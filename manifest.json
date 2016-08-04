@@ -1,0 +1,34 @@
+{
+  "manifest_version": 2,
+  "name"            : "Verto SofthPhone",
+  "description"     : "FreeSWITCH verto phone.",
+  "short_name"      : "vertoSoftPhone",
+  "version"         : "0.1",
+  "minimum_chrome_version": "23",
+  "icons": {
+    "16": "images/phone16.png",
+    "24": "images/phone16.png",
+    "48": "images/phone16.png",
+    "64": "images/phone16.png"
+  },
+  "permissions": [
+    "storage",
+    "unlimitedStorage",
+    "alarms",
+    "notifications",
+    "http://localhost/",
+    "webview",
+    "<all_urls>",
+    "fullscreen"
+  ],
+  "app": {
+    "background": {
+        "scripts": [
+            "lib/jquery/jquery-2.1.3.min.js",
+            "lib/ratchet-v2.0.2/js/ratchet.min.js",// this is our background/event page
+
+            "background.js"
+        ]
+    }
+  }
+}

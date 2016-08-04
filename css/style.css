@@ -1,0 +1,43 @@
+html, body {
+    margin: 0;
+    padding: 0;
+    border: none;
+    outline: none;/*
+	width: 230px;
+	height: 400px;*/	
+}
+
+#phone form {
+    margin: 10px;
+}
+
+
+.content .input-number {
+	width: 79%;
+    background-color: transparent;
+    border: 0;
+    text-align: center;
+}
+
+.content .input-number-btn {
+	padding-top: 7px;
+}
+.circle-btn {
+	width: 50px;
+    height: 50px;
+    margin: 3px;
+    font-size: 24px;
+    line-height: 50px;
+    text-align: center;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 25px;
+}
+
+.dialpad {
+    margin-left: 26px;	
+}
+
+.dialpad-form, .content {
+  background-color: #fff;
+}

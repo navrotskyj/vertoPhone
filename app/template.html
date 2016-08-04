@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html ng-app='app'>
+    <head>
+        <title>Phone</title>
+        <link rel="stylesheet" type="text/css" href="lib/ratchet-v2.0.2/css/ratchet.min.css">
+        <link rel="stylesheet" type="text/css" href="lib/ratchet-v2.0.2/css/ratchet-theme-ios.css">
+        <link rel="stylesheet" type="text/css" href="css/style.css">
+    </head>
+    <body ng-controller='PhoneCtrl' class="app">
+            
+        <header class="bar bar-nav">
+          <!-- <a class="pull-left">100</a> -->
+          <a href="#mySTate">
+            <h1 class="title">
+              Ready
+              <span class="icon icon-caret"></span>
+            </h1>
+          </a>
+        </header>
+
+        <nav class="bar bar-tab">
+          <a class="tab-item" href="#">
+            <span class="icon icon-star-filled"></span>
+            <span class="tab-label">Favorites</span>
+          </a>        
+          <a class="tab-item" href="#">
+            <span class="icon icon-list"></span>
+            <span class="tab-label">History</span>
+          </a>
+          <a class="tab-item" href="#">
+            <span class="icon icon-person"></span>
+            <span class="tab-label">Contacts</span>
+          </a>
+
+          <a class="tab-item active" href="#">
+            <span class="icon icon-bars"></span>
+            <span class="tab-label">Dialpad</span>
+          </a>
+          <a class="tab-item" href="#">
+            <span class="icon icon-gear"></span>
+            <span class="tab-label">Settings</span>
+          </a>
+        </nav>
+
+
+        <div class="content">
+            <form class="dialpad-form">
+                <a class="icon icon-plus pull-left input-number-btn"></a>
+                <a class="icon icon-close pull-right input-number-btn"></a>
+                <input type="text" class="input-number" ng-model="phone.activeNumber" placeholder="SIP uri">
+
+                <div class="dialpad">
+                    <a class="circle-btn icon dialpad-btn">1</a>
+                    <a class="circle-btn icon dialpad-btn">2</a>
+                    <a class="circle-btn icon dialpad-btn">3</a>
+
+                    <a class="circle-btn icon dialpad-btn">4</a>
+                    <a class="circle-btn icon dialpad-btn">5</a>
+                    <a class="circle-btn icon dialpad-btn">6</a>
+                    
+                    <a class="circle-btn icon">7</a>
+                    <a class="circle-btn icon">8</a>
+                    <a class="circle-btn icon">9</a>
+                    
+                    <a class="circle-btn icon">*</a>
+                    <a class="circle-btn icon">0</a>
+                    <a class="circle-btn icon">#</a>
+                    
+                    
+                </div>  
+            </form>
+        </div>
+
+        
+        
+        <script type="text/javascript" src="lib/jquery/jquery-2.1.3.min.js"></script>
+        <script type="text/javascript" src="lib/angular/angular.js"></script>
+        <script type="text/javascript" src="lib/ratchet-v2.0.2/js/ratchet.min.js"></script>
+        <script type="text/javascript" src="app/app.js"></script>
+        <script type="text/javascript" src="app/phoneCtrl.js"></script>
+    </body>
+</html>
