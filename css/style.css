@@ -8,9 +8,54 @@ html, body {
 }
 
 #phone form {
-    margin: 10px;
+    /*margin: 10px;*/
 }
 
+#phone .call {
+    text-align: center;
+    font-size: 42px;
+}
+
+#phone .call.make-call {
+    color: #fff;
+    background-color: #4cd964;
+}
+
+#phone .call.hangup-call {
+    color: #fff;
+    background-color: #cf2d28;
+    /* Safari */
+    -webkit-transform: rotate(134deg);
+
+    /* Firefox */
+    -moz-transform: rotate(134deg);
+
+    /* IE */
+    -ms-transform: rotate(134deg);
+
+    /* Opera */
+    -o-transform: rotate(134deg);
+
+}
+
+#phone ul>li>a:not(:first-child) {
+    margin-left: 10px;
+}
+
+#phone li {
+    list-style: none;
+}
+
+#phone .dialpad > li {
+    width: 100%;
+    text-align: center;
+}
+
+#phone > #dialpad .call-btn-group {
+    padding: 0;
+    display: table;
+    margin: 0 auto;
+}
 
 .content .input-number {
 	width: 79%;
@@ -35,7 +80,10 @@ html, body {
 }
 
 .dialpad {
-    margin-left: 26px;	
+    margin: 0 auto;
+    max-width: 218px;
+    max-height: 280px;
+    padding: 0;
 }
 
 .dialpad-form, .content {
