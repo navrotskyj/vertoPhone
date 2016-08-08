@@ -1,9 +1,9 @@
 console.log('init app', $('.content'), new Date());
 
-var phone;
+var vertoPhone;
 
 $(document).ready(function() {
-	phone = new Phone();
+
 });
 
 var Phone = function () {
@@ -11,9 +11,11 @@ var Phone = function () {
 	this.number = '';
 
 	this.controls = {
-		$inputCreateContact: $('.dialpad-form > .icon-plus'),
-		$inputDelChar: $('.dialpad-form > .icon-close'),
+		$inputCreateContact: $('.dialpad-form > .ion-ios-plus-outline'),
+		$inputDelChar: $('.dialpad-form > .ion-backspace-outline'),
 		$callBtn: $('.call'),
+		$dialpadForm: $('.dialpad-form'),
+		$activeCallForm: $('.call-active'),
 		settings: {
 			$login: $('#settingsLogin'),
 			$password: $('#settingsPassword'),
@@ -44,9 +46,9 @@ Phone.prototype.setSettings = function (data) {
 	this.settings.login = data.login || "";
 	this.settings.password = data.password || "";
 
-	this.controls.settings.$login.text(this.settings.server);
-	this.controls.settings.$password.text(this.settings.password);
-	this.controls.settings.$server.text(this.settings.server);
+	this.controls.settings.$login.val(this.settings.login);
+	this.controls.settings.$password.val(this.settings.password);
+	this.controls.settings.$server.val(this.settings.server);
 
 	this.controls.$events.trigger('saveSettings', this.getSettings());
 };
@@ -85,9 +87,15 @@ Phone.prototype.makeCall = function () {
 	if (this.controls.$callBtn.hasClass('make-call')) {
 		this.controls.$callBtn.removeClass('make-call');
 		this.controls.$callBtn.addClass('hangup-call');
+
+		this.controls.$dialpadForm.hide();
+		this.controls.$activeCallForm.show();
 	} else {
 		this.controls.$callBtn.removeClass('hangup-call');
 		this.controls.$callBtn.addClass('make-call');
+
+		this.controls.$activeCallForm.hide();
+		this.controls.$dialpadForm.show();
 	}
 };
 
@@ -127,3 +135,5 @@ Phone.prototype.subscribeUI = function () {
 		return false
 	});
 };
+
+vertoPhone = new Phone();

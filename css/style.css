@@ -13,7 +13,7 @@ html, body {
 
 #phone .call {
     text-align: center;
-    font-size: 42px;
+    font-size: 28px;
 }
 
 #phone .call.make-call {
@@ -57,6 +57,10 @@ html, body {
     margin: 0 auto;
 }
 
+#phone #dialpad form {
+    height: 279px;
+}
+
 .content .input-number {
 	width: 79%;
     background-color: transparent;
@@ -81,11 +85,9 @@ html, body {
 
 .dialpad {
     margin: 0 auto;
-    max-width: 218px;
-    max-height: 280px;
     padding: 0;
 }
 
-.dialpad-form, .content {
+.content {
   background-color: #fff;
 }
