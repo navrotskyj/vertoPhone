@@ -1,11 +1,89 @@
-console.log('init app', $('.content'), new Date());
 
 var vertoPhone;
 
-$(document).ready(function() {
+console.log('new vue');
+Vue.config.devtools = true;
+vertoPhone = new Vue({
+	el: '#phone',
+	data: {
+		number: '',
+		settings: {
+			login: '',
+			password: '',
+			server: ''
+		},
+		activeCall: null,
+		ringer: new Vue({el: '#localVideo'}),
+		activeTabName: 'dialpad',
+		bg: null,
+		calls: [],
+		history: [],
+		contacts: [],
+		favorites: [],
+		tabs: [
+			{name: 'Favorites', id: 'favorites', class: 'icon ion-ios-star-outline'},
+			{name: 'History', id: 'history', class: 'icon ion-ios-clock-outline'},
+			{name: 'Contacts', id: 'contacts', class: 'icon icon-person'},
+			{name: 'Dialpad', id: 'dialpad', class: 'icon ion-ios-keypad-outline'},
+			{name: 'Settings', id: 'settings', class: 'icon icon-gear'}
+		]
+	},
+	methods: {
+		setActiveTab: function (item) {
+			this.activeTabName = item.id;
+		},
+		getSettings: function () {
+			return this.settings;
+		},
+		saveSettings: function () {
+			// TODO
+			this.bg.onSave(null, this.getSettings());
+		},
+		delLastNumber: function () {
+			this.$set('number', this.number.substring(0, this.number.length - 1));
+		},
+		setSettings: function (settings) {
+			if (!settings)
+				settings = {};
 
+			this.settings.login = settings.login || '';
+			this.settings.password = settings.password || '';
+			this.settings.server = settings.server || '';
+		},
+
+		// region  call control
+
+		dtmf: function (number) {
+			this.number += number;
+			this.ringer.$el.src = '../sound/DTMF' + encodeURIComponent(number || 0) + '.mp3';
+			this.ringer.$el.play();
+		},
+		makeCall: function () {
+			
+		},
+		dropCall: function () {
+
+		},
+		holdCall: function () {
+
+		},
+		transferCall: function () {
+
+		},
+
+		// endregion
+
+		init: function (args) {
+			console.log('on init');
+			this.bg = args;
+		},
+		subscribe: function (name, fn) {
+			this.$watch(name, fn);
+		}
+	}
 });
 
+/*
 var Phone = function () {
 	this.ringer = document.createElement('audio');
 	this.number = '';
@@ -120,12 +198,12 @@ Phone.prototype.subscribeUI = function () {
 		$(this).addClass('active');
 		$content.attr('hidden', null);
 	});
-	
+
 	this.controls.$inputDelChar.click(function () {
 		var number = phoneScope.getNumber();
 		phoneScope.setNumber(number.substring(0, number.length - 1));
 	});
-	
+
 	this.controls.$callBtn.click(function () {
 		phoneScope.makeCall();
 	});
@@ -137,3 +215,5 @@ Phone.prototype.subscribeUI = function () {
 };
 
 vertoPhone = new Phone();
+
+	*/

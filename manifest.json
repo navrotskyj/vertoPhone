@@ -25,6 +25,7 @@
     "background": {
         "scripts": [
             "lib/jquery/jquery-2.1.3.min.js",
+            "lib/vue.min.js",
             "lib/ratchet-v2.0.2/js/ratchet.min.js",// this is our background/event page
             "lib/verto.js",
             "background.js"

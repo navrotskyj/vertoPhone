@@ -9,6 +9,8 @@ var Session = function (option) {
 		passwd: option.password,
 		socketUrl: option.server
 	}, this);
+	this.activeCalls = [];
+	this.isLogin = false;
 
 	this.verto.login();
 };
@@ -16,11 +18,13 @@ var Session = function (option) {
 Session.prototype.onWSLogin = function (e) {
 	console.info('onWSLogin');
 	console.info(e);
+	this.isLogin = true;
 };
 
 Session.prototype.onWSClose = function (e) {
 	console.info('onWSClose');
 	console.info(e);
+	this.isLogin = false;
 };
 
 Session.prototype.onEvent = function (e) {
@@ -50,7 +54,11 @@ chrome.app.runtime.onLaunched.addListener(function() {
 			phoneWindow.contentWindow.onload = function () {
 				chrome.storage.local.get('settings', function(data) {
 					phoneWindow.contentWindow.vertoPhone.setSettings( (data && data.settings) || {});
-					phoneWindow.contentWindow.vertoPhone.on('saveSettings', saveSettings)
+					phoneWindow.contentWindow.vertoPhone.subscribe('saveSettings', saveSettings)
+					phoneWindow.contentWindow.vertoPhone.init({
+						onSave: saveSettings,
+						session: session
+					})
 				});
 			};
 
