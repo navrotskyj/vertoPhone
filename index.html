@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-<html>
+<html id="application">
     <head>
-        <title>100@10.10.10.144</title>
+        <title v-text="login"></title>
         <link rel="stylesheet" type="text/css" href="lib/ratchet-v2.0.2/css/ratchet.min.css">
         <link rel="stylesheet" type="text/css" href="lib/ratchet-v2.0.2/css/ratchet-theme-ios.css">
         <link rel="stylesheet" type="text/css" href="lib/ionicons-2.0.1/css/ionicons.min.css">
@@ -10,13 +10,13 @@
     <body class="app" id="phone">
             
         <header class="bar bar-nav">
-          <!-- <a class="pull-left">100</a> -->
-          <a href="#mySTate">
-            <h1 class="title">
-              Ready
-              <span class="icon icon-caret"></span>
-            </h1>
-          </a>
+          <!--&lt;!&ndash; <a class="pull-left">100</a> &ndash;&gt;-->
+          <!--<a href="#mySTate">-->
+            <!--<h1 class="title">-->
+              <!--Ready-->
+              <!--<span class="icon icon-caret"></span>-->
+            <!--</h1>-->
+          <!--</a>-->
         </header>
 
         <nav class="bar bar-tab">
@@ -30,6 +30,7 @@
 
         <div v-if="activeTabName == 'favorites'" id="favorites" class="content">
           favorites: 404 :)
+            {{ bg.session._activeCallsIds }}
             <span v-for="item in bg.session.activeCalls">
                 {{item}}
             </span>
@@ -50,7 +51,12 @@
         </div>
 
         <div v-if="activeTabName == 'contacts'" id="contacts" class="content">
-          Contacts: 404 :)
+            <nav class="bar bar-standard">
+                <input type="search" placeholder="Search">
+            </nav>
+          <div v-for="i in activeCall">
+              {{i}}
+          </div>
           <ul class="table-view">
             <li class="table-view-cell">
               <a class="navigate-right">
@@ -70,7 +76,7 @@
           </ul>
         </div>
 
-        <div v-if="activeTabName == 'dialpad'" id="dialpad" class="content active">
+        <div v-if="activeTabName == 'dialpad'" id="dialpad" class="content">
             <form class="dialpad-form">
                 <a class="icon ion-ios-plus-outline pull-left input-number-btn"></a>
                 <a v-on:click="delLastNumber" class="icon ion-backspace-outline pull-right input-number-btn"></a>
@@ -126,7 +132,20 @@
           </form>
         </div>
 
+        <div v-if="activeTabName == 'call'" id="call" class="content">
+            <div v-for="call in activeCall">
+                {{call.calleeIdName}}
+                {{call.calleeIdNumber}}
+                {{call.state}}
+                <button class="btn" v-on:click="dropCall(call.id)">hangup</button>
+                <button class="btn" v-on:click="answerCall(call.id)">answer</button>
+                <button class="btn" v-on:click="holdCall(call.id)">hold</button>
+                <button class="btn" v-on:click="unholdCall(call.id)">unhold</button>
+            </div>
+        </div>
+
         <video id="localVideo" style="display: none"></video>
+        <video id="remoteVideo" style="display: none"></video>
 
         <script type="text/javascript" src="lib/vue.min.js"></script>
         <script type="text/javascript" src="lib/ratchet-v2.0.2/js/ratchet.min.js"></script>
