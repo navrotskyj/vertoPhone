@@ -1,155 +1,41 @@
 <!DOCTYPE html>
-<html id="application">
+<html >
     <head>
-        <title v-text="login"></title>
+        <title></title>
         <link rel="stylesheet" type="text/css" href="lib/ratchet-v2.0.2/css/ratchet.min.css">
         <link rel="stylesheet" type="text/css" href="lib/ratchet-v2.0.2/css/ratchet-theme-ios.css">
         <link rel="stylesheet" type="text/css" href="lib/ionicons-2.0.1/css/ionicons.min.css">
         <link rel="stylesheet" type="text/css" href="css/style.css">
     </head>
-    <body class="app" id="phone">
-            
+    <body class="app" ng-app="vertoPhone"  id="phone">
         <header class="bar bar-nav">
-          <!--&lt;!&ndash; <a class="pull-left">100</a> &ndash;&gt;-->
-          <!--<a href="#mySTate">-->
-            <!--<h1 class="title">-->
-              <!--Ready-->
-              <!--<span class="icon icon-caret"></span>-->
-            <!--</h1>-->
-          <!--</a>-->
+            <div class="segmented-control">
+                <a ng-click="setViewCall(call)" ng-class="{'bg-success': call.state == 'active', 'bg-danger': call.state == 'held'}" class="control-item" ng-repeat="call in activeCalls">
+                    <span class="h5">{{call.calleeIdNumber.substr(call.calleeIdNumber.length - 4)}}</span>
+                </a>
+            </div>
+
         </header>
 
-        <nav class="bar bar-tab">
+        <nav ng-controller="navigate" class="bar bar-tab">
 
-          <a v-on:click="setActiveTab(item)" v-bind:class="{'active': item.id == activeTabName}" class="tab-item" v-for="item in tabs" href="#{{ item.id }}">
-              <span class="{{item.class}}"></span>
-              <span class="tab-label">{{item.name}}</span>
+          <a ng-click="changeState(key, tab)" ng-repeat="(key, tab) in tabs" ng-class="{'active': key == activeTabName}" class="tab-item">
+              <span ng-class="tab.class"></span>
+              <span class="tab-label">{{tab.name}}</span>
           </a>
 
         </nav>
-
-        <div v-if="activeTabName == 'favorites'" id="favorites" class="content">
-          favorites: 404 :)
-            {{ bg.session._activeCallsIds }}
-            <span v-for="item in bg.session.activeCalls">
-                {{item}}
-            </span>
-            <span class="icon ion-ios-telephone" style="color: #2ac845"></span>
-        </div>
-
-        <div v-if="activeTabName == 'history'" id="history" class="content">
-          history: 404 :)
-            <div class="card">
-              <ul class="table-view">
-                <li class="table-view-cell">
-                  <a class="navigate-right" href="../app/two.html" data-transition="slide-in">
-                    Load new page with push
-                  </a>
-                </li>
-              </ul>
-            </div>
-        </div>
-
-        <div v-if="activeTabName == 'contacts'" id="contacts" class="content">
-            <nav class="bar bar-standard">
-                <input type="search" placeholder="Search">
-            </nav>
-          <div v-for="i in activeCall">
-              {{i}}
-          </div>
-          <ul class="table-view">
-            <li class="table-view-cell">
-              <a class="navigate-right">
-                Item 1
-              </a>
-            </li>
-            <li class="table-view-cell">
-              <a class="navigate-right">
-                Item 2
-              </a>
-            </li>
-            <li class="table-view-cell">
-              <a class="navigate-right">
-                Item 3
-              </a>
-            </li>
-          </ul>
-        </div>
-
-        <div v-if="activeTabName == 'dialpad'" id="dialpad" class="content">
-            <form class="dialpad-form">
-                <a class="icon ion-ios-plus-outline pull-left input-number-btn"></a>
-                <a v-on:click="delLastNumber" class="icon ion-backspace-outline pull-right input-number-btn"></a>
-                <input type="text" v-model="number" class="input-number" placeholder="SIP uri">
-
-                <ul class="dialpad">
-                    <li>
-                        <a v-on:click="dtmf('1')" class="circle-btn icon dialpad-btn" number="1">
-                            1
-                        </a>
-                        <a v-on:click="dtmf('2')" class="circle-btn icon dialpad-btn" number="2">2</a>
-                        <a v-on:click="dtmf('3')" class="circle-btn icon dialpad-btn" number="3">3</a>
-                    </li>
-
-                    <li>
-                        <a v-on:click="dtmf('4')" class="circle-btn icon dialpad-btn" number="4">4</a>
-                        <a v-on:click="dtmf('5')" class="circle-btn icon dialpad-btn" number="5">5</a>
-                        <a v-on:click="dtmf('6')" class="circle-btn icon dialpad-btn" number="6">6</a>
-                    </li>
-
-                    <li>
-                        <a v-on:click="dtmf('7')" class="circle-btn icon dialpad-btn" number="7">7</a>
-                        <a v-on:click="dtmf('8')" class="circle-btn icon dialpad-btn" number="8">8</a>
-                        <a v-on:click="dtmf('9')" class="circle-btn icon dialpad-btn" number="9">9</a>
-                    </li>
-
-                    <li>
-                        <a v-on:click="dtmf('8')" class="circle-btn icon dialpad-btn" number="*">*</a>
-                        <a v-on:click="dtmf('0')" class="circle-btn icon dialpad-btn" number="0">0</a>
-                        <a v-on:click="dtmf('#')" class="circle-btn icon dialpad-btn" number="#">#</a>
-                    </li>
-
-
-                </ul>
-            </form>
-
-            <form style="display: none;" class="call-active">
-                aa
-            </form>
-            <ul class="call-btn-group">
-                <li>
-                    <a v-on:click="makeCall" class="icon circle-btn ion-ios-telephone call make-call"></a>
-                </li>
-            </ul>
-        </div>
-
-        <div v-if="activeTabName == 'settings'" id="settings" class="content">
-          <form method="post">
-            <input v-model="settings.login" type="text" id="settingsLogin" placeholder="login">
-            <input v-model="settings.password" type="password" id="settingsPassword" placeholder="password">
-            <input v-model="settings.server" type="text" id="settingsServer" placeholder="server">
-            <button v-on:click="saveSettings" id="saveSettings" type="submit" class="btn btn-positive btn-block">Save</button>
-          </form>
-        </div>
-
-        <div v-if="activeTabName == 'call'" id="call" class="content">
-            <div v-for="call in activeCall">
-                {{call.calleeIdName}}
-                {{call.calleeIdNumber}}
-                {{call.state}}
-                <button class="btn" v-on:click="dropCall(call.id)">hangup</button>
-                <button class="btn" v-on:click="answerCall(call.id)">answer</button>
-                <button class="btn" v-on:click="holdCall(call.id)">hold</button>
-                <button class="btn" v-on:click="unholdCall(call.id)">unhold</button>
-            </div>
-        </div>
+        <div ng-include="currentViewTemplate" class="content"></div>
 
         <video id="localVideo" style="display: none"></video>
         <video id="remoteVideo" style="display: none"></video>
 
-        <script type="text/javascript" src="lib/vue.min.js"></script>
+        <script type="text/javascript" src="lib/angular.js"></script>
         <script type="text/javascript" src="lib/ratchet-v2.0.2/js/ratchet.min.js"></script>
+        <script type="text/javascript" src="app/services/callService.js"></script>
+        <script type="text/javascript" src="app/ctrl/settingsCtrl.js"></script>
+        <script type="text/javascript" src="app/ctrl/dialpadCtrl.js"></script>
+        <script type="text/javascript" src="app/ctrl/callCtrl.js"></script>
         <script type="text/javascript" src="app/app.js"></script>
-        <script type="text/javascript" src="app/phoneCtrl.js"></script>
     </body>
 </html>

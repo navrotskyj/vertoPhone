@@ -7,13 +7,35 @@ html, body {
 	height: 400px;*/	
 }
 
+#phone .no-border {
+    border: 0;
+}
+
 #phone form {
     /*margin: 10px;*/
+}
+
+#phone .content a {
+    color: rgba(17, 26, 35, 0.69)
+}
+
+#phone .dialpad-form .dialpad-input {
+    margin-bottom: 0;
+    margin-top: 0;
+}
+
+#phone .dialpad-form .dialpad-input a {
+    font-size: 18px;
+    margin-top: 4px;
 }
 
 #phone .call {
     text-align: center;
     font-size: 28px;
+}
+
+#phone .bg-default {
+    background-color: rgba(247, 247, 247, .98);
 }
 
 #phone .call.make-call {
@@ -51,7 +73,7 @@ html, body {
     text-align: center;
 }
 
-#phone > #dialpad .call-btn-group {
+#phone #dialpad .call-btn-group {
     padding: 0;
     display: table;
     margin: 0 auto;
@@ -78,9 +100,17 @@ html, body {
     font-size: 24px;
     line-height: 50px;
     text-align: center;
-    background-color: #fff;
-    border: 1px solid #ddd;
+    border: 1px solid #d0d0d0;
     border-radius: 25px;
+}
+
+.bg-success {
+    background-color: #4cd964;
+    color: #fff;
+}
+
+.bg-danger {
+    background-color: #daa05d;
 }
 
 .dialpad {

@@ -1,0 +1,54 @@
+<div ng-controller="callCtrl">
+
+    <div class="card no-border">
+        <div style="text-align: center;" class="content-padded">
+            <h5>{{activeCall.calleeIdNumber}}</h5>
+            <h5>{{activeCall.state}}</h5>
+        </div>
+    </div>
+
+    <div class="card no-border" style="min-height: 170px;">
+        <ul class="dialpad">
+            <li>
+                <a ng-disabled="true" class="circle-btn icon">
+                    <span ng-click="toggleMute(activeCall)" class="icon ion-ios-mic-off"></span>
+                </a>
+                <a class="circle-btn icon">
+                    <span class="icon ion-ios-keypad"></span>
+                </a>
+                <a class="circle-btn icon">
+                    <span class="icon ion-ios-redo"></span>
+                </a>
+            </li>
+
+            <li>
+                <a class="circle-btn icon">
+                    <span class="ion-ios-plus-empty"></span>
+                </a>
+
+                <a class="circle-btn icon">
+                    <span class="ion-chatbubbles"></span>
+                </a>
+
+                <a class="circle-btn icon">
+                    <span class="ion-ios-pause"></span>
+                </a>
+            </li>
+        </ul>
+    </div>
+
+
+    <div class="card no-border" style="margin-bottom: 0">
+        <ul class="dialpad">
+            <li>
+                <a  ng-click="dropCall(activeCall.id)" class="circle-btn icon call hangup-call">
+                    <span  class="ion-ios-telephone"></span>
+                </a>
+                <a ng-click="answerCall(activeCall.id)"  class="circle-btn icon call make-call" ng-if="activeCall.state == 'newCall' && activeCall.direction.name == 'inbound'">
+                    <span class="ion-ios-telephone"></span>
+                </a>
+            </li>
+        </ul>
+    </div>
+
+</div>

@@ -1,119 +1,127 @@
 
-var vertoPhone;
-Vue.config.devtools = true;
-
-chrome.runtime.onMessage.addListener(
-	function(request, sender, sendResponse) {
-		vertoPhone.setActiveCall(request);
-	}
-);
-
-
-vertoPhone = new Vue({
-	el: '#application',
-	data: {
-		login: '',
-		number: '',
-		settings: {
-			login: '',
-			password: '',
-			server: ''
-		},
-		activeCall: null,
-		ringer: new Vue({el: '#localVideo'}),
-		activeTabName: 'dialpad',
-		prevActiveTabName: '',
-		bg: null,
-		calls: [],
-		history: [],
-		contacts: [],
-		favorites: [],
-		tabs: [
-			{name: 'Favorites', id: 'favorites', class: 'icon ion-ios-star-outline'},
-			{name: 'History', id: 'history', class: 'icon ion-ios-clock-outline'},
-			{name: 'Contacts', id: 'contacts', class: 'icon icon-person'},
-			{name: 'Dialpad', id: 'dialpad', class: 'icon ion-ios-keypad-outline'},
-			{name: 'Settings', id: 'settings', class: 'icon icon-gear'}
-		]
-	},
-	methods: {
-		setActiveTab: function (item) {
-			if (this.activeTabName == item.id) return;
-			this.activeTabName = item.id;
-		},
-		setActiveCall: function (activeCalls) {
-			this.activeCall = activeCalls;
-		},
-		getSettings: function () {
-			return this.settings;
-		},
-		saveSettings: function () {
-			// TODO
-			this.bg.onSave(null, this.getSettings());
-		},
-		delLastNumber: function () {
-			this.$set('number', this.number.substring(0, this.number.length - 1));
-		},
-		setSettings: function (settings) {
-			if (!settings)
-				settings = {};
-
-			this.settings.login = settings.login || '';
-			this.settings.password = settings.password || '';
-			this.settings.server = settings.server || '';
-		},
-
-		onChangeActiveCall: function (v) {
-			var callIds = Object.keys(v);
-			if (callIds.length > 0) {
-				this.setActiveTab({id: 'call'});
-			} else {
-				this.setActiveTab({id: 'dialpad'});
-			}
-		},
-
-		// region  call control
-
-		dtmf: function (number, callId) {
-			this.number += number;
-			this.ringer.$el.src = '../sound/DTMF' + encodeURIComponent(number || 0) + '.mp3';
-			this.ringer.$el.play();
-		},
-		makeCall: function () {
-			this.bg.session.makeCall(this.number);
-		},
-		dropCall: function (id) {
-			this.bg.session.dropCall(id);
-		},
-		answerCall: function (id) {
-			this.bg.session.answerCall(id);
-		},
-		holdCall: function (id) {
-			this.bg.session.holdCall(id);
-		},
-		unholdCall: function (id) {
-			this.bg.session.unholdCall(id);
-		},
-		transferCall: function () {
-
-		},
-
-		// endregion
-
-		init: function (args) {
-			console.log('on init', args);
-			this.$watch('activeCall', this.onChangeActiveCall);
-			this.bg = args;
-			this.login = args.session.vertoLogin;
-
-			var callCount = Object.keys(Object.keys(this.bg.session.activeCalls)).length;
-			if (callCount > 0) {
-				this.activeCall = this.bg.session.activeCalls;
-				this.setActiveTab({id: 'call'})
-			}
-		},
-		subscribe: function (name, fn) {
-			this.$watch(name, fn);
-		}
-	}
+var bg = angular.module('app.chrome', []);
+bg.run(function ($rootScope) {
+    chrome.runtime.onMessage.addListener(
+        function(request, sender, sendResponse) {
+            $rootScope.$emit('bg:' + request.action, request.data)
+        }
+    );
+    
+    $rootScope.sendBg = function (action, data) {
+        chrome.runtime.sendMessage({
+            action: action,
+            data: data,
+        });
+    }
 });
+
+var vertoPhone = angular.module("vertoPhone", ['app.callService', 'app.settings', 'app.chrome', 'app.dialpad', 'app.call']);
+
+vertoPhone.constant('Tabs', {
+    favorites: {
+        name: 'Favorites',
+        class: 'icon ion-ios-star-outline'
+    },
+    history: {
+        name: 'History',
+        class: 'icon ion-ios-clock-outline'
+    },
+    contacts: {
+        name: 'Contacts',
+        class: 'icon icon-person'
+    },
+    dialpad: {
+        name: 'Dialpad',
+        class: 'icon ion-ios-keypad-outline'
+    },
+    settings: {
+        name: 'Settings',
+        class: 'icon icon-gear'
+    }
+});
+
+vertoPhone.run(function($rootScope, $window, CallService) {
+    $rootScope.currentViewTemplate = '';
+    $rootScope.session = null;
+    $rootScope.activeCalls = [];
+    $rootScope.activeCall = {};
+    $rootScope.$on('bg:init', function (e, data) {
+        if (data.hasOwnProperty('settings')) {
+            $rootScope.vertoSettings = data.settings;
+        }
+
+        if (data.hasOwnProperty('activeCalls')) {
+            setActiveCall(data.activeCalls);
+        }
+
+        document.title = $window.vertoSession && $window.vertoSession.vertoLogin
+            ? $window.vertoSession.vertoLogin
+            : 'No login.';
+    });
+    $rootScope.$on('bg:changeCall', function (e, data) {
+        console.log(data);
+        setActiveCall(data);
+    });
+    
+    $rootScope.setViewCall = function (call) {
+        $rootScope.activeCall = call;
+        if (call.state == 'held') {
+            CallService.unholdCall(call.id)
+        } else if (call.state == 'newCall') {
+            if ($rootScope.activeCall && $rootScope.activeCall.state == 'active') {
+                CallService.holdCall($rootScope.activeCall.id);
+            }
+        //     $rootScope.activeCall = call;
+        }
+        setCallView();
+
+    };
+
+    function setCallView() {
+        $rootScope.currentViewTemplate = 'app/view/call.html'
+    }
+
+    function setActiveCall(data) {
+        $rootScope.activeCalls = [];
+        $rootScope.activeCall = null;
+
+        for (var key in data) {
+            var call = data[key];
+            $rootScope.activeCalls.push(call);
+            if (call.state == 'active') {
+                $rootScope.activeCall = call;
+            }
+        }
+
+        if (!$rootScope.activeCall && $rootScope.activeCalls.length > 0) {
+            $rootScope.activeCall = $rootScope.activeCalls[0]
+        }
+
+        if ($rootScope.activeCalls.length > 0) {
+            setCallView()
+        } else {
+            $rootScope.currentViewTemplate = 'app/view/dialpad.html'
+        }
+        $rootScope.$apply();
+    }
+
+    $rootScope.$on('changeState', function (e, stateName) {
+        $rootScope.currentViewTemplate = 'app/view/' + stateName + '.html'
+    });
+});
+
+vertoPhone.controller('navigate', ['$rootScope', '$scope', 'Tabs', function ($rootScope, $scope, Tabs) {
+    $scope.tabs = Tabs;
+    $scope.activeTabName = 'dialpad';
+
+    if (!$rootScope.inCall)
+        changeState($scope.activeTabName);
+    $scope.changeState = changeState;
+
+    function changeState(stateName) {
+        console.debug(arguments);
+        $scope.activeTabName = stateName;
+        $rootScope.$emit('changeState', stateName);
+    }
+}]);
+

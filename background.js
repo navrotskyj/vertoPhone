@@ -1,5 +1,3 @@
-console.log('init bg', $.verto);
-
 var phoneWindow = null,
 	session,
 	db = getVertoDB();
@@ -10,9 +8,10 @@ var Session = function (option) {
 		passwd: option.password,
 		socketUrl: option.server
 	}, this);
-	this.lastError = {};
+	
 	this.vertoLogin = option.login;
-	this.activeCalls = {};
+	this.activeCalls = {
+	};
 	this.isLogin = false;
 
 	this.verto.login();
@@ -68,7 +67,7 @@ Session.prototype.onGetVideoContainer = function (d) {
 
 Session.prototype.onWSLogin = function (e, success) {
 	console.info('onWSLogin');
-	this.isLogin = true;
+	this.isLogin = success;
 	if (success) {
 		createNotification('Login', 'Success', 'login ' + this.vertoLogin, 'images/bell64.png', 2000)
 	} else {
@@ -140,7 +139,7 @@ Session.prototype.onDialogState = function (d) {
 	}
 
 	console.log(this.activeCalls);
-	sendSession(this.activeCalls);
+	sendSession('changeCall', this.activeCalls);
 };
 
 var Call = function (d) {
@@ -177,11 +176,12 @@ chrome.app.runtime.onLaunched.addListener(function() {
 			phoneWindow.contentWindow.onload = function () {
 				phoneWindow.session = session;
 				chrome.storage.local.get('settings', function(data) {
-					phoneWindow.contentWindow.vertoPhone.setSettings( (data && data.settings) || {});
-					phoneWindow.contentWindow.vertoPhone.subscribe('saveSettings', saveSettings);
-					phoneWindow.contentWindow.vertoPhone.init({
-						onSave: saveSettings,
-						session: session
+					phoneWindow.contentWindow.vertoSession = session;
+
+					sendSession('init', {
+						settings: (data && data.settings) || {},
+						activeCalls: session && session.activeCalls,
+						logged: session && session.isLogin
 					});
 				});
 			};
@@ -200,11 +200,25 @@ function makeCall(number, options) {
 	session.makeCall(number, options);
 }
 
-function sendSession(obj) {
-	chrome.runtime.sendMessage(obj);
+function sendSession(action, obj) {
+	chrome.runtime.sendMessage({
+		action: action,
+		data: obj,
+	});
 }
 
-function saveSettings(e, data) {
+chrome.runtime.onMessage.addListener(
+	function(request, sender, sendResponse) {
+		if (request.action && vertoAction[request.action])
+			vertoAction[request.action](request.data);
+	}
+);
+
+var vertoAction = {
+	saveSettings: saveSettings
+};
+
+function saveSettings(data) {
 	var obj = {
 		settings: data
 	};
@@ -215,6 +229,9 @@ function saveSettings(e, data) {
 		}
 
 		session = new Session(obj.settings);
+
+		if (phoneWindow)
+			phoneWindow.contentWindow.vertoSession = session;
 
 		createNotification('Save', 'Saved settings', '', 'images/success64.png', 2000);
 	});

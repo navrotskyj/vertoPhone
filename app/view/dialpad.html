@@ -1,0 +1,20 @@
+<div class="bg-default" ng-controller="dialpadCtrl" id="dialpad">
+	<form class="dialpad-form">
+
+		<div class="card no-border dialpad-input bg-default">
+			<a class="icon ion-ios-plus-outline pull-left input-number-btn"></a>
+			<a ng-click="delLastNumber()" class="icon ion-backspace-outline pull-right input-number-btn"></a>
+			<input type="text" ng-model="number" class="input-number" placeholder="SIP uri">
+		</div>
+
+		<div  ng-include=" 'app/view/dialpadTemplate.html' ">
+
+		</div>
+	</form>
+
+	<ul class="call-btn-group">
+	    <li>
+	        <a ng-click="makeCall()" class="icon circle-btn ion-ios-telephone call make-call"></a>
+	    </li>
+	</ul>
+</div>
