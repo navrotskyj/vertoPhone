@@ -181,33 +181,39 @@ html, body {
 /*CHAT*/
 
 .chat {
-
+    padding-top: 44px;
+    padding-bottom: 95px;
+    position: absolute;
+    height: 100%;
+    width: 100%;
 }
 
-.chat-call .chat {
-    height: 224px;
-}
-.chat-call .chat section{
-    height: 175px;
-}
-
-.chat-call .chat .from-me::after, .chat-call .chat .from-them:after {
-    background: rgba(247, 247, 247, .98);
+.chat .chat-data {
+    /*height: 78%;*/
+    max-height: 100%;
+    overflow: auto;
 }
 
+.chat .chat-action {
+    -webkit-box-shadow: 0 0 0;
+    box-shadow: 0 0 0;
+    margin-bottom: 5px;
+}
 
 .chat p {
     color: rgba(17, 26, 35, 0.69);
 }
 
 .chat section {
-    overflow-y: scroll;
+    overflow-y: auto;
     overflow-x: hidden;
-    max-width: 95%;
+    max-width: 100%;
+    padding-left: 5px;
+    padding-right: 5px;
     margin: 5px auto;
 }
 
-.chat div {
+.chat .chat-data div {
     max-width: 90%;
     word-wrap: break-word;
     margin-bottom: 10px;

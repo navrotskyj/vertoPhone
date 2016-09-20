@@ -19,7 +19,7 @@
 
         <nav ng-controller="navigate" class="bar bar-tab">
 
-          <a ng-click="changeState(key, tab)" ng-repeat="(key, tab) in tabs" ng-class="{'active': key == activeTabName}" class="tab-item">
+          <a ng-click="changeState(key, false, tab)" ng-repeat="(key, tab) in tabs" ng-class="{'active': key == activeTabName}" class="tab-item">
               <span ng-class="tab.class"></span>
               <span class="tab-label">{{tab.name}}</span>
           </a>
@@ -38,6 +38,7 @@
         <script type="text/javascript" src="app/ctrl/callCtrl.js"></script>
         <script type="text/javascript" src="app/ctrl/contactsCtrl.js"></script>
         <script type="text/javascript" src="app/ctrl/historyCtrl.js"></script>
+        <script type="text/javascript" src="app/ctrl/chatCtrl.js"></script>
         <script type="text/javascript" src="app/app.js"></script>
     </body>
 </html>

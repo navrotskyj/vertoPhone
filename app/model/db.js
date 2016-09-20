@@ -17,50 +17,44 @@ var modelVerto = {
     _dbCollections: [
         {
             name: "history",
-            columns: [
+            keyPath: "id",
+            autoIncrement: true,
+            index: [
                 {
-                    name: "createdOn"
-                },
-                {
-                    name: "answeredOn"
-                },
-                {
-                    name: "hangupOn"
-                },
-                {
-                    name: "endCause"
-                },
-                {
-                    name: "number"
-                },
-                {
-                    name: "direction"
+                    name: "createdOn",
+                    columns: "createdOn",
+                    unique: false
                 }
             ]
         },
         {
-            name: 'contacts',
-            columns: [{
-                name: "name",
-                unique: false
-            },{
-                name: "email",
-                unique: true
-            },{
-                name: "number",
-                unique: true
-            }]
-        },
-        {
             name: 'chat',
-            columns: [{
-                name: "Name",
-                unique: true
-            }, {
-                name: "Name2",
-                unique: true
-            }]
+            keyPath: "id",
+            autoIncrement: true,
+            index: [
+                {
+                    name: "createdOn",
+                    columns: "createdOn"
+                },
+                {
+                    name: "from",
+                    columns: "from"
+                }
+            ]
         }
+        // {
+        //     name: 'contacts',
+        //     columns: [{
+        //         name: "name",
+        //         unique: false
+        //     },{
+        //         name: "email",
+        //         unique: true
+        //     },{
+        //         name: "number",
+        //         unique: true
+        //     }]
+        // }
     ],
     db: null,
     _destroy: function () {
@@ -81,7 +75,7 @@ var modelVerto = {
             console.debug('onupgradeneeded');
 
             for (var col of scope._dbCollections) {
-                initTable(col.name, col.columns,responseInitTable)
+                initTable(col,responseInitTable)
             }
 
             var responseCount = 0;
@@ -95,28 +89,20 @@ var modelVerto = {
                 }
             }
 
-            function initTable(tableName, columns, callback) {
-                var objectStore = db.createObjectStore(tableName, { keyPath: "id",  autoIncrement: true});
+            function initTable(prop, callback) {
+                var objectStore = db.createObjectStore(prop.name, { keyPath: prop.keyPath,  autoIncrement: prop.autoIncrement});
 
                 // Create an index to search customers by name. We may have duplicates
                 // so we can't use a unique index.
                 // Create an index to search customers by email. We want to ensure that
                 // no two customers have the same email, so use a unique index.
 
-                for (var col of columns) {
-                    objectStore.createIndex(col.name, col.name, { unique: col.unique == true });
+                for (var i of prop.index) {
+                    objectStore.createIndex(i.name, i.columns, { unique: i.unique == true, multiEntry: i.multiEntry == true });
                 }
 
                 callback(objectStore);
 
-                // Use transaction oncomplete to make sure the objectStore creation is
-                // finished before adding data into it.
-                // objectStore.transaction.oncomplete = function(event) {
-                //     // Store values in the newly created objectStore.
-                //     var tableObjectStore = db.transaction(tableName, "readwrite").objectStore(tableName);
-                //
-                //     return callback(tableObjectStore);
-                // };
             }
         }
 
@@ -142,11 +128,19 @@ var modelVerto = {
     list: function (collectionName, params = {}, cb) {
         var transaction = this.db.transaction(collectionName, IDBTransaction.READ_ONLY);
         var objectStore = transaction.objectStore(collectionName);
+        if (params.index) {
+            objectStore = objectStore.index(params.index)
+        }
         var result = [];
         var limit = params.limit || Infinity;
         var idx = 0;
+        var filter = null;
 
-        objectStore.openCursor(null, params.sort).onsuccess = function(event) {
+        if (params.search) {
+            filter = IDBKeyRange.only(params.search)
+        }
+
+        objectStore.openCursor(filter, params.sort).onsuccess = function(event) {
             var cursor = event.target.result;
             if (cursor) {
                 result.push(cursor.value);
