@@ -7,6 +7,10 @@ html, body {
 	height: 400px;*/	
 }
 
+#phone .btn.circle-btn:focus {
+    outline:0;
+}
+
 #phone .no-border {
     border: 0;
 }
@@ -88,6 +92,27 @@ html, body {
     height: 279px;
 }
 
+#phone .card.card-call {
+    height: 224px;
+    margin: 0;
+}
+
+#phone .card.card-call-info {
+    text-align: center;
+    margin-top: 5px;
+}
+
+#phone .card.card-call-footer {
+    margin: 0;
+}
+
+#phone .card.card-call-footer .card-call-btn-close {
+    position: absolute;
+    right: 15px;
+    top: 28px;
+    font-size: 15px;
+}
+
 .content .input-number {
 	width: 79%;
     background-color: transparent;
@@ -103,11 +128,13 @@ html, body {
     height: 50px;
     margin: 3px;
     font-size: 24px;
-    line-height: 50px;
+    /*line-height: 50px;*/
     text-align: center;
     border: 1px solid #d0d0d0;
     border-radius: 25px;
 }
+
+
 
 .bg-success {
     background-color: #4cd964;
