@@ -28,6 +28,10 @@ html, body {
     color: rgba(17, 26, 35, 0.69)
 }
 
+#phone .default-text {
+    color: rgba(17, 26, 35, 0.69);
+}
+
 #phone .dialpad-form .dialpad-input {
     margin-bottom: 0;
     margin-top: 0;
