@@ -37,11 +37,11 @@
             </li>
         </ul>
 
-        <div ng-if="activeCall.menuName == 'dialpad'" ng-include=" 'app/view/dialpadTemplate.html' ">
+        <div ng-if="activeCall.menuName == 'dialpad'"  ng-include=" 'app/view/dialpadTemplate.html' ">
         </div>
 
-        <div ng-if="activeCall.menuName == 'chat'"> 
-            CHAT
+        <div ng-if="activeCall.menuName == 'chat'" class="chat-call" ng-include=" 'app/view/chatTemplate.html' ">
+
         </div>
     </div>
 

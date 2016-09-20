@@ -15,7 +15,7 @@ bg.run(function ($rootScope) {
     }
 });
 
-var vertoPhone = angular.module("vertoPhone", ['app.callService', 'app.contacts', 'app.settings', 'app.chrome', 'app.dialpad', 'app.call']);
+var vertoPhone = angular.module("vertoPhone", ['app.callService', 'app.contacts', 'app.history', 'app.settings', 'app.chrome', 'app.dialpad', 'app.call']);
 
 vertoPhone.constant('Tabs', {
     favorites: {
@@ -25,6 +25,10 @@ vertoPhone.constant('Tabs', {
     history: {
         name: 'History',
         class: 'icon ion-ios-clock-outline'
+    },
+    chat: {
+        name: 'Chat',
+        class: 'icon ion-chatbubbles'
     },
     contacts: {
         name: 'Contacts',

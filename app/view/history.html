@@ -1,9 +1,22 @@
-  <div class="card">
-              <ul class="table-view">
-                <li class="table-view-cell">
-                  <a class="navigate-right" href="../app/two.html" data-transition="slide-in">
-                    Load new page with push
-                  </a>
-                </li>
-              </ul>
-            </div>	
+<div class="content" ng-controller="historyCtrl">
+    <div class="bar bar-standard bar-header-secondary">
+        <input ng-model="search" type="search" placeholder="Search">
+    </div>
+
+    <ul style="padding-top: 44px;" class="table-view">
+        <li  ng-repeat="c in data" class="table-view-cell">
+            <span
+                    ng-class="{'ion-ios-arrow-thin-left': c.direction == 'outbound', 'ion-ios-arrow-thin-right': c.direction == 'inbound', 'color-success': c.answeredOn > 0, 'color-danger': !c.answeredOn}"
+                    class="media-object pull-left icon icon-pages">
+
+            </span>
+            <button ng-click="makeCall(c.number)" class="btn btn-link  history-make-call media-object pull-right icon icon-pages ion-ios-telephone-outline"></button>
+            <div class="media-body">
+                {{c.number || "empty"}}
+            </div>
+            <p style="font-size: 11px;">
+                {{getTime(c.createdOn)}}
+            </p>
+        </li>
+    </ul>
+</div>

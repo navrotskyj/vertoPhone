@@ -73,6 +73,20 @@ html, body {
     margin-left: 10px;
 }
 
+#phone .color-success {
+    color: #4cd964;
+}
+#phone .color-danger {
+    color: #cf2d28;
+}
+
+#phone .history-make-call {
+    right: 14px;
+    position: absolute;
+    color: #4cd964;
+    outline:0
+}
+
 #phone li {
     list-style: none;
 }
@@ -102,6 +116,7 @@ html, body {
     margin-top: 5px;
 }
 
+
 #phone .card.card-call-footer {
     margin: 0;
 }
@@ -111,6 +126,10 @@ html, body {
     right: 15px;
     top: 28px;
     font-size: 15px;
+}
+
+#phone .bar-tab .tab-item .icon~.tab-label {
+    font-size: 9px;
 }
 
 .content .input-number {
@@ -152,4 +171,110 @@ html, body {
 
 .content {
   background-color: #fff;
+}
+
+
+/*CHAT*/
+
+.chat {
+
+}
+
+.chat-call .chat {
+    height: 224px;
+}
+.chat-call .chat section{
+    height: 175px;
+}
+
+.chat-call .chat .from-me::after, .chat-call .chat .from-them:after {
+    background: rgba(247, 247, 247, .98);
+}
+
+
+.chat p {
+    color: rgba(17, 26, 35, 0.69);
+}
+
+.chat section {
+    overflow-y: scroll;
+    overflow-x: hidden;
+    max-width: 95%;
+    margin: 5px auto;
+}
+
+.chat div {
+    max-width: 90%;
+    word-wrap: break-word;
+    margin-bottom: 10px;
+    line-height: 24px;
+}
+
+.chat .clear {clear: both}
+.chat .from-me {
+    position: relative;
+    padding: 10px 20px;
+    color: white;
+    background: #0B93F6;
+    border-radius: 25px;
+    float: right;
+}
+
+.chat .from-me:before {
+     content:"";
+     position:absolute;
+     z-index:-1;
+     bottom:-2px;
+     right:-7px;
+     height:20px;
+     border-right:20px solid #0B93F6;
+     border-bottom-left-radius: 16px 14px;
+     -webkit-transform:translate(0, -2px);
+}
+
+.chat .from-me::after {
+     content:"";
+     position:absolute;
+     z-index:1;
+     bottom:-2px;
+     right:-56px;
+     width:26px;
+     height:20px;
+     background:white;
+     border-bottom-left-radius: 10px;
+     -webkit-transform:translate(-30px, -2px);
+}
+
+.chat .from-them {
+    position: relative;
+    padding: 10px 20px;
+    background: #E5E5EA;
+    border-radius: 25px;
+    color: black;
+    float: left;
+}
+
+.chat .from-them:before {
+     content:"";
+     position:absolute;
+     z-index:2;
+     bottom:-2px;
+     left:-7px;
+     height:20px;
+     border-left:20px solid #E5E5EA;
+     border-bottom-right-radius: 16px 14px;
+     -webkit-transform:translate(0, -2px);
+}
+
+.chat .from-them:after {
+     content:"";
+     position:absolute;
+     z-index:3;
+     bottom:-2px;
+     left:4px;
+     width:26px;
+     height:20px;
+     background:white;
+     border-bottom-right-radius: 10px;
+     -webkit-transform:translate(-30px, -2px);
 }

@@ -1,6 +1,7 @@
 var phoneWindow = null,
-	session,
-	db = getVertoDB();
+	session;
+
+modelVerto.init();
 
 var Session = function (option) {
 	this.verto = new $.verto({
@@ -15,6 +16,10 @@ var Session = function (option) {
 	this.isLogin = false;
 
 	this.verto.login();
+};
+
+Session.prototype.listCollection = function (collectionName, params, cb) {
+	modelVerto.list(collectionName, params, cb);
 };
 
 Session.prototype.logout = function () {
@@ -129,11 +134,13 @@ Session.prototype.onError = function (dialog, e) {
 
 
 
+
 Session.prototype.onDialogState = function (d) {
 	switch (d.state) {
 		case $.verto.enum.state.recovering:
 		case $.verto.enum.state.ringing:
 		case $.verto.enum.state.requesting:
+			d.createdOn = Date.now();
 			this.activeCalls[d.callID] = new Call(d);
 			if (d.direction == $.verto.enum.direction.inbound) {
 				createNotification(
@@ -163,8 +170,20 @@ Session.prototype.onDialogState = function (d) {
 			if (videoTag) {
 				videoTag.remove();
 			}
-
-			delete this.activeCalls[d.callID];
+			if (this.activeCalls[d.callID]) {
+				modelVerto.add('history', {
+					createdOn: d.createdOn,
+					answeredOn: this.activeCalls[d.callID].onActiveTime,
+					hangupOn: Date.now(),
+					endCause: d.cause,
+					number: d.params.remote_caller_id_number,
+					direction: d.direction.name
+				}, function (err) {
+					if (err)
+						console.error(err);
+				});
+				delete this.activeCalls[d.callID];
+			}
 			break;
 		default:
 			console.warn('No handle: ', d.state);
