@@ -29,6 +29,7 @@ angular
         if (from) {
             chatService.from(from, {}, function (data) {
                 $scope.data = data;
+                $scope.$apply();
             })
         }
     }])
@@ -39,7 +40,7 @@ angular
         }
 
         function from(id, params, cb) {
-            $window.vertoSession.listCollection('chat', {limit: 100, index: "from", sort: 'prev', search: [id]}, cb);
+            $window.vertoSession.listCollection('chat', {limit: 100, index: "from", sort: 'prev', search: id}, cb);
         }
 
         return {

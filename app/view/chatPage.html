@@ -2,29 +2,11 @@
     <div class="chat-data">
 
         <section>
-            <div class="from-me">
-                <p>Hey there! What's up?</p>
+            <div ng-repeat-start="c in data" class="{{c.direction == 'inbound' ? 'from-me' : 'from-them'}}">
+                <p>{{c.body}}</p>
             </div>
-            <div class="clear"></div>
-            <div class="from-them">
-                <p>Checking out iOS7 you know..</p>
-            </div>
-            <div class="clear"></div>
-            <div class="from-me">
-                <p>Check out this bubble!</p>
-            </div>
-            <div class="clear"></div>
-            <div class="from-them">
-                <p>It's pretty cool!</p>
-            </div>
-            <div class="clear"></div>
-            <div class="from-me">
-                <p>Yeah it's pure CSS &amp; HTML</p>
-            </div>
-            <div class="clear"></div>
-            <div class="from-them">
-                <p>Wow that's impressive. But what's even more impressive is that this bubble is really high.</p>
-            </div>
+            <div ng-repeat-end class="clear"></div>
+
         </section>
 
     </div>

@@ -133,7 +133,21 @@ Session.prototype.onError = function (dialog, e) {
 };
 
 
+Session.prototype.onMessage = function (v, n, e, msg) {
+	var _msg = {
+		from: msg.from,
+		to: msg.to,
+		body: msg.body,
+		createdOn: Date.now(),
+		direction: "inbound"
+	};
 
+	modelVerto.add('chat', _msg, function (err) {
+		if (err)
+			console.error(err);
+	});
+	sendSession('chat', _msg);
+};
 
 Session.prototype.onDialogState = function (d) {
 	switch (d.state) {
