@@ -57,9 +57,43 @@ Session.prototype.unholdCall = function (id) {
 	}
 };
 
+Session.prototype.toggleHold = function (id) {
+	var call = this.verto.dialogs[id];
+	if (call) {
+		call.toggleHold();
+	}
+};
+
+Session.prototype.dtmf = function (id, d) {
+	var call = this.verto.dialogs[id];
+	if (call) {
+		call.dtmf(d);
+	}
+};
+
+Session.prototype.openMenu = function (id, name) {
+	var call = this.activeCalls[id]
+	if (call) {
+		call.openMenu(name);
+		sendSession('changeCall', this.activeCalls);
+	}
+}
+
+
+Session.prototype.toggleMute = function (id) {
+	var call = this.activeCalls[id];
+	var dialog = this.verto.dialogs[id];
+
+	if (call && dialog) {
+		call.setMute(dialog.setMute('toggle'));
+		sendSession('changeCall', this.activeCalls);
+	};
+}
+
 Session.prototype.onGetVideoContainer = function (d) {
 	var video = document.createElement('video');
 	video.id = d.callID;
+	video.volume = 1;
 	video.style.display = 'none';
 	document.body.appendChild(video);
 	d.params.tag = video.id;
@@ -153,10 +187,24 @@ var Call = function (d) {
 	this.callerIdName = d.params.caller_id_name;
 	this.callerIdNumber = d.params.caller_id_number;
 	this.state = 'newCall';
+	this.onActiveTime = null;
+	this.menuName = '';
+	this.mute = false;
+	this.dtmf = [];
+};
+
+Call.prototype.setMute = function (mute) {
+	this.mute = mute;
 };
 
 Call.prototype.setState = function (state) {
 	this.state = state;
+	if (!this.onActiveTime && state == 'active')
+		this.onActiveTime = Date.now();
+};
+
+Call.prototype.openMenu = function (name) {
+	this.menuName = name;
 };
 
 chrome.app.runtime.onLaunched.addListener(function() {

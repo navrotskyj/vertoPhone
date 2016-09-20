@@ -1,22 +1,23 @@
-<div ng-controller="callCtrl">
+<div class="content bg-default" ng-controller="callCtrl">
 
-    <div class="card no-border">
+    <div class="card no-border bg-default">
         <div style="text-align: center;" class="content-padded">
             <h5>{{activeCall.calleeIdNumber}}</h5>
-            <h5>{{activeCall.state}}</h5>
+            <h5 ui-timer start="activeCall.onActiveTime"></h5>
         </div>
     </div>
 
-    <div class="card no-border" style="min-height: 170px;">
-        <ul class="dialpad">
+    <div class="card no-border bg-default" style="height: 170px;">
+        <ul ng-if="!activeCall.menuName" class="dialpad">
             <li>
-                <a ng-disabled="true" class="circle-btn icon">
-                    <span ng-click="toggleMute(activeCall)" class="icon ion-ios-mic-off"></span>
+                <a ng-click="toggleMute(activeCall.id)" class="circle-btn icon">
+                    <span ng-show="!activeCall.mute" class="icon ion-ios-mic-off"></span>
+                    <span ng-show="activeCall.mute" class="icon ion-ios-mic"></span>
                 </a>
-                <a class="circle-btn icon">
-                    <span class="icon ion-ios-keypad"></span>
+                <a ng-click="openMenu(activeCall.id, 'dialpad')" class="circle-btn icon">
+                    <span  class="icon ion-ios-keypad"></span>
                 </a>
-                <a class="circle-btn icon">
+                <a ng-click="openMenu(activeCall.id, 'transfer')" class="circle-btn icon">
                     <span class="icon ion-ios-redo"></span>
                 </a>
             </li>
@@ -26,19 +27,26 @@
                     <span class="ion-ios-plus-empty"></span>
                 </a>
 
-                <a class="circle-btn icon">
+                <a ng-click="openMenu(activeCall.id, 'chat')" class="circle-btn icon">
                     <span class="ion-chatbubbles"></span>
                 </a>
 
-                <a class="circle-btn icon">
+                <a ng-click="toggleHold(activeCall.id)" class="circle-btn icon">
                     <span class="ion-ios-pause"></span>
                 </a>
             </li>
         </ul>
+
+        <div ng-if="activeCall.menuName == 'dialpad'" style="zoom: 75%;" ng-include=" 'app/view/dialpadTemplate.html' "> 
+        </div>
+
+        <div ng-if="activeCall.menuName == 'chat'"> 
+            CHAT
+        </div>
     </div>
 
 
-    <div class="card no-border" style="margin-bottom: 0">
+    <div class="card no-border bg-default" style="margin-bottom: 0">
         <ul class="dialpad">
             <li>
                 <a  ng-click="dropCall(activeCall.id)" class="circle-btn icon call hangup-call">
@@ -47,6 +55,8 @@
                 <a ng-click="answerCall(activeCall.id)"  class="circle-btn icon call make-call" ng-if="activeCall.state == 'newCall' && activeCall.direction.name == 'inbound'">
                     <span class="ion-ios-telephone"></span>
                 </a>
+
+                <span class="h5 pull-right" ng-click="openMenu(activeCall.id, '')" ng-if="activeCall.menuName">Close</span>
             </li>
         </ul>
     </div>

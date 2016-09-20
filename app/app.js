@@ -15,7 +15,7 @@ bg.run(function ($rootScope) {
     }
 });
 
-var vertoPhone = angular.module("vertoPhone", ['app.callService', 'app.settings', 'app.chrome', 'app.dialpad', 'app.call']);
+var vertoPhone = angular.module("vertoPhone", ['app.callService', 'app.contacts', 'app.settings', 'app.chrome', 'app.dialpad', 'app.call']);
 
 vertoPhone.constant('Tabs', {
     favorites: {
@@ -105,23 +105,21 @@ vertoPhone.run(function($rootScope, $window, CallService) {
         $rootScope.$apply();
     }
 
-    $rootScope.$on('changeState', function (e, stateName) {
+    $rootScope.activeTabName = 'dialpad';
+
+    if (!$rootScope.inCall)
+        changeState($rootScope.activeTabName);
+    $rootScope.changeState = changeState;
+
+    function changeState(stateName) {
+        console.debug(arguments);
+        $rootScope.activeTabName = stateName;
         $rootScope.currentViewTemplate = 'app/view/' + stateName + '.html'
-    });
+    };
 });
 
 vertoPhone.controller('navigate', ['$rootScope', '$scope', 'Tabs', function ($rootScope, $scope, Tabs) {
     $scope.tabs = Tabs;
-    $scope.activeTabName = 'dialpad';
 
-    if (!$rootScope.inCall)
-        changeState($scope.activeTabName);
-    $scope.changeState = changeState;
-
-    function changeState(stateName) {
-        console.debug(arguments);
-        $scope.activeTabName = stateName;
-        $rootScope.$emit('changeState', stateName);
-    }
 }]);
 

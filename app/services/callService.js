@@ -6,7 +6,7 @@
     
 angular
     .module('app.callService', [])
-    .service('CallService', function ($window) {
+    .service('CallService', function ($window, $rootScope) {
     return {
         makeCall: function (number) {
             $window.vertoSession.makeCall(number);
@@ -26,6 +26,33 @@ angular
 
         unholdCall: function (id) {
             $window.vertoSession.unholdCall(id);
+        },
+
+        toggleHold: function (id) {
+            $window.vertoSession.toggleHold(id);
+        },
+
+        toggleMute: function (id) {
+            $window.vertoSession.toggleMute(id);
+        },
+
+        dtmf: function (id, d) {
+            $window.vertoSession.dtmf(id, d);
+        },
+
+        openMenu: function (id, name) {
+            $window.vertoSession.openMenu(id, name);
+        },
+
+        setValue: function (id, key, value) {
+            if ($window.vertoSession[id]) {
+                $window.vertoSession[id][key] = value;
+            }
+        },
+        getValue: function (id, key) {
+            if ($window.vertoSession[id]) {
+                return $window.vertoSession[id][key];
+            }
         }
     }
 });

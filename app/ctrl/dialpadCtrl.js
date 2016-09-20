@@ -11,6 +11,7 @@ angular
         $scope.number = '';
 
         var ringer = document.getElementById('localVideo');
+        ringer.volume = 0.2;
         
         $scope.dtmf = function (digit) {
             $scope.number += digit;
@@ -23,6 +24,6 @@ angular
         };
         
         $scope.delLastNumber = function () {
-            
+            $scope.number = $scope.number.substring(0, $scope.number.length - 1);
         };
     });

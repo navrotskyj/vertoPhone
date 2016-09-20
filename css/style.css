@@ -15,6 +15,11 @@ html, body {
     /*margin: 10px;*/
 }
 
+#phone .content {
+    top: 44px;
+    bottom: 50px;           
+}
+
 #phone .content a {
     color: rgba(17, 26, 35, 0.69)
 }

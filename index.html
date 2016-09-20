@@ -25,10 +25,10 @@
           </a>
 
         </nav>
-        <div ng-include="currentViewTemplate" class="content"></div>
+        <div ng-include="currentViewTemplate"></div>
 
-        <video id="localVideo" style="display: none"></video>
-        <video id="remoteVideo" style="display: none"></video>
+        <video id="localVideo" volume="0.1" style="display: none"></video>
+        <video id="remoteVideo" volume="1" style="display: none"></video>
 
         <script type="text/javascript" src="lib/angular.js"></script>
         <script type="text/javascript" src="lib/ratchet-v2.0.2/js/ratchet.min.js"></script>
@@ -36,6 +36,7 @@
         <script type="text/javascript" src="app/ctrl/settingsCtrl.js"></script>
         <script type="text/javascript" src="app/ctrl/dialpadCtrl.js"></script>
         <script type="text/javascript" src="app/ctrl/callCtrl.js"></script>
+        <script type="text/javascript" src="app/ctrl/contactsCtrl.js"></script>
         <script type="text/javascript" src="app/app.js"></script>
     </body>
 </html>
