@@ -376,6 +376,7 @@ function createVertoWindow() {
 	chrome.app.window.create('index.html',
 		{
 			id: "vertoPhone",
+			// alwaysOnTop: true,
 			innerBounds: {
 				width: 235,
 				height: 430,

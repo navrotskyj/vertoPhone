@@ -45,7 +45,7 @@ vertoPhone.constant('Tabs', {
     }
 });
 
-vertoPhone.run(function($rootScope, $window, CallService) {
+vertoPhone.run(function($rootScope, $window, CallService, $timeout) {
     $rootScope.currentViewTemplate = '';
     $rootScope.session = null;
     $rootScope.activeCalls = [];
@@ -58,6 +58,10 @@ vertoPhone.run(function($rootScope, $window, CallService) {
         if (data.hasOwnProperty('activeCalls')) {
             setActiveCall(data.activeCalls);
         }
+
+        $timeout(function () {
+            $rootScope.isLoadApplication = true;
+        });
 
         document.title = $window.vertoSession && $window.vertoSession.vertoLogin
             ? $window.vertoSession.vertoLogin

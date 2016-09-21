@@ -7,7 +7,7 @@
         <link rel="stylesheet" type="text/css" href="lib/ionicons-2.0.1/css/ionicons.min.css">
         <link rel="stylesheet" type="text/css" href="css/style.css">
     </head>
-    <body class="app" ng-app="vertoPhone"  id="phone">
+    <body class="app" ng-app="vertoPhone"  id="phone" ng-show="isLoadApplication">
         <header class="bar bar-nav">
             <div class="segmented-control">
                 <a ng-click="setViewCall(call)" ng-class="{'bg-success': call.state == 'active', 'bg-danger': call.state == 'held'}" class="control-item" ng-repeat="call in activeCalls">

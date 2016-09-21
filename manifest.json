@@ -14,6 +14,7 @@
   "permissions": [
     "storage",
     "unlimitedStorage",
+    "alwaysOnTopWindows",
     "alarms",
     "notifications",
     "http://localhost/",
