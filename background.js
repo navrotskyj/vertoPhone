@@ -13,7 +13,7 @@ var Session = function (option) {
 	this.notificationNewCall = option.notificationNewCall;
 
 	if (option.ring) {
-		this.ring = 'sound/elegant_ringtone.mp3';
+		this.ring = 'sound/iphone.mp3';
 	}
 
 	this.verto = new $.verto({
