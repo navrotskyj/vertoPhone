@@ -41,7 +41,24 @@ angular
         
         function getActiveCallId() {
             return $rootScope.activeCall && $rootScope.activeCall.id;
-        }
+        };
+
+        // $scope.$watch('activeCall', function (call) {
+        //     if (call && call.initRemoteStream) {
+        //         var $video = document.getElementById(call.id);
+        //         if ($video) {
+                    // var stream = CallService.getCallStream(call.id);
+                    // if (stream) {
+                    //     $video.srcObject = stream.remoteStream;
+                    //     $video.play();
+                    // }
+        //         }
+        //     }
+        // });
+        // 
+        $scope.openVideo = function (call) {
+            CallService.openVideo(call.id);
+        };
 
         $scope.dropCall = dropCall;
         $scope.answerCall = answerCall;
@@ -92,6 +109,29 @@ angular
 
         function between(x, min, max) {
             return x >= min && x <= max;
+        }
+    })
+    .directive('uiVideoCall', function (CallService) {
+        return {
+            restrict: 'AE',
+            replace: true,
+            scope: {
+                callId: "=",
+                videoOn: "="
+            },
+            template: '<video id="{{callId}}"></video>',
+            link: function (scope, el) {
+                var $video = el[0];
+                scope.$watch('videoOn', function (video) {
+                    if (video) {
+                        var stream = CallService.getCallStream(scope.callId);
+                        if (stream) {
+                            $video.srcObject = stream.remoteStream;
+                            $video.play();
+                        }
+                    }
+                });
+            }
         }
     })
     .directive('uiTimer', function () {

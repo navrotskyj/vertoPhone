@@ -20,6 +20,10 @@ angular
             $window.vertoSession.answerCall(id);
         },
 
+        getCallStream: function (id) {
+            return $window.vertoSession.getCallStream(id);
+        },        
+
         holdCall: function (id) {
             $window.vertoSession.holdCall(id);
         },
@@ -46,6 +50,10 @@ angular
             }
 
             $window.vertoSession.transfer(id, dest);
+        },
+
+        openVideo: function (id) {
+            $window.vertoSession.openVideo(id);
         },
 
         openMenu: function (id, name) {

@@ -47,6 +47,13 @@ html, body {
     font-size: 28px;
 }
 
+#phone .card.card-call video {
+    position: absolute;
+    left: 0;
+    right: 0;
+    width: 100%;
+}
+
 #phone .bg-default {
     background-color: rgba(247, 247, 247, .98);
 }

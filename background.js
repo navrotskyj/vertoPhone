@@ -4,6 +4,12 @@ var phoneWindow = null,
 
 modelVerto.init();
 
+var video = document.createElement('video');
+video.id = "localTagVideo";
+video.volume = 1;
+video.style.display = 'none';
+document.body.appendChild(video);
+
 var missedNotifications = {};
 
 var Session = function (option) {
@@ -20,7 +26,8 @@ var Session = function (option) {
 		login: option.login,
 		passwd: option.password,
 		socketUrl: option.server,
-		ringFile: this.ring
+		ringFile: this.ring,
+		localTag: 'localTagVideo'
 	}, this);
 
 	this.activeCalls = {
@@ -43,10 +50,28 @@ Session.prototype.makeCall = function (number, option) {
 		destination_number: number,
 		caller_id_name: this.vertoLogin,
 		caller_id_number: this.vertoLogin,
-		useVideo: false,
+		useVideo: true,
 		useStereo: false
 	});
 };
+
+Session.prototype.getCallStream = function (id) {
+	var call = this.verto.dialogs[id];
+	if (call) {
+		return {
+			localStream: call.rtc.localStream,
+			remoteStream: call.rtc.remoteStream
+		}
+	}
+};
+
+Session.prototype.onRemoteStream = function (d) {
+	var call = this.activeCalls[d.callID];
+	if (call) {
+		call.initRemoteStream = true;
+		sendSession('changeCall', this.activeCalls);
+	};
+}
 
 Session.prototype.dropCall = function (id) {
 	var call = this.verto.dialogs[id];
@@ -98,6 +123,39 @@ Session.prototype.openMenu = function (id, name) {
 		sendSession('changeCall', this.activeCalls);
 	}
 };
+
+Session.prototype.openVideo = function (id) {
+	var call = this.activeCalls[id];
+	var scope = this;
+	if (call && call.initRemoteStream) {
+		console.warn('open window');
+			chrome.app.window.create('app/view/videoCall.html',
+				{
+					id: id,
+					// alwaysOnTop: true,
+					innerBounds: {
+						width: 640,
+						height: 480
+					}
+				},
+				function (window) {
+					window.contentWindow.onload = function (e) {
+						var videoR = e.target.getElementById('remoteVideo');
+						var videoL = e.target.getElementById('localVideo');
+						if (videoR) {
+							var stream = scope.getCallStream(id);
+							if (stream) {
+								videoR.srcObject = stream.remoteStream;
+								videoR.play();
+								videoL.srcObject = stream.localStream;
+								videoL.play();
+							}
+						}
+					}
+				}
+			);
+	}
+}
 
 Session.prototype.transfer = function (id, dest, params) {
 	var dialog = this.verto.dialogs[id];
@@ -240,10 +298,12 @@ var Call = function (d) {
 	this.calleeIdNumber = d.params.remote_caller_id_number;
 	this.callerIdName = d.params.caller_id_name;
 	this.callerIdNumber = d.params.caller_id_number;
+	this.useVideo = d.params.useVideo;
 	this.state = 'newCall';
 	this.onActiveTime = null;
 	this.menuName = '';
 	this.mute = false;
+	this.initRemoteStream = false;
 	this.dtmf = [];
 
 	if (this.direction == $.verto.enum.direction.inbound) {
@@ -257,8 +317,9 @@ Call.prototype.setMute = function (mute) {
 
 Call.prototype.setState = function (state) {
 	this.state = state;
-	if (!this.onActiveTime && state == 'active')
+	if (!this.onActiveTime && state == 'active') {
 		this.onActiveTime = Date.now();
+	}
 };
 
 Call.prototype.openMenu = function (name) {
@@ -271,6 +332,11 @@ Call.prototype.destroy = function (userDropCall) {
 
 	if (!userDropCall && !this.onActiveTime)
 		this.showMissed();
+
+	if (this.useVideo) {
+		var videoWindow = chrome.app.window.get(this.id);
+		videoWindow.close();
+	}
 };
 
 Call.prototype.showNewCall = function () {

@@ -28,13 +28,18 @@
                 </button>
 
                 <!--TODO: Chat not working-->
-                <button ng-disabled="true" ng-click="openMenu(activeCall.id, 'chat')" class="btn circle-btn icon">
-                    <span class="ion-chatbubbles"></span>
+                <button ng-disabled="!activeCall.useVideo && !activeCall.initRemoteStream" ng-click="openVideo(activeCall)" class="btn circle-btn icon">
+                    <span class="ion-ios-videocam"></span>
                 </button>
 
                 <button ng-disabled="activeCall.state != 'active' && activeCall.state != 'held'" ng-click="toggleHold(activeCall.id)" class="btn circle-btn icon" ng-class="{'active': activeCall.state == 'held'}">
                     <span class="ion-ios-pause"></span>
                 </button>
+            </li>
+
+            <li>
+                <div ui-video-call call-id="activeCall.id" video-on="activeCall.initRemoteStream"></div>
+                <!-- <video id="{{activeCall.id}}"></video> -->
             </li>
         </ul>
 
