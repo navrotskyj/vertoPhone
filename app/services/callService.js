@@ -40,6 +40,14 @@ angular
             $window.vertoSession.dtmf(id, d);
         },
 
+        transfer: function (id, dest) {
+            if (!dest) {
+                return false;
+            }
+
+            $window.vertoSession.transfer(id, dest);
+        },
+
         openMenu: function (id, name) {
             $window.vertoSession.openMenu(id, name);
         },

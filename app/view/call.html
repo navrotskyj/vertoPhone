@@ -17,7 +17,7 @@
                 <button ng-click="openMenu(activeCall.id, 'dialpad')" class="btn circle-btn icon">
                     <span  class="icon ion-ios-keypad"></span>
                 </button>
-                <button ng-click="openMenu(activeCall.id, 'transfer')" class="btn circle-btn icon">
+                <button ng-disabled="activeCall.state != 'active' && activeCall.state != 'held'" ng-click="openMenu(activeCall.id, 'transfer')" class="btn circle-btn icon">
                     <span class="icon ion-ios-redo"></span>
                 </button>
             </li>
@@ -37,12 +37,19 @@
             </li>
         </ul>
 
+        <div ng-if="activeCall.menuName == 'transfer'" style="text-align: center; padding: 5px;">
+            <input autofocus ng-keyup="$event.keyCode == 13 && transfer(activeCall.id, destinationNumber)" type="text" ng-model="destinationNumber">
+            <button ng-click="transfer(activeCall.id, destinationNumber)" class="btn circle-btn icon">
+                <span class="ion-ios-redo-outline"></span>
+            </button>
+        </div>
+
         <div ng-if="activeCall.menuName == 'dialpad'"  ng-include=" 'app/view/dialpadTemplate.html' ">
         </div>
 
-        <div ng-if="activeCall.menuName == 'chat'" class="chat-call" ng-include=" 'app/view/chatTemplate.html' ">
+        <!--<div ng-if="activeCall.menuName == 'chat'" class="chat-call" ng-include=" 'app/view/chatTemplate.html' ">-->
 
-        </div>
+        <!--</div>-->
     </div>
 
     <div class="card card-call-footer no-border bg-default" style="margin-bottom: 0">

@@ -43,9 +43,10 @@ Session.prototype.dropCall = function (id) {
 };
 
 Session.prototype.answerCall = function (id, params) {
-	var call = this.verto.dialogs[id];
-	if (call) {
-		call.answer();
+	var d = this.verto.dialogs[id];
+	var call = this.activeCalls[id];
+	if (d && call && !call.onActiveTime) {
+		d.answer();
 	}
 };
 
@@ -77,13 +78,18 @@ Session.prototype.dtmf = function (id, d) {
 };
 
 Session.prototype.openMenu = function (id, name) {
-	var call = this.activeCalls[id]
+	var call = this.activeCalls[id];
 	if (call) {
 		call.openMenu(name);
 		sendSession('changeCall', this.activeCalls);
 	}
-}
+};
 
+Session.prototype.transfer = function (id, dest, params) {
+	var dialog = this.verto.dialogs[id];
+	if (dialog)
+		dialog.transfer(dest, params);
+};
 
 Session.prototype.toggleMute = function (id) {
 	var call = this.activeCalls[id];
@@ -92,8 +98,8 @@ Session.prototype.toggleMute = function (id) {
 	if (call && dialog) {
 		call.setMute(dialog.setMute('toggle'));
 		sendSession('changeCall', this.activeCalls);
-	};
-}
+	}
+};
 
 Session.prototype.onGetVideoContainer = function (d) {
 	var video = document.createElement('video');
@@ -133,21 +139,23 @@ Session.prototype.onError = function (dialog, e) {
 };
 
 
-Session.prototype.onMessage = function (v, n, e, msg) {
-	var _msg = {
-		from: msg.from,
-		to: msg.to,
-		body: msg.body,
-		createdOn: Date.now(),
-		direction: "inbound"
-	};
-
-	modelVerto.add('chat', _msg, function (err) {
-		if (err)
-			console.error(err);
-	});
-	sendSession('chat', _msg);
-};
+// TODO
+// Session.prototype.onMessage = function (v, n, e, msg) {
+// 	console.log(arguments);
+// 	var _msg = {
+// 		from: msg.from,
+// 		to: msg.to,
+// 		body: msg.body,
+// 		createdOn: Date.now(),
+// 		direction: "inbound"
+// 	};
+//
+// 	modelVerto.add('chat', _msg, function (err) {
+// 		if (err)
+// 			console.error(err);
+// 	});
+// 	sendSession('chat', _msg);
+// };
 
 Session.prototype.onDialogState = function (d) {
 	switch (d.state) {

@@ -6,39 +6,93 @@
     
 angular
     .module('app.call', ['app.callService'])
-    .controller('callCtrl', function ($scope, CallService) {
-        $scope.dropCall = function (id) {
-            CallService.dropCall(id);
-        };
+    .controller('callCtrl', function ($scope, CallService, $rootScope) {
 
-        $scope.answerCall = function (id) {
+        var onKeyUp = $rootScope.$on('key:down', function (e, key) {
+            if (key.target.nodeName == "INPUT") return;
+            var myKey = false;
+
+            if (key.keyCode == 77) {
+                myKey = true;
+                toggleMute(getActiveCallId());
+            } else if (key.keyCode == 72) {
+                myKey = true;
+                toggleHold(getActiveCallId());
+            } else if (between(key.keyCode, 48, 57) || between(key.keyCode, 96, 105)) {
+                myKey = true;
+                dtmf(key.key)
+            } else if (key.keyCode == 13 || key.keyCode == 65 ) {
+                myKey = true;
+                answerCall(getActiveCallId())
+            } else if (key.keyCode == 81) {
+                myKey = true;
+                dropCall(getActiveCallId())
+            }
+
+            if (myKey) {
+                key.preventDefault();
+                $scope.$apply();
+            }
+        });
+
+        $scope.$on('$destroy', function () {
+            onKeyUp();
+        });
+        
+        function getActiveCallId() {
+            return $rootScope.activeCall && $rootScope.activeCall.id;
+        }
+
+        $scope.dropCall = dropCall;
+        $scope.answerCall = answerCall;
+        $scope.holdCall = holdCall;
+        $scope.unholdCall = unholdCall;
+        $scope.toggleHold = toggleHold;
+        $scope.toggleMute = toggleMute;
+        $scope.transfer = transfer;
+        $scope.openMenu = openMenu;
+        $scope.dtmf = dtmf;
+
+        function answerCall(id) {
             CallService.answerCall(id);
-        };
+        }
 
-        $scope.holdCall = function (id) {
+        function holdCall(id) {
             CallService.holdCall(id);
-        };
+        }
 
-        $scope.unholdCall = function (id) {
+        function unholdCall(id) {
             CallService.unholdCall(id);
-        };
+        }
 
-        $scope.toggleHold = function (id) {
+        function toggleHold(id) {
             CallService.toggleHold(id);
-        };        
+        }
 
-        $scope.toggleMute = function (id) {
+        function toggleMute(id) {
             CallService.toggleMute(id);
-        };          
+        }
 
-        $scope.openMenu = function (id, name) {
+        function transfer(id, dest) {
+            CallService.transfer(id, dest);
+        }
+
+        function openMenu(id, name) {
             CallService.openMenu(id, name);
-        };
+        }
 
-        $scope.dtmf = function (d) {
-            if ($scope.activeCall) 
+        function dtmf(d) {
+            if ($scope.activeCall)
                 CallService.dtmf($scope.activeCall.id, d);
-        };
+        }
+
+        function dropCall(id) {
+            CallService.dropCall(id);
+        }
+
+        function between(x, min, max) {
+            return x >= min && x <= max;
+        }
     })
     .directive('uiTimer', function () {
         return {
