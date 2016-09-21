@@ -1,10 +1,26 @@
 <div class="content">
-	<div class="card no-border" >
+	<div class="card card-settings no-border" >
 	    <form ng-controller="settingsCtrl" method="post">
 	        <input ng-model="settings.login" type="text" id="settingsLogin" placeholder="login">
 	        <input ng-model="settings.password" type="password" id="settingsPassword" placeholder="password">
 	        <input ng-model="settings.server" type="text" id="settingsServer" placeholder="server">
-	        <button ng-click="saveSettings()" id="saveSettings" type="submit" class="btn btn-positive btn-block">Save</button>
+
+			<li class="table-view-cell">
+				Notify new call
+				<div ui-toggle ng-model="settings.notificationNewCall"></div>
+			</li>
+
+			<li class="table-view-cell">
+				Notify missed call
+				<div ui-toggle ng-model="settings.notificationMissed"></div>
+			</li>
+
+			<li class="table-view-cell">
+				Ring! Ring!
+				<div ui-toggle ng-model="settings.ring"></div>
+			</li>
+
+	        <button ng-click="saveSettings()" type="submit" class="btn btn-positive">Save</button>
 	    </form>
 	</div>
 </div>

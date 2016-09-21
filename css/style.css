@@ -91,6 +91,20 @@ html, body {
     outline:0
 }
 
+#phone .card.card-settings {
+    font-size: 15px;
+}
+
+#phone .card.card-settings input {
+    height: 33px;
+    margin-bottom: 10px;
+}
+#phone .card.card-settings button {
+    margin-top: 15px;
+    height: 30px;
+    width: 100%;
+}
+
 #phone li {
     list-style: none;
 }

@@ -10,7 +10,7 @@ bg.run(function ($rootScope) {
     $rootScope.sendBg = function (action, data) {
         chrome.runtime.sendMessage({
             action: action,
-            data: data,
+            data: data
         });
     }
 });
@@ -134,8 +134,29 @@ vertoPhone.run(function($rootScope, $window, CallService) {
     };
 });
 
+vertoPhone.directive('uiToggle', function () {
+    return {
+        restrict: "AE",
+        replace: true,
+        scope: {
+            ngModel: '='
+        },
+        template: `
+            <div class="toggle" ng-class="{'active': ngModel}" ng-click="changeToggle()">
+				<div class="toggle-handle"></div>
+				<input type="checkbox" style="display: none;" ng-model="ngModel">
+			</div>
+        `,
+        link: function (scope, el) {
+
+            scope.changeToggle = function () {
+                scope.ngModel = !scope.ngModel;
+            }
+        }
+    }
+});
+
 vertoPhone.controller('navigate', ['$rootScope', '$scope', 'Tabs', function ($rootScope, $scope, Tabs) {
     $scope.tabs = Tabs;
-
 }]);
 

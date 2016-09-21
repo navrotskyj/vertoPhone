@@ -1,16 +1,28 @@
 var phoneWindow = null,
-	session;
+	session,
+	maxCallCount = 5;
 
 modelVerto.init();
 
+var missedNotifications = {};
+
 var Session = function (option) {
+	this.vertoLogin = option.login;
+
+	this.notificationMissed = option.notificationMissed;
+	this.notificationNewCall = option.notificationNewCall;
+
+	if (option.ring) {
+		this.ring = 'sound/elegant_ringtone.mp3';
+	}
+
 	this.verto = new $.verto({
 		login: option.login,
 		passwd: option.password,
-		socketUrl: option.server
+		socketUrl: option.server,
+		ringFile: this.ring
 	}, this);
-	
-	this.vertoLogin = option.login;
+
 	this.activeCalls = {
 	};
 	this.isLogin = false;
@@ -38,8 +50,10 @@ Session.prototype.makeCall = function (number, option) {
 
 Session.prototype.dropCall = function (id) {
 	var call = this.verto.dialogs[id];
-	if (call)
+	if (call) {
+		call.userDropCall = true;
 		call.hangup();
+	}
 };
 
 Session.prototype.answerCall = function (id, params) {
@@ -162,16 +176,12 @@ Session.prototype.onDialogState = function (d) {
 		case $.verto.enum.state.recovering:
 		case $.verto.enum.state.ringing:
 		case $.verto.enum.state.requesting:
+			if (Object.keys(this.activeCalls).length >= maxCallCount) {
+				d.hangup();
+				return;
+			}
 			d.createdOn = Date.now();
 			this.activeCalls[d.callID] = new Call(d);
-			if (d.direction == $.verto.enum.direction.inbound) {
-				createNotification(
-					"New call",
-					d.params.remote_caller_id_number,
-					d.params.remote_caller_id_name,
-					'images/call64.png'
-				);
-			}
 			break;
 		case $.verto.enum.state.active:
 			var dialogs = this.verto.dialogs;
@@ -204,7 +214,10 @@ Session.prototype.onDialogState = function (d) {
 					if (err)
 						console.error(err);
 				});
-				delete this.activeCalls[d.callID];
+				if (this.activeCalls[d.callID]) {
+					this.activeCalls[d.callID].destroy(d.userDropCall);
+					delete this.activeCalls[d.callID];
+				}
 			}
 			break;
 		default:
@@ -232,6 +245,10 @@ var Call = function (d) {
 	this.menuName = '';
 	this.mute = false;
 	this.dtmf = [];
+
+	if (this.direction == $.verto.enum.direction.inbound) {
+		this.showNewCall();
+	}
 };
 
 Call.prototype.setMute = function (mute) {
@@ -248,8 +265,115 @@ Call.prototype.openMenu = function (name) {
 	this.menuName = name;
 };
 
+Call.prototype.destroy = function (userDropCall) {
+	if (this.notificationId)
+		chrome.notifications.clear(this.notificationId);
+
+	if (!userDropCall && !this.onActiveTime)
+		this.showMissed();
+};
+
+Call.prototype.showNewCall = function () {
+	if  (session && session.notificationNewCall) {
+		var scope = this;
+		chrome.notifications.create({
+			type: 'basic',
+			iconUrl: 'images/call64.png',
+			title: "New call",
+			message: this.calleeIdNumber,
+			contextMessage: this.calleeIdName,
+			requireInteraction: true,
+			buttons: [
+				{
+					title: "Answer",
+					iconUrl: "images/call64.png"
+				},
+				{
+					title: "Hangup",
+					iconUrl: "images/error64.png"
+				}
+			]
+		}, function (id) {
+			console.log(id);
+			scope.notificationId = id;
+		});
+	} else {
+		if (!chrome.app.window.get('vertoPhone'))
+			createVertoWindow();
+	}
+
+};
+
+Call.prototype.showMissed = function () {
+	if  (session && session.notificationMissed) {
+		var number = this.calleeIdNumber;
+		chrome.notifications.create({
+			type: 'basic',
+			iconUrl: 'images/error64.png',
+			title: "Missed call!",
+			message: number,
+			contextMessage: this.calleeIdName + '(' + new Date().toLocaleString() + ')',
+			requireInteraction: true,
+			buttons: [
+				{
+					title: "Reply",
+					iconUrl: "images/call64.png"
+				},
+				{
+					title: "OK",
+					iconUrl: "images/success64.png"
+				}
+			]
+		}, function (id) {
+			console.log(id);
+			missedNotifications[id] = {
+				number: number
+			}
+		});
+	}
+};
+
+chrome.notifications.onClosed.addListener(function (notifId, byUser) {
+	if (byUser && missedNotifications.hasOwnProperty(notifId))
+		delete missedNotifications[notifId];
+});
+
+chrome.notifications.onButtonClicked.addListener(function(notifId, btnIdx) {
+	console.log(notifId);
+	if (missedNotifications.hasOwnProperty(notifId)) {
+		if (btnIdx === 0 && session) {
+			session.makeCall(missedNotifications[notifId].number);
+		}
+		delete  missedNotifications[notifId];
+		chrome.notifications.clear(notifId);
+		return;
+	}
+	var calls = session && session.activeCalls;
+	for (var key in calls) {
+		if (calls[key].notificationId == notifId) {
+			if (btnIdx) { // answer
+				session.dropCall(key)
+			} else {
+				session.answerCall(key)
+			}
+		}
+	}
+	chrome.notifications.clear(notifId);
+});
+
 chrome.app.runtime.onLaunched.addListener(function() {
-	chrome.app.window.create('index.html', 
+	createVertoWindow();
+});
+
+
+chrome.storage.local.get('settings', function(data) {
+	if (!session && data && data.settings) {
+		session = new Session(data && data.settings);
+	}
+});
+
+function createVertoWindow() {
+	chrome.app.window.create('index.html',
 		{
 			id: "vertoPhone",
 			innerBounds: {
@@ -277,13 +401,7 @@ chrome.app.runtime.onLaunched.addListener(function() {
 
 		}
 	);
-
-	chrome.storage.local.get('settings', function(data) {
-		if (!session && data && data.settings) {
-			session = new Session(data && data.settings);
-		}
-	});
-});
+}
 
 function makeCall(number, options) {
 	session.makeCall(number, options);
