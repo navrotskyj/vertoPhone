@@ -70,8 +70,8 @@ Session.prototype.onRemoteStream = function (d) {
 	if (call) {
 		call.initRemoteStream = true;
 		sendSession('changeCall', this.activeCalls);
-	};
-}
+	}
+};
 
 Session.prototype.dropCall = function (id) {
 	var call = this.verto.dialogs[id];
@@ -335,7 +335,8 @@ Call.prototype.destroy = function (userDropCall) {
 
 	if (this.useVideo) {
 		var videoWindow = chrome.app.window.get(this.id);
-		videoWindow.close();
+		if (videoWindow)
+			videoWindow.close();
 	}
 };
 
