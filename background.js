@@ -85,7 +85,9 @@ Session.prototype.answerCall = function (id, params) {
 	var d = this.verto.dialogs[id];
 	var call = this.activeCalls[id];
 	if (d && call && !call.onActiveTime) {
-		d.answer();
+		d.answer({
+			useVideo: true
+		});
 	}
 };
 
