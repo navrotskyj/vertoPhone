@@ -31,6 +31,7 @@ var Session = function (option) {
 	}, this);
 
 	this.activeCalls = {
+
 	};
 	this.isLogin = false;
 
@@ -50,7 +51,7 @@ Session.prototype.makeCall = function (number, option) {
 		destination_number: number,
 		caller_id_name: this.vertoLogin,
 		caller_id_number: this.vertoLogin,
-		useVideo: true,
+		useVideo: option && option.useVideo,
 		useStereo: false
 	});
 };
@@ -321,6 +322,8 @@ Call.prototype.setState = function (state) {
 	this.state = state;
 	if (!this.onActiveTime && state == 'active') {
 		this.onActiveTime = Date.now();
+		if (this.notificationId)
+			chrome.notifications.clear(this.notificationId);
 	}
 };
 

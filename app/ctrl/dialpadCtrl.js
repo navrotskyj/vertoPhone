@@ -46,11 +46,11 @@ angular
         $scope.delLastNumber = delLastNumber;
         $scope.makeCall = makeCall;
 
-        function makeCall() {
+        function makeCall(useVideo) {
             if ($scope.execMakeCall || !$scope.number)
                 return;
 
-            CallService.makeCall($scope.number);
+            CallService.makeCall($scope.number, {useVideo: useVideo});
             $scope.execMakeCall = true;
             $timeout(function () {
                 $scope.execMakeCall = false;

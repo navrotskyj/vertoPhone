@@ -59,13 +59,16 @@
     </div>
 
     <div class="card card-call-footer no-border bg-default" style="margin-bottom: 0">
-        <ul class="dialpad">
+        <ul class="dialpad call-group">
             <li>
-                <button  ng-click="dropCall(activeCall.id)" class="btn circle-btn icon call hangup-call">
-                    <span  class="ion-ios-telephone"></span>
+                <button  ng-click="dropCall(activeCall.id)" class="btn circle-btn icon ion-ios-telephone hangup-call">
+
                 </button>
-                <button ng-click="answerCall(activeCall.id)"  class="btn circle-btn icon call make-call" ng-if="activeCall.state == 'newCall' && activeCall.direction.name == 'inbound'">
-                    <span class="ion-ios-telephone"></span>
+                <button ng-click="answerCall(activeCall.id)"  class="btn circle-btn icon ion-ios-telephone call make-call" ng-if="activeCall.state == 'newCall' && activeCall.direction.name == 'inbound'">
+
+                </button>
+                <button ng-click="answerCall(activeCall.id, true)"  class="btn circle-btn icon ion-ios-videocam call make-call-video" ng-if="activeCall.state == 'newCall' && activeCall.direction.name == 'inbound'">
+
                 </button>
             </li>
         </ul>

@@ -8,8 +8,8 @@ angular
     .module('app.callService', [])
     .service('CallService', function ($window, $rootScope) {
     return {
-        makeCall: function (number) {
-            $window.vertoSession.makeCall(number);
+        makeCall: function (number, params) {
+            $window.vertoSession.makeCall(number, params);
         },
 
         dropCall: function (id) {

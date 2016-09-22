@@ -12,9 +12,11 @@
 		</div>
 	</div>
 
-	<ul class="call-btn-group">
+	<ul class="dialpad call-group">
 	    <li>
 	        <button ng-disabled="execMakeCall" ng-click="makeCall()" class="btn circle-btn icon ion-ios-telephone call make-call"></button>
+
+			<button ng-disabled="execMakeCall" ng-click="makeCall(true)" class="btn circle-btn icon ion-ios-videocam call make-call-video"></button>
 	    </li>
 	</ul>
 </div>

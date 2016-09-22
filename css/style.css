@@ -7,6 +7,21 @@ html, body {
 	height: 400px;*/	
 }
 
+#phone .call-group .btn.circle-btn.icon.ion-ios-videocam.call.make-call-video {
+    display: none;
+    position: absolute;
+    top: 0;
+    margin-left: 6px;
+}
+
+/*#phone .call-group:hover .btn.circle-btn.icon.ion-ios-videocam.call.make-call-video:hover {*/
+    /*display: inline;*/
+/*}*/
+
+#phone .dialpad.call-group:hover .btn.circle-btn.icon.ion-ios-videocam.call.make-call-video {
+    display: inline-block;;
+}
+
 #phone .btn.circle-btn:focus {
     outline:0;
 }
@@ -48,10 +63,8 @@ html, body {
 }
 
 #phone .card.card-call video {
-    position: absolute;
-    left: 0;
-    right: 0;
     width: 100%;
+    height: 110px;
 }
 
 #phone .bg-default {
@@ -63,7 +76,7 @@ html, body {
     background-color: #4cd964;
 }
 
-#phone .call.hangup-call {
+#phone .hangup-call {
     color: #fff;
     background-color: #cf2d28;
     /* Safari */
@@ -125,6 +138,7 @@ html, body {
     padding: 0;
     display: table;
     margin: 0 auto;
+    position: relative;
 }
 
 #phone #dialpad form {
