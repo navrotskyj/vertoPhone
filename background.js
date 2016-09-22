@@ -27,7 +27,7 @@ var Session = function (option) {
 		passwd: option.password,
 		socketUrl: option.server,
 		ringFile: this.ring,
-		localTag: 'localTagVideo'
+		// localTag: 'localTagVideo'
 	}, this);
 
 	this.activeCalls = {
