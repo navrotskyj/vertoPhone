@@ -50,6 +50,8 @@ angular
             if ($scope.execMakeCall || !$scope.number)
                 return;
 
+
+
             CallService.makeCall($scope.number, {useVideo: useVideo});
             $scope.execMakeCall = true;
             $timeout(function () {

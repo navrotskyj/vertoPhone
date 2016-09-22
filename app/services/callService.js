@@ -16,8 +16,8 @@ angular
             $window.vertoSession.dropCall(id);
         },
 
-        answerCall: function (id) {
-            $window.vertoSession.answerCall(id);
+        answerCall: function (id, params) {
+            $window.vertoSession.answerCall(id, params);
         },
 
         getCallStream: function (id) {

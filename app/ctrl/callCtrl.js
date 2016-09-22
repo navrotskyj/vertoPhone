@@ -70,8 +70,10 @@ angular
         $scope.openMenu = openMenu;
         $scope.dtmf = dtmf;
 
-        function answerCall(id) {
-            CallService.answerCall(id);
+        function answerCall(id, useVideo) {
+            CallService.answerCall(id, {
+                useVideo: useVideo
+            });
         }
 
         function holdCall(id) {

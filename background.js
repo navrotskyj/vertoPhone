@@ -87,7 +87,7 @@ Session.prototype.answerCall = function (id, params) {
 	var call = this.activeCalls[id];
 	if (d && call && !call.onActiveTime) {
 		d.answer({
-			useVideo: true
+			useVideo: params && params.useVideo
 		});
 	}
 };
