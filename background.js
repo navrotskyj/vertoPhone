@@ -27,6 +27,10 @@ var Session = function (option) {
 		passwd: option.password,
 		socketUrl: option.server,
 		ringFile: this.ring,
+		videoParams: {
+			maxWidth: "200",
+			maxHeight: "150"
+		},
 		// localTag: 'localTagVideo'
 	}, this);
 
@@ -60,13 +64,13 @@ Session.prototype.getCallStream = function (id) {
 	var call = this.verto.dialogs[id];
 	if (call) {
 		return {
-			localStream: call.rtc.localStream,
-			remoteStream: call.rtc.remoteStream
+			// localStreamSrc: URL.createObjectURL(call.rtc.localStream),
+			remoteStreamSrc: URL.createObjectURL(call.rtc.remoteStream)
 		}
 	}
 };
 
-Session.prototype.onRemoteStream = function (d, stream) {
+Session.prototype.onRemoteStream = function (d) {
 	var call = this.activeCalls[d.callID];
 	if (call) {
 		call.initRemoteStream = true;
@@ -182,13 +186,18 @@ Session.prototype.toggleMute = function (id) {
 };
 
 Session.prototype.onGetVideoContainer = function (d) {
+	var video = addVideo(d.callID);
+	d.params.tag = video.id;
+};
+
+function addVideo(id) {
 	var video = document.createElement('video');
-	video.id = d.callID;
+	video.id = id;
 	video.volume = 1;
 	video.style.display = 'none';
 	document.body.appendChild(video);
-	d.params.tag = video.id;
-};
+	return video
+}
 
 Session.prototype.onWSLogin = function (e, success) {
 	console.info('onWSLogin');

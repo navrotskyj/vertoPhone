@@ -128,9 +128,8 @@ angular
                     if (video) {
                         var stream = CallService.getCallStream(scope.callId);
                         if (stream) {
-                            $video.volume = 0;
-                            $video.srcObject = stream.remoteStream;
-                            $video.play();
+                            $video.src = stream.remoteStreamSrc;
+                            $video.play()
                         }
                     }
                 });

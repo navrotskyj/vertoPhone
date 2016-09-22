@@ -28,7 +28,7 @@
                 </button>
 
                 <!--TODO: Chat not working-->
-                <button ng-disabled="!activeCall.useVideo && !activeCall.initRemoteStream" ng-click="openVideo(activeCall)" class="btn circle-btn icon">
+                <button ng-disabled="true || !activeCall.useVideo && !activeCall.initRemoteStream" ng-click="openVideo(activeCall)" class="btn circle-btn icon">
                     <span class="ion-ios-videocam"></span>
                 </button>
 
