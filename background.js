@@ -66,7 +66,7 @@ Session.prototype.getCallStream = function (id) {
 	}
 };
 
-Session.prototype.onRemoteStream = function (d) {
+Session.prototype.onRemoteStream = function (d, stream) {
 	var call = this.activeCalls[d.callID];
 	if (call) {
 		call.initRemoteStream = true;
@@ -132,33 +132,38 @@ Session.prototype.openVideo = function (id) {
 	var scope = this;
 	if (call && call.initRemoteStream) {
 		console.warn('open window');
-			chrome.app.window.create('app/view/videoCall.html',
-				{
-					id: id,
-					// alwaysOnTop: true,
-					innerBounds: {
-						width: 640,
-						height: 480
-					}
-				},
-				function (window) {
-					window.contentWindow.onload = function (e) {
-						var videoR = e.target.getElementById('remoteVideo');
-						var videoL = e.target.getElementById('localVideo');
-						if (videoR) {
-							var stream = scope.getCallStream(id);
-							if (stream) {
-								videoR.srcObject = stream.remoteStream;
-								videoR.play();
-								videoL.srcObject = stream.localStream;
-								videoL.play();
-							}
+		var title = ' ' + call.calleeIdNumber + ' (' + call.calleeIdName + ')';
+
+		chrome.app.window.create('app/view/videoCall.html',
+			{
+				id: id,
+				// alwaysOnTop: true,
+				innerBounds: {
+					width: 640,
+					height: 480
+				}
+			},
+			function (window) {
+				window.contentWindow.onload = function (e) {
+					this.document.title += title;
+					var videoR = e.target.getElementById('remoteVideo');
+					var videoL = e.target.getElementById('localVideo');
+					if (videoR) {
+						var stream = scope.getCallStream(id);
+						if (stream) {
+							videoR.srcObject = stream.remoteStream;
+							videoR.volume = 0;
+							videoR.play();
+							videoL.srcObject = stream.localStream;
+							videoL.volume = 0;
+							videoL.play();
 						}
 					}
 				}
-			);
+			}
+		);
 	}
-}
+};
 
 Session.prototype.transfer = function (id, dest, params) {
 	var dialog = this.verto.dialogs[id];
@@ -338,11 +343,9 @@ Call.prototype.destroy = function (userDropCall) {
 	if (!userDropCall && !this.onActiveTime)
 		this.showMissed();
 
-	if (this.useVideo) {
-		var videoWindow = chrome.app.window.get(this.id);
-		if (videoWindow)
-			videoWindow.close();
-	}
+	var videoWindow = chrome.app.window.get(this.id);
+	if (videoWindow)
+		videoWindow.close();
 };
 
 Call.prototype.showNewCall = function () {

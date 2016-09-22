@@ -121,13 +121,14 @@ angular
                 callId: "=",
                 videoOn: "="
             },
-            template: '<video id="{{callId}}"></video>',
+            template: '<video volume="0" id="{{callId}}"></video>',
             link: function (scope, el) {
                 var $video = el[0];
                 scope.$watch('videoOn', function (video) {
                     if (video) {
                         var stream = CallService.getCallStream(scope.callId);
                         if (stream) {
+                            $video.volume = 0;
                             $video.srcObject = stream.remoteStream;
                             $video.play();
                         }
