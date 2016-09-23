@@ -30,7 +30,7 @@ var Session = function (option) {
 		videoParams: {
 			maxWidth: "200",
 			maxHeight: "150"
-		},
+		}
 		// localTag: 'localTagVideo'
 	}, this);
 
@@ -64,8 +64,8 @@ Session.prototype.getCallStream = function (id) {
 	var call = this.verto.dialogs[id];
 	if (call) {
 		return {
-			// localStreamSrc: URL.createObjectURL(call.rtc.localStream),
-			remoteStreamSrc: URL.createObjectURL(call.rtc.remoteStream)
+			localStream: call.rtc.localStream,
+			remoteStream: call.rtc.remoteStream
 		}
 	}
 };

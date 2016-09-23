@@ -43,19 +43,6 @@ angular
             return $rootScope.activeCall && $rootScope.activeCall.id;
         };
 
-        // $scope.$watch('activeCall', function (call) {
-        //     if (call && call.initRemoteStream) {
-        //         var $video = document.getElementById(call.id);
-        //         if ($video) {
-                    // var stream = CallService.getCallStream(call.id);
-                    // if (stream) {
-                    //     $video.srcObject = stream.remoteStream;
-                    //     $video.play();
-                    // }
-        //         }
-        //     }
-        // });
-        // 
         $scope.openVideo = function (call) {
             CallService.openVideo(call.id);
         };
@@ -128,7 +115,8 @@ angular
                     if (video) {
                         var stream = CallService.getCallStream(scope.callId);
                         if (stream) {
-                            $video.src = stream.remoteStreamSrc;
+                            $video.srcObject = stream.remoteStream;
+                            $video.volume = 0;
                             $video.play()
                         }
                     }
