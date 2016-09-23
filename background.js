@@ -60,6 +60,46 @@ Session.prototype.makeCall = function (number, option) {
 	});
 };
 
+Session.prototype.screenShare = function (parentCallId, destination_number) {
+	var call = this.activeCalls[parentCallId];
+	if (!call) {
+		return // ERROR
+	}
+
+	chrome.desktopCapture.chooseDesktopMedia(["screen", "window"], (desktop_id) => {
+		navigator.webkitGetUserMedia({
+			audio: false,
+			video: {
+				mandatory: {
+					chromeMediaSource: 'desktop',
+					chromeMediaSourceId: desktop_id,
+					minWidth: 1280,
+					maxWidth: 1280,
+					minHeight: 720,
+					maxHeight: 720
+				}
+			}
+		}, function (stream) {
+			console.log(stream);
+		}, function (e) {
+			console.error(e)
+		});
+	});
+
+	// this.verto.newCall({
+	// 	destination_number: destination_number,
+	// 	caller_id_name: this.vertoLogin,
+	// 	caller_id_number: this.vertoLogin,
+	// 	useAudio: false,
+	// 	useStereo: false,
+	// 	useVideo: true,
+	// 	screenShare: true,
+	// 	userVariables: {
+	// 		verto_parent_callId: parentCallId
+	// 	}
+	// });
+};
+
 Session.prototype.getCallStream = function (id) {
 	var call = this.verto.dialogs[id];
 	if (call) {
@@ -311,10 +351,10 @@ var Call = function (d) {
 	this.cause = d.cause;
 	this.answered = d.answered;
 	this.attach = d.attach;
-	this.calleeIdName = d.params.remote_caller_id_name;
-	this.calleeIdNumber = d.params.remote_caller_id_number;
-	this.callerIdName = d.params.caller_id_name;
-	this.callerIdNumber = d.params.caller_id_number;
+	this.calleeIdName = d.params.remote_caller_id_name; // && d.params.remote_caller_id_name.split('@')[0];
+	this.calleeIdNumber = d.params.remote_caller_id_number; // && d.params.remote_caller_id_number.split('@')[0];
+	this.callerIdName = d.params.caller_id_name;// && d.params.caller_id_name.split('@')[0];
+	this.callerIdNumber = d.params.caller_id_number; // && d.params.caller_id_number.split('@')[0];
 	this.useVideo = d.params.useVideo;
 	this.state = 'newCall';
 	this.onActiveTime = null;

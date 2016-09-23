@@ -47,6 +47,7 @@ angular
             CallService.openVideo(call.id);
         };
 
+        $scope.screenShare = screenShare;
         $scope.dropCall = dropCall;
         $scope.answerCall = answerCall;
         $scope.holdCall = holdCall;
@@ -57,6 +58,9 @@ angular
         $scope.openMenu = openMenu;
         $scope.dtmf = dtmf;
 
+        function screenShare(id) {
+            CallService.screenShare(id, {});
+        }
         function answerCall(id, useVideo) {
             CallService.answerCall(id, {
                 useVideo: useVideo

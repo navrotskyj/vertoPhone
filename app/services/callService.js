@@ -11,6 +11,9 @@ angular
         makeCall: function (number, params) {
             $window.vertoSession.makeCall(number, params);
         },
+        screenShare: function (id, params) {
+            $window.vertoSession.screenShare(id, params);
+        },
 
         dropCall: function (id) {
             $window.vertoSession.dropCall(id);

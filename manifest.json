@@ -19,6 +19,7 @@
     "http://localhost/",
     "audioCapture",
     "videoCapture",
+    "desktopCapture",
     "<all_urls>",
     "fullscreen"
   ],
