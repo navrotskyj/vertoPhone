@@ -60,44 +60,24 @@ Session.prototype.makeCall = function (number, option) {
 	});
 };
 
-Session.prototype.screenShare = function (parentCallId, destination_number) {
+Session.prototype.screenShare = function (parentCallId) {
 	var call = this.activeCalls[parentCallId];
 	if (!call) {
 		return // ERROR
 	}
 
-	chrome.desktopCapture.chooseDesktopMedia(["screen", "window"], (desktop_id) => {
-		navigator.webkitGetUserMedia({
-			audio: false,
-			video: {
-				mandatory: {
-					chromeMediaSource: 'desktop',
-					chromeMediaSourceId: desktop_id,
-					minWidth: 1280,
-					maxWidth: 1280,
-					minHeight: 720,
-					maxHeight: 720
-				}
-			}
-		}, function (stream) {
-			console.log(stream);
-		}, function (e) {
-			console.error(e)
-		});
+	this.verto.newCall({
+		destination_number: call.calleeIdNumber + '-screen',
+		caller_id_name: this.vertoLogin,
+		caller_id_number: this.vertoLogin,
+		useAudio: false,
+		useStereo: false,
+		useVideo: true,
+		screenShare: true,
+		userVariables: {
+			verto_parent_callId: parentCallId
+		}
 	});
-
-	// this.verto.newCall({
-	// 	destination_number: destination_number,
-	// 	caller_id_name: this.vertoLogin,
-	// 	caller_id_number: this.vertoLogin,
-	// 	useAudio: false,
-	// 	useStereo: false,
-	// 	useVideo: true,
-	// 	screenShare: true,
-	// 	userVariables: {
-	// 		verto_parent_callId: parentCallId
-	// 	}
-	// });
 };
 
 Session.prototype.getCallStream = function (id) {
@@ -287,6 +267,26 @@ Session.prototype.onError = function (dialog, e) {
 // };
 
 Session.prototype.onDialogState = function (d) {
+
+	var screenShare = /^(\d+)-screen$/.exec(d.params.remote_caller_id_number);
+
+	if (screenShare) {
+		var number = screenShare[1];
+		for (var key in this.activeCalls) {
+			if (this.activeCalls[key].calleeIdNumber === number) {
+				d.screenShare = true;
+				if (this.activeCalls[key].screenShareCall) {
+					// TODO close window;
+					return;
+				} else {
+					return this.activeCalls[key].setScreenShareCall(d);
+				}
+			}
+		}
+		console.error('WTF screen');
+		return;
+	}
+
 	switch (d.state) {
 		case $.verto.enum.state.recovering:
 		case $.verto.enum.state.ringing:
@@ -301,7 +301,7 @@ Session.prototype.onDialogState = function (d) {
 		case $.verto.enum.state.active:
 			var dialogs = this.verto.dialogs;
 			for (var key in dialogs) {
-				if (key != d.callID && dialogs.hasOwnProperty(key) && dialogs[key].state == $.verto.enum.state.active) {
+				if (key != d.callID && dialogs.hasOwnProperty(key) && dialogs[key].state == $.verto.enum.state.active && !dialogs[key].screenShare) {
 					dialogs[key].hold();
 				}
 			}
@@ -351,22 +351,33 @@ var Call = function (d) {
 	this.cause = d.cause;
 	this.answered = d.answered;
 	this.attach = d.attach;
-	this.calleeIdName = d.params.remote_caller_id_name; // && d.params.remote_caller_id_name.split('@')[0];
-	this.calleeIdNumber = d.params.remote_caller_id_number; // && d.params.remote_caller_id_number.split('@')[0];
-	this.callerIdName = d.params.caller_id_name;// && d.params.caller_id_name.split('@')[0];
-	this.callerIdNumber = d.params.caller_id_number; // && d.params.caller_id_number.split('@')[0];
+	this.calleeIdName = d.params.remote_caller_id_name;
+	this.calleeIdNumber = deleteDomain(d.params.remote_caller_id_number);
+	this.callerIdName = d.params.caller_id_name;
+	this.callerIdNumber = deleteDomain(d.params.caller_id_number);
 	this.useVideo = d.params.useVideo;
 	this.state = 'newCall';
 	this.onActiveTime = null;
 	this.menuName = '';
 	this.mute = false;
 	this.initRemoteStream = false;
+	this.screenShareCall = null;
 	this.dtmf = [];
 
 	if (this.direction == $.verto.enum.direction.inbound) {
 		this.showNewCall();
 	}
 };
+
+function deleteDomain(param) {
+	if (typeof param == "string") {
+		var i = param.indexOf('@');
+		if (~i) {
+			param = param.substr(0, i);
+		}
+	}
+	return param;
+}
 
 Call.prototype.setMute = function (mute) {
 	this.mute = mute;
@@ -392,9 +403,26 @@ Call.prototype.destroy = function (userDropCall) {
 	if (!userDropCall && !this.onActiveTime)
 		this.showMissed();
 
+	if (this.screenShareCall) {
+		try {
+			this.screenShareCall.hangup();
+		} catch (e) {
+			log.error(e)
+		}
+	}
+
 	var videoWindow = chrome.app.window.get(this.id);
 	if (videoWindow)
 		videoWindow.close();
+};
+
+Call.prototype.setScreenShareCall = function (d) {
+	d.screenShareCall = d;
+};
+
+Call.prototype.hangupScreen = function () {
+	if (this.screenShareCall)
+		return this.screenShareCall.hangup();
 };
 
 Call.prototype.showNewCall = function () {
