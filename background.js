@@ -14,6 +14,7 @@ var missedNotifications = {};
 
 var Session = function (option) {
 	this.vertoLogin = option.login;
+	this.lastCallNumber = null;
 
 	this.notificationMissed = option.notificationMissed;
 	this.notificationNewCall = option.notificationNewCall;
@@ -50,7 +51,12 @@ Session.prototype.logout = function () {
 	this.verto.logout();
 };
 
+Session.prototype.getLastCallNumber = function () {
+	return this.lastCallNumber;
+}
+
 Session.prototype.makeCall = function (number, option) {
+	this.lastCallNumber = number;
 	this.verto.newCall({
 		destination_number: number,
 		caller_id_name: this.vertoLogin,
@@ -453,8 +459,8 @@ Call.prototype.setScreenShareCall = function (d) {
 		videoRight.src = screenShareCallStreemSrc;
 		videoRight.play();
 		w.contentWindow.document.getElementsByClassName('right')[0].style.display = 'flex'
-	} else {
-		this.openVideo();
+	} else if (session) {
+		session.openVideo(this.id);
 	}
 };
 

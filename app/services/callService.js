@@ -63,15 +63,8 @@ angular
             $window.vertoSession.openMenu(id, name);
         },
 
-        setValue: function (id, key, value) {
-            if ($window.vertoSession[id]) {
-                $window.vertoSession[id][key] = value;
-            }
-        },
-        getValue: function (id, key) {
-            if ($window.vertoSession[id]) {
-                return $window.vertoSession[id][key];
-            }
+        getLastCallNumber: function (id, key) {
+            return $window.vertoSession.getLastCallNumber();
         }
     }
 });

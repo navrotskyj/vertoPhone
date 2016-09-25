@@ -47,10 +47,13 @@ angular
         $scope.makeCall = makeCall;
 
         function makeCall(useVideo) {
-            if ($scope.execMakeCall || !$scope.number)
+            if ($scope.execMakeCall)
                 return;
 
-
+            if (!$scope.number) {
+                $scope.number = CallService.getLastCallNumber();
+                return;
+            }
 
             CallService.makeCall($scope.number, {useVideo: useVideo});
             $scope.execMakeCall = true;
