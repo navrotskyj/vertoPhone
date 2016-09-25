@@ -1,8 +1,35 @@
 var phoneWindow = null,
 	session,
+	videoParamsBest = {},
 	maxCallCount = 5;
 
 modelVerto.init();
+$.verto.init({skipPermCheck: true}, ()=> {
+	videoParamsBest = {};
+	var count = $.verto.videoDevices.length;
+
+	$.verto.videoDevices.forEach( (i) => {
+		console.log('try check test video ', i)
+		$.FSRTC.getValidRes(i.id, (r) => {
+			videoParamsBest[i.id] = {
+				w: r.bestResSupported[0],
+				h: r.bestResSupported[1]
+			};
+
+			if (!--count && session && videoParamsBest[session.selectedVideo]) {
+				session.verto.videoParams({
+					minWidth: videoParamsBest[session.selectedVideo].w,
+		            minHeight: videoParamsBest[session.selectedVideo].h,
+		            maxWidth: videoParamsBest[session.selectedVideo].w,
+		            maxHeight: videoParamsBest[session.selectedVideo].h,
+		            minFrameRate: 15,
+				})	
+			}
+		});
+
+		
+	})
+})
 
 var video = document.createElement('video');
 video.id = "localTagVideo";
@@ -23,15 +50,35 @@ var Session = function (option) {
 		this.ring = 'sound/iphone.mp3';
 	}
 
+	this.selectedVideo = option.selectedVideo;
+	this.selectedSpeaker = option.selectedSpeaker;
+	this.selectedAudio = option.selectedAudio;
+
+	var scope = this;
+
+	this.videoParams = {};
+
+	if (videoParamsBest[this.selectedVideo]) {
+		this.videoParams = {
+			minWidth: videoParamsBest[this.selectedVideo].w,
+            minHeight: videoParamsBest[this.selectedVideo].h,
+            maxWidth: videoParamsBest[this.selectedVideo].w,
+            maxHeight: videoParamsBest[this.selectedVideo].h,
+            minFrameRate: 15,
+		}
+	}
+
+	console.log('test', videoParamsBest);
+
 	this.verto = new $.verto({
 		login: option.login,
 		passwd: option.password,
 		socketUrl: option.server,
 		ringFile: this.ring,
-		videoParams: {
-			// maxWidth: "200",
-			// maxHeight: "150"
-		}
+		useCamera: this.selectedVideo,
+		useSpeak: this.selectedSpeaker,
+		useMic: this.selectedAudio,
+		videoParams: this.videoParams
 		// localTag: 'localTagVideo'
 	}, this);
 
@@ -53,7 +100,19 @@ Session.prototype.logout = function () {
 
 Session.prototype.getLastCallNumber = function () {
 	return this.lastCallNumber || "";
-}
+};
+
+Session.prototype.refreshDevicesList = function () {
+	$.verto.init({skipPermCheck: true}, ()=> {})
+};
+
+Session.prototype.getDevicesList = function (cb) {
+	return {
+		audioInDevices: $.verto.audioInDevices,
+		audioOutDevices: $.verto.audioOutDevices,
+		videoDevices: $.verto.videoDevices,
+	}
+};
 
 Session.prototype.makeCall = function (number, option) {
 	this.lastCallNumber = number;
@@ -62,7 +121,12 @@ Session.prototype.makeCall = function (number, option) {
 		caller_id_name: this.vertoLogin,
 		caller_id_number: this.vertoLogin,
 		useVideo: option && option.useVideo,
-		useStereo: false
+		
+		useStereo: false,
+
+		useCamera: this.selectedVideo,
+		useSpeak: this.selectedSpeaker,
+		useMic: this.selectedAudio
 	});
 };
 
@@ -260,6 +324,25 @@ Session.prototype.onError = function (dialog, e) {
 		error: e
 	}
 };
+
+Session.prototype.getMediaDevices = function (cb) {
+	var res = {
+		videoinputs: [],
+		audioInputs: []
+	}
+	navigator.mediaDevices.enumerateDevices()
+		.then(function(devices) {
+		  devices.forEach(function(device) {
+		    console.log(device.kind + ": " + device.label +
+		            " id = " + device.deviceId);
+		    if (device.kind == "audiooutput") {
+		    	res.audioInputs.push(device);
+		    } else {
+		    	res.videoInputs.push(device);
+		    }
+		  });
+		})
+}
 
 
 // TODO

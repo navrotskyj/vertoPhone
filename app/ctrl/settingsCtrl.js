@@ -12,4 +12,6 @@ angular
         $scope.saveSettings = function () {
             $rootScope.sendBg('saveSettings', $scope.settings);
         };
+
+        $scope.devices = window.vertoSession.getDevicesList();
     }]);

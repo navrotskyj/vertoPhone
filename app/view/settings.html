@@ -20,6 +20,25 @@
 				<div ui-toggle ng-model="settings.ring"></div>
 			</li>
 
+			<div class="form-group">
+				<span class="ion-ios-mic"></span>
+				<select ng-model="settings.selectedAudio" ng-options="item.id as item.label for item in devices.audioInDevices">
+				</select>
+			</div>
+
+
+			<div class="form-group">
+				<span class="ion-ios-volume-high"></span>
+				<select ng-model="settings.selectedSpeaker" ng-options="item.id as item.label for item in devices.audioOutDevices">
+				</select>
+			</div>			
+
+			<div class="form-group">
+				<span class="ion-ios-camera"></span>
+				<select ng-model="settings.selectedVideo" ng-options="item.id as item.label for item in devices.videoDevices">
+				</select>
+			</div>					
+
 	        <button ng-click="saveSettings()" type="submit" class="btn btn-positive">Save</button>
 	    </form>
 	</div>
