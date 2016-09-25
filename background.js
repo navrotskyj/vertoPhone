@@ -52,7 +52,7 @@ Session.prototype.logout = function () {
 };
 
 Session.prototype.getLastCallNumber = function () {
-	return this.lastCallNumber;
+	return this.lastCallNumber || "";
 }
 
 Session.prototype.makeCall = function (number, option) {
@@ -282,7 +282,7 @@ Session.prototype.onError = function (dialog, e) {
 
 Session.prototype.onDialogState = function (d) {
 
-	var screenShare = /^(\d+).*-screen$/.exec(d.params.remote_caller_id_number);
+	var screenShare = /^(\d+).*-screen$/.exec(d.params.destination_number || d.params.remote_caller_id_number);
 
 	if (screenShare) {
 		var number = screenShare[1];
