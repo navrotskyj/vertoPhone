@@ -23,8 +23,8 @@
             </li>
 
             <li>
-                <button ng-disabled="false" ng-click="screenShare(activeCall.id)" class="btn circle-btn icon">
-                    <span class="ion-ios-plus-empty"></span>
+                <button ng-class="{'active': activeCall.screenShareCall}" ng-click="screenShare(activeCall.id)" class="btn circle-btn icon">
+                    <span class="ion-ios-monitor"></span>
                 </button>
 
                 <!--TODO: Chat not working-->

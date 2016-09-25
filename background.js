@@ -28,8 +28,8 @@ var Session = function (option) {
 		socketUrl: option.server,
 		ringFile: this.ring,
 		videoParams: {
-			maxWidth: "200",
-			maxHeight: "150"
+			// maxWidth: "200",
+			// maxHeight: "150"
 		}
 		// localTag: 'localTagVideo'
 	}, this);
@@ -66,6 +66,11 @@ Session.prototype.screenShare = function (parentCallId) {
 		return // ERROR
 	}
 
+	if (call.screenShareCall) {
+		this.verto.dialogs[call.screenShareCall].hangup();
+		return
+	}
+
 	this.verto.newCall({
 		destination_number: call.calleeIdNumber + '-screen',
 		caller_id_name: this.vertoLogin,
@@ -73,10 +78,7 @@ Session.prototype.screenShare = function (parentCallId) {
 		useAudio: false,
 		useStereo: false,
 		useVideo: true,
-		screenShare: true,
-		userVariables: {
-			verto_parent_callId: parentCallId
-		}
+		screenShare: true
 	});
 };
 
@@ -157,7 +159,7 @@ Session.prototype.openVideo = function (id) {
 	if (call && call.initRemoteStream) {
 		console.warn('open window');
 		var title = ' ' + call.calleeIdNumber + ' (' + call.calleeIdName + ')';
-
+		var screenShareCallStreemSrc = call.screenShareCallStreem;
 		chrome.app.window.create('app/view/videoCall.html',
 			{
 				id: id,
@@ -170,18 +172,24 @@ Session.prototype.openVideo = function (id) {
 			function (window) {
 				window.contentWindow.onload = function (e) {
 					this.document.title += title;
-					var videoR = e.target.getElementById('remoteVideo');
+					var videoLeft = e.target.getElementById('remoteVideoLeft');
 					var videoL = e.target.getElementById('localVideo');
-					if (videoR) {
-						var stream = scope.getCallStream(id);
-						if (stream) {
-							videoR.srcObject = stream.remoteStream;
-							videoR.volume = 0;
-							videoR.play();
-							videoL.srcObject = stream.localStream;
-							videoL.volume = 0;
-							videoL.play();
+					var stream = scope.getCallStream(id);
+					if (stream) {
+						videoLeft.srcObject = stream.remoteStream;
+						videoLeft.volume = 0;
+						videoLeft.play();
+						videoL.srcObject = stream.localStream;
+						videoL.volume = 0;
+						videoL.play();
+						if (screenShareCallStreemSrc) {
+							var videoRight = e.target.getElementById('remoteVideoRight');
+							videoRight.volume = 0;
+							videoRight.src = screenShareCallStreemSrc;
+							videoRight.play();
+							e.target.getElementsByClassName('right')[0].style.display = 'flex'
 						}
+
 					}
 				}
 			}
@@ -276,11 +284,16 @@ Session.prototype.onDialogState = function (d) {
 			if (this.activeCalls[key].calleeIdNumber === number) {
 				d.screenShare = true;
 				if (d.state == $.verto.enum.state.ringing) {
-					d.answer();
+					d.answer({useVideo: true});
 				} else if (d.state == $.verto.enum.state.answering) {
-					return this.activeCalls[key].setScreenShareCall(d);
+					this.activeCalls[key].setScreenShareCall(d);
+					return sendSession('changeCall', this.activeCalls);
 				} else if (d.state == $.verto.enum.state.requesting) {
-					return this.activeCalls[key].setScreenShareCall(d);
+					this.activeCalls[key].setScreenShareCall(d);
+					return sendSession('changeCall', this.activeCalls);
+				} else if (d.state == $.verto.enum.state.hangup) {
+					this.activeCalls[key].removeScreenShareCall(d);
+					return sendSession('changeCall', this.activeCalls);
 				}
 				return;
 			}
@@ -372,6 +385,16 @@ var Call = function (d) {
 	}
 };
 
+Call.prototype.removeScreenShareCall = function (d) {
+	this.screenShareCall = null;
+	this.screenShareCallStreem = null;
+	var w = chrome.app.window.get(this.id);
+	if (w) {
+		w.contentWindow.document.getElementById('remoteVideoRight').src = '';
+		w.contentWindow.document.getElementsByClassName('right')[0].style.display = 'none'
+	}
+}
+
 function deleteDomain(param) {
 	if (typeof param == "string") {
 		var i = param.indexOf('@');
@@ -421,30 +444,18 @@ Call.prototype.destroy = function (userDropCall) {
 
 Call.prototype.setScreenShareCall = function (d) {
 	this.screenShareCall = d.callID;
-	this.screenShareCallStreem = URL.createObjectURL(d.rtc.remoteStream || d.rtc.localStream);
-	var scope = this;
-	var title = d.callID;
-	chrome.app.window.create('app/view/screenCall.html',
-		{
-			id: d.callID + '-screan',
-			// alwaysOnTop: true,
-			innerBounds: {
-				width: 640,
-				height: 480
-			}
-		},
-		function (window) {
-			window.contentWindow.onload = function (e) {
-				this.document.title += title;
-				var videoR = e.target.getElementById('remoteVideo');
-				if (videoR) {
-					videoR.src = scope.screenShareCallStreem;
-					videoR.volume = 0;
-					videoR.play();
-				}
-			}
-		}
-	);
+	var screenShareCallStreemSrc = this.screenShareCallStreem = URL.createObjectURL(d.rtc.remoteStream || d.rtc.localStream);
+	
+	var w = chrome.app.window.get(this.id);
+	if (w) {
+		var videoRight = w.contentWindow.document.getElementById('remoteVideoRight');
+		videoRight.volume = 0;
+		videoRight.src = screenShareCallStreemSrc;
+		videoRight.play();
+		w.contentWindow.document.getElementsByClassName('right')[0].style.display = 'flex'
+	} else {
+		this.openVideo();
+	}
 };
 
 Call.prototype.hangupScreen = function () {

@@ -2,21 +2,55 @@
 <html>
 <head>
   <title>Video call</title>
-  <style type="text/css">
+	<link rel="stylesheet" type="text/css" href="../../lib/ratchet-v2.0.2/css/ratchet.min.css">
+	<link rel="stylesheet" type="text/css" href="../../lib/ratchet-v2.0.2/css/ratchet-theme-ios.css">
+	<link rel="stylesheet" type="text/css" href="../../lib/ionicons-2.0.1/css/ionicons.min.css">	
+	<style type="text/css">
 
 	body {
 		color: purple;
 		background-color: black; 
 	}
 
-	#remoteVideo {
-		position: absolute; 
-		width: 100%; 
+	#remoteVideoLeft, #remoteVideoRight {
+		width: 100%;
 		height: 100%;
 	}
 
+	.video {
+		position: absolute; 
+		width: 100%;
+		height: 100%;
+    	display: flex;	
+	}
+
+	.left, .right {
+		width: 100%;
+		height: 100%;
+	} 
+
+	.close {
+		display: none;
+	}
+
+	.group-btn {
+	    position: absolute;
+	    width: 100%;
+	    height: 50px;
+	    left: 15px;
+	    top: 15px;
+	}
+/*
+	.group-btn:hover button {
+		display: flex;
+	}
+
+	.group-btn button {
+		display: none;
+	}*/
+
 	#localVideo {
-		background-color: red;
+		background-color: black;
 		position: fixed; 
 		right: 0;
 		bottom: 0;
@@ -29,10 +63,21 @@
 		<div> 
 
 		</div>
-		<div>
-			<video id="remoteVideo"></video>
-		</div>
-		<div>
+		<div class="video">
+			<div class="left">
+				<div class="group-btn">
+					<!-- <button class="btn circle-btn icon ion-ios-telephone"></button> -->
+				</div>	
+				<video id="remoteVideoLeft"></video>
+			</div>
+
+			<div class="right close">
+				<div class="group-btn">
+					B
+				</div>	
+				<video id="remoteVideoRight"></video>
+			</div>
+
 			<video id="localVideo"></video>
 		</div>
 	</body>
