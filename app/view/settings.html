@@ -20,6 +20,11 @@
 				<div ui-toggle ng-model="settings.ring"></div>
 			</li>
 
+			<li class="table-view-cell">
+				Always on top
+				<div ui-toggle ng-model="settings.alwaysOnTop"></div>
+			</li>
+
 			<div class="form-group">
 				<span class="ion-ios-mic"></span>
 				<select ng-model="settings.selectedAudio" ng-options="item.id as item.label for item in devices.audioInDevices">

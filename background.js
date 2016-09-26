@@ -54,6 +54,8 @@ var Session = function (option) {
 	this.selectedSpeaker = option.selectedSpeaker;
 	this.selectedAudio = option.selectedAudio;
 
+	this.alwaysOnTop = option.alwaysOnTop || false;
+
 	var scope = this;
 
 	this.videoParams = {};
@@ -88,6 +90,10 @@ var Session = function (option) {
 	this.isLogin = false;
 
 	this.verto.login();
+
+	if (phoneWindow) {
+		phoneWindow.setAlwaysOnTop(this.alwaysOnTop)
+	}
 };
 
 Session.prototype.listCollection = function (collectionName, params, cb) {
@@ -679,7 +685,7 @@ function createVertoWindow() {
 	chrome.app.window.create('index.html',
 		{
 			id: "vertoPhone",
-			// alwaysOnTop: true,
+			alwaysOnTop: session && session.alwaysOnTop,
 			innerBounds: {
 				width: 235,
 				height: 430,
