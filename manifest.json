@@ -22,7 +22,8 @@
     "videoCapture",
     "desktopCapture",
     "<all_urls>",
-    "fullscreen"
+    "fullscreen",
+    "background"
   ],
   "app": {
     "background": {
