@@ -9,13 +9,20 @@ angular
     .controller('historyCtrl', ['$scope', '$rootScope', 'historyService', 'CallService', function ($scope, $rootScope, historyService, CallService) {
         $scope.data = [];
         
-        $scope.$watch('search', function (val) {
-            console.log(val)
-        });
-        
-        historyService.list({}, function (data) {
-            $scope.data = data;
-            $scope.$apply()
+        $scope.$watch('search', function (val, oldVal) {
+            var f = {
+                column: 'number'
+            };
+            if (val)
+                f.reg = new RegExp('^' + val);
+
+            historyService.list({
+                search: f
+            }, function (data) {
+                $scope.data = data;
+                $scope.$apply()
+            });
+
         });
 
         $scope.makeCall = function (number) {
@@ -29,9 +36,9 @@ angular
     .service('historyService', function ($window) {
 
         function list(params, cb) {
-            $window.vertoSession.listCollection('history', {limit: 100, sort: 'prev', search: params.search}, cb);
+            $window.vertoSession.listCollection('history', {limit: 100, index: "createdOn", sort: 'prev', search: params.search}, cb);
         }
-        
+
         return {
             list: list
         }

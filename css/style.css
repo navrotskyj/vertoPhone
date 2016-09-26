@@ -21,10 +21,18 @@ html, body {
 #phone .form-group select{
     margin: 5px;
 }
+
 #phone .form-group span {
     font-size: 50px;
     width: 60px
 }
+
+#phone .form-group.contact span {
+    font-size: 24px;
+    width: 32px;
+    padding-top: 4px;
+}
+
 /*#phone .call-group:hover .btn.circle-btn.icon.ion-ios-videocam.call.make-call-video:hover {*/
     /*display: inline;*/
 /*}*/

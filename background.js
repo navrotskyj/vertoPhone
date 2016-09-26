@@ -94,6 +94,15 @@ Session.prototype.listCollection = function (collectionName, params, cb) {
 	modelVerto.list(collectionName, params, cb);
 };
 
+Session.prototype.addCollection = function (collectionName, params, cb) {
+	modelVerto.add(collectionName, params, cb);
+};
+
+Session.prototype.updateCollection = function (collectionName, id, params, cb) {
+	modelVerto.update(collectionName, id, params, cb);
+};
+
+
 Session.prototype.logout = function () {
 	this.verto.logout();
 };

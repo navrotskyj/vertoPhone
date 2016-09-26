@@ -1,14 +1,17 @@
-
 <div class="content" ng-controller="contactsCtrl">
   <div class="bar bar-standard bar-header-secondary">
-    <input type="search" placeholder="Search">
+    <input ng-model="search" type="search" placeholder="Search">
   </div>
 
-  <ul style="padding-top: 44px;" class="table-view">
-    <li ng-repeat="c in contacts" class="table-view-cell">
-      <a class="navigate-right">
-        {{c.name}}
-      </a>
+  <ul class="table-view tab-content">
+    <li  ng-repeat="c in data" class="table-view-cell">
+      <div class="media-body " style="width:100%;">
+        <button ng-click="changeState('contacts', true, c)" class="btn btn-link  media-object pull-left" style="text-align: left; width: 100%; color: #929292">
+          {{c.name}}
+        </button>
+      </div>
+
+      <button  ng-click="makeCall(c.number); $event.stopPropagation()" class="btn btn-link  history-make-call media-object pull-right icon icon-pages ion-ios-telephone-outline "></button>
     </li>
   </ul>
 </div>

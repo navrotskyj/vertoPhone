@@ -1,0 +1,24 @@
+<div class="content" ng-controller="contactPageCtrl">
+    <div class="card card-settings no-border" >
+        <form method="post">
+            <input ng-model="data.name" type="text" placeholder="Name">
+
+            <div class="form-group contact" ng-repeat="n in data.numbers">
+                <span ng-click="removerNumber(data.numbers, n)" class="ion-ios-minus-outline color-danger"></span>
+                <input ng-model="n.number" type="text" placeholder="Number" >
+            </div>
+
+
+            <a ng-click="addNumber(data)" class="btn btn-link">Add number</a>
+
+            <li class="table-view-cell">
+                Favorite
+                <div ui-toggle ng-model="data.favorite"></div>
+            </li>
+
+
+            <button ng-click="save(data)" type="submit" class="btn btn-positive">Save</button>
+
+        </form>
+    </div>
+</div>

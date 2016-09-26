@@ -24,6 +24,33 @@ var modelVerto = {
                     name: "createdOn",
                     columns: "createdOn",
                     unique: false
+                },
+                {
+                    name: "number",
+                    columns: "number",
+                    unique: false
+                }
+            ]
+        },
+        {
+            name: "contacts",
+            keyPath: "id",
+            autoIncrement: true,
+            index: [
+                {
+                    name: "name",
+                    columns: "name",
+                    unique: false
+                },
+                {
+                    name: "number",
+                    columns: "number",
+                    unique: true
+                },
+                {
+                    name: "favorite",
+                    columns: "favorite",
+                    unique: false
                 }
             ]
         },
@@ -124,6 +151,22 @@ var modelVerto = {
             return cb(e.target.error)
         };
     },
+
+    update: function (collectionName, id, data, cb) {
+        var trans = this.db.transaction(collectionName, IDBTransaction.READ_WRITE);
+        var store = trans.objectStore(collectionName);
+
+        // add
+        var requestPut = store.put(data);
+
+        requestPut.onsuccess = function(e) {
+            return cb(null, e);
+        };
+
+        requestPut.onerror = function(e) {
+            return cb(e.target.error)
+        };
+    },
     
     list: function (collectionName, params = {}, cb) {
         var transaction = this.db.transaction(collectionName, IDBTransaction.READ_ONLY);
@@ -133,19 +176,24 @@ var modelVerto = {
         }
         var result = [];
         var limit = params.limit || Infinity;
-        var idx = 0;
         var filter = null;
+        var reg = null;
 
-        if (params.search) {
-            filter = IDBKeyRange.only(params.search)
+        if (params.search && params.search.text) {
+            filter = IDBKeyRange.only(params.search.text)
+        }
+
+        if (params.search && params.search.reg, params.search.column) {
+            reg = params.search.reg;
         }
 
         objectStore.openCursor(filter, params.sort).onsuccess = function(event) {
             var cursor = event.target.result;
             if (cursor) {
-                result.push(cursor.value);
+                if (!reg || reg.test(cursor.value[params.search.column]))
+                    result.push(cursor.value);
 
-                if (++idx >= limit) {
+                if (result.length >= limit) {
                     transaction.abort();
                     return cb && cb(result);
                 } else {
