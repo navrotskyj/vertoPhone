@@ -72,8 +72,6 @@ var Session = function (option) {
 		}
 	}
 
-	console.log('test', videoParamsBest);
-
 	this.verto = new $.verto({
 		login: option.login,
 		passwd: option.password,
@@ -446,6 +444,7 @@ Session.prototype.onDialogState = function (d) {
 		case $.verto.enum.state.destroy:
 			var videoTag = document.getElementById(d.callID);
 			if (videoTag) {
+				videoTag.src = "";
 				videoTag.remove();
 			}
 			if (this.activeCalls[d.callID]) {

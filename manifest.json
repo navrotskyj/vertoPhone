@@ -4,6 +4,7 @@
   "description"     : "FreeSWITCH verto phone.",
   "short_name"      : "vertoSoftPhone",
   "version"         : "0.1",
+  "author"          : "navrotskyj@gmail.com",
   "minimum_chrome_version": "23",
   "icons": {
     "16": "images/call64.png",
