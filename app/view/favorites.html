@@ -1,1 +1,16 @@
-<video id="igor"></video>
+<div class="content" ng-controller="favoritesCtrl">
+    <div class="bar bar-standard bar-header-secondary">
+        <input ng-model="search" type="search" placeholder="Search">
+    </div>
+
+    <ul class="table-view tab-content">
+        <li  ng-repeat="c in data" class="table-view-cell">
+            <div class="media-body " style="width:100%;">
+                <button ng-click="changeState('contacts', true, c)" class="btn btn-link  media-object pull-left" style="text-align: left; width: 100%; color: #929292">
+                    {{c.name}}
+                </button>
+            </div>
+
+        </li>
+    </ul>
+</div>

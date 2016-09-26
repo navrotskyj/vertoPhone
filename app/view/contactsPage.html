@@ -1,6 +1,6 @@
 <div class="content" ng-controller="contactPageCtrl">
     <div class="card card-settings no-border" >
-        <form method="post">
+        <form method="post" ng-if="edit">
             <input ng-model="data.name" type="text" placeholder="Name">
 
             <div class="form-group contact" ng-repeat="n in data.numbers">
@@ -19,6 +19,21 @@
 
             <button ng-click="save(data)" type="submit" class="btn btn-positive">Save</button>
 
+        </form>
+
+        <form ng-if="!edit">
+            <span>{{data.name}}</span>
+            <ul class="table-view ">
+                <li class="table-view-cell" ng-repeat="n in data.numbers">
+                    <div class="media-body">
+                        {{n.number}}
+                    </div>
+                    <a  ng-click="makeCall(n.number); $event.stopPropagation()" class="color-success btn btn-link pull-right icon icon-pages ion-ios-telephone-outline "></a>
+                </li>
+            </ul>
+
+            <a ng-click="remove(data.id)" class="color-danger pull-left">Remove</a>
+            <a ng-click="setEdit(true)" class="pull-right">Edit</a>
         </form>
     </div>
 </div>

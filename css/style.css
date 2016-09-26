@@ -58,10 +58,6 @@ html, body {
     bottom: 50px;           
 }
 
-#phone .content a {
-    color: rgba(17, 26, 35, 0.69)
-}
-
 #phone .default-text {
     color: rgba(17, 26, 35, 0.69);
 }
@@ -134,6 +130,9 @@ html, body {
 }
 #phone .color-danger {
     color: #cf2d28;
+}
+#phone .color-default {
+    color: rgba(17, 26, 35, 0.69)
 }
 
 #phone .history-make-call {

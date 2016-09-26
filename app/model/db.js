@@ -43,8 +43,9 @@ var modelVerto = {
                     unique: false
                 },
                 {
-                    name: "number",
-                    columns: "number",
+                    name: "_numbers",
+                    columns: "_numbers",
+                    multiEntry: true,
                     unique: true
                 },
                 {
@@ -167,6 +168,22 @@ var modelVerto = {
             return cb(e.target.error)
         };
     },
+
+    remove: function (collectionName, id, cb) {
+        var trans = this.db.transaction(collectionName, IDBTransaction.READ_WRITE);
+        var store = trans.objectStore(collectionName);
+
+        // add
+        var requestPut = store.delete(id);
+
+        requestPut.onsuccess = function(e) {
+            return cb(null, e);
+        };
+
+        requestPut.onerror = function(e) {
+            return cb(e.target.error)
+        };
+    },
     
     list: function (collectionName, params = {}, cb) {
         var transaction = this.db.transaction(collectionName, IDBTransaction.READ_ONLY);
@@ -183,7 +200,7 @@ var modelVerto = {
             filter = IDBKeyRange.only(params.search.text)
         }
 
-        if (params.search && params.search.reg, params.search.column) {
+        if (params.search && params.search.reg && params.search.column) {
             reg = params.search.reg;
         }
 

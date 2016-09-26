@@ -102,6 +102,10 @@ Session.prototype.updateCollection = function (collectionName, id, params, cb) {
 	modelVerto.update(collectionName, id, params, cb);
 };
 
+Session.prototype.removeCollection = function (collectionName, id, cb) {
+	modelVerto.remove(collectionName, id, cb);
+};
+
 
 Session.prototype.logout = function () {
 	this.verto.logout();
@@ -438,6 +442,7 @@ Session.prototype.onDialogState = function (d) {
 					hangupOn: Date.now(),
 					endCause: d.cause,
 					number: d.params.remote_caller_id_number,
+					name: this.activeCalls[d.callID].contact && this.activeCalls[d.callID].contact.name,
 					direction: d.direction.name
 				}, function (err) {
 					if (err)
@@ -478,6 +483,15 @@ var Call = function (d) {
 	this.screenShareCall = null;
 	this.screenShareCallStreem = null;
 	this.dtmf = [];
+
+	this.contact = null;
+	var scope = this;
+	modelVerto.list('contacts', {limit: 1, sort: 'next', index: "_numbers", search: {text: this.calleeIdNumber}}, function (data) {
+		if (data && data.length > 0) {
+			scope.contact = data[0];
+			sendSession('changeCall', session.activeCalls);
+		}
+	});
 
 	if (this.direction == $.verto.enum.direction.inbound) {
 		this.showNewCall();

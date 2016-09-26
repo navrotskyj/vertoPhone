@@ -12,7 +12,7 @@
             </span>
             <button  ng-click="makeCall(c.number)" class="btn btn-link  history-make-call media-object pull-right icon icon-pages ion-ios-telephone-outline "></button>
             <div class="media-body default-text">
-                {{c.number || "empty"}}
+                {{c.name ? c.name  + ' (' + c.number + ')': c.number}}
             </div>
             <p style="font-size: 11px;">
                 {{getTime(c.createdOn)}}

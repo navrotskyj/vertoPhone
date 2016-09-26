@@ -2,7 +2,7 @@
 
     <div class="card card-call-info no-border bg-default" style="height: 55px; margin: 0;">
         <div style="text-align: center;" >
-            <p>{{activeCall.calleeIdNumber}}</p>
+            <p>{{activeCall.contact.name ? activeCall.contact.name  + ' (' + activeCall.calleeIdNumber + ')': activeCall.calleeIdNumber}}</p>
             <p ui-timer start="activeCall.onActiveTime"></p>
         </div>
     </div>
@@ -23,7 +23,7 @@
             </li>
 
             <li>
-                <button ng-class="{'active': activeCall.screenShareCall}" ng-click="screenShare(activeCall.id)" class="btn circle-btn icon">
+                <button ng-disabled="activeCall.state != 'active' && activeCall.state != 'held'" ng-class="{'active': activeCall.screenShareCall}" ng-click="screenShare(activeCall.id)" class="btn circle-btn icon">
                     <span class="ion-ios-monitor"></span>
                 </button>
 

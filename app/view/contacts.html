@@ -1,6 +1,9 @@
 <div class="content" ng-controller="contactsCtrl">
   <div class="bar bar-standard bar-header-secondary">
-    <input ng-model="search" type="search" placeholder="Search">
+    <div class="form-group">
+      <input ng-model="search" type="search" placeholder="Search">
+      <a ng-click="changeState('contacts', true, {number: ''})" class="color-default icon icon-compose pull-right"></a>
+    </div>
   </div>
 
   <ul class="table-view tab-content">
@@ -11,7 +14,6 @@
         </button>
       </div>
 
-      <button  ng-click="makeCall(c.number); $event.stopPropagation()" class="btn btn-link  history-make-call media-object pull-right icon icon-pages ion-ios-telephone-outline "></button>
     </li>
   </ul>
 </div>
