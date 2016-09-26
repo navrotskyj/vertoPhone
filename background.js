@@ -381,6 +381,7 @@ Session.prototype.onDialogState = function (d) {
 					this.activeCalls[key].setScreenShareCall(d);
 					return sendSession('changeCall', this.activeCalls);
 				} else if (d.state == $.verto.enum.state.hangup) {
+					d.rtc.stop();
 					this.activeCalls[key].removeScreenShareCall(d);
 					return sendSession('changeCall', this.activeCalls);
 				}
