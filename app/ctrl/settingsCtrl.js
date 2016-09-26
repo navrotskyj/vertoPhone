@@ -12,6 +12,16 @@ angular
         $scope.saveSettings = function () {
             $rootScope.sendBg('saveSettings', $scope.settings);
         };
+        
+        $scope.$watch('settings.useVideo', function (val) {
+            if (!$scope.settings)
+                return;
+            if ($scope.devices && $scope.devices.videoDevices && $scope.devices.videoDevices.length > 0) {
+                $scope.settings.useVideo = val;
+            } else {
+                $scope.settings.useVideo = false;
+            }
+        });
 
-        $scope.devices = window.vertoSession.getDevicesList();
+        $scope.devices = window.vertoDevices;
     }]);

@@ -6,6 +6,11 @@
 	        <input ng-model="settings.server" type="text" id="settingsServer" placeholder="server">
 
 			<li class="table-view-cell">
+				Use video
+				<div ui-toggle ng-model="settings.useVideo"></div>
+			</li>
+
+			<li class="table-view-cell">
 				Notify new call
 				<div ui-toggle ng-model="settings.notificationNewCall"></div>
 			</li>
@@ -38,7 +43,7 @@
 				</select>
 			</div>			
 
-			<div class="form-group">
+			<div class="form-group" ng-show="settings.useVideo">
 				<span class="ion-ios-camera"></span>
 				<select ng-model="settings.selectedVideo" ng-options="item.id as item.label for item in devices.videoDevices">
 				</select>

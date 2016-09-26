@@ -54,6 +54,8 @@ var Session = function (option) {
 	this.selectedSpeaker = option.selectedSpeaker;
 	this.selectedAudio = option.selectedAudio;
 
+	this.useVideo = option.useVideo;
+
 	this.alwaysOnTop = option.alwaysOnTop || false;
 
 	var scope = this;
@@ -80,8 +82,8 @@ var Session = function (option) {
 		useCamera: this.selectedVideo,
 		useSpeak: this.selectedSpeaker,
 		useMic: this.selectedAudio,
-		videoParams: this.videoParams
-		// localTag: 'localTagVideo'
+		videoParams: this.videoParams,
+		sessid: option.sessid
 	}, this);
 
 	this.activeCalls = {
@@ -139,7 +141,7 @@ Session.prototype.makeCall = function (number, option) {
 		destination_number: number,
 		caller_id_name: this.vertoLogin,
 		caller_id_number: this.vertoLogin,
-		useVideo: option && option.useVideo,
+		useVideo: this.useVideo && option && option.useVideo,
 		
 		useStereo: false,
 
@@ -320,10 +322,15 @@ Session.prototype.onWSLogin = function (e, success) {
 	console.info('onWSLogin');
 	this.isLogin = success;
 	if (success) {
-		createNotification('Login', 'Success', 'login ' + this.vertoLogin, 'images/bell64.png', 2000)
+		createNotification('Login', 'Success', 'login ' + this.vertoLogin, 'images/bell64.png', 2000);
 	} else {
 		createNotification('Login', 'Error', 'bad credentials ' + this.vertoLogin, 'images/error64.png', 10000)
 	}
+
+	sendSession('onWSLogin', {
+		login: this.vertoLogin,
+		success: success
+	});
 };
 
 Session.prototype.onWSClose = function (e) {
@@ -696,8 +703,16 @@ function createVertoWindow() {
 		},
 		function (window) {
 			phoneWindow = window;
+			phoneWindow.contentWindow.vertoDevices = {
+				audioInDevices: $.verto.audioInDevices,
+				audioOutDevices: $.verto.audioOutDevices,
+				videoDevices: $.verto.videoDevices
+			};
+
 			phoneWindow.contentWindow.onload = function () {
 				phoneWindow.session = session;
+
+
 				chrome.storage.local.get('settings', function(data) {
 					phoneWindow.contentWindow.vertoSession = session;
 
@@ -736,6 +751,9 @@ var vertoAction = {
 };
 
 function saveSettings(data) {
+	if (!data.sessid ) {
+		data.sessid = $.verto.genUUID();
+	}
 	var obj = {
 		settings: data
 	};

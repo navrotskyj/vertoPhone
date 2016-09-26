@@ -67,7 +67,7 @@
                 <button ng-click="answerCall(activeCall.id)"  class="btn circle-btn icon ion-ios-telephone call make-call" ng-if="activeCall.state == 'newCall' && activeCall.direction.name == 'inbound'">
 
                 </button>
-                <button ng-click="answerCall(activeCall.id, true)"  class="btn circle-btn icon ion-ios-videocam call make-call-video" ng-if="activeCall.state == 'newCall' && activeCall.direction.name == 'inbound'">
+                <button  ng-click="answerCall(activeCall.id, true)"  class="btn circle-btn icon ion-ios-videocam call make-call-video" ng-if="useVideo && activeCall.state == 'newCall' && activeCall.direction.name == 'inbound'">
 
                 </button>
             </li>

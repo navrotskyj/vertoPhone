@@ -125,6 +125,13 @@ html, body {
     margin-left: 10px;
 }
 
+#phone.app {
+    display: none;
+}
+#phone.app.loaded {
+    display: block;
+}
+
 #phone .color-success {
     color: #4cd964;
 }

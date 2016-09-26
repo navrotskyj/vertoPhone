@@ -63,9 +63,30 @@ vertoPhone.run(function($rootScope, $window, CallService, $timeout) {
             $rootScope.isLoadApplication = true;
         });
 
-        document.title = $window.vertoSession && $window.vertoSession.vertoLogin
-            ? $window.vertoSession.vertoLogin
-            : 'No login.';
+        $rootScope.$on('bg:onWSLogin', function (e, data) {
+            if (data.success) {
+                document.title = data.login;
+                $rootScope.useVideo = $window.vertoSession.useVideo;
+                $rootScope.isLoged = true;
+                $rootScope.changeState('dialpad', false);
+                $timeout(function () {
+                    $rootScope.$apply()
+                })
+            } else {
+                $rootScope.isLoged = false;
+                $rootScope.changeState('settings', false);
+            }
+        });
+
+        if ($window.vertoSession && $window.vertoSession.isLogin) {
+            document.title = $window.vertoSession.vertoLogin;
+            $rootScope.useVideo = $window.vertoSession.useVideo;
+            $rootScope.isLoged = true;
+            $rootScope.changeState('dialpad', false);
+        } else {
+            $rootScope.changeState('settings', false);
+        }
+
     });
     $rootScope.$on('bg:changeCall', function (e, data) {
         console.log(data);
@@ -121,6 +142,9 @@ vertoPhone.run(function($rootScope, $window, CallService, $timeout) {
     $rootScope.changeState = changeState;
 
     function changeState(stateName, isPage, data) {
+        if (!$rootScope.isLoged) {
+            stateName = 'settings';
+        }
         console.debug(arguments);
         var newTemplate = stateName;
         $rootScope.activeTabName = stateName;
