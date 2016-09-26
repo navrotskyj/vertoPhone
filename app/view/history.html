@@ -3,7 +3,7 @@
         <input ng-model="search" type="search" placeholder="Search">
     </div>
 
-    <ul style="padding-top: 44px;" class="table-view">
+    <ul class="table-view tab-content">
         <li  ng-repeat="c in data" class="table-view-cell">
             <span
                     ng-class="{'ion-ios-arrow-thin-left': c.direction == 'outbound', 'ion-ios-arrow-thin-right': c.direction == 'inbound', 'color-success': c.answeredOn > 0, 'color-danger': !c.answeredOn}"

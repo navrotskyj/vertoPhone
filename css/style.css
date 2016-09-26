@@ -73,6 +73,19 @@ html, body {
     font-size: 28px;
 }
 
+#phone .table-view.tab-content {
+    position: fixed;
+    top: 90px;
+    overflow-y: auto;
+    bottom: 35px;
+    width: 100%;
+    font-size: 12px;
+}
+
+#phone .table-view.tab-content li{
+    padding: 9px;
+}
+
 #phone .card.card-call video {
     width: 100%;
     height: 110px;

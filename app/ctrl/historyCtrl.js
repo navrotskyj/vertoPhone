@@ -31,6 +31,7 @@ angular
         function list(params, cb) {
             $window.vertoSession.listCollection('history', {limit: 100, sort: 'prev', search: params.search}, cb);
         }
+        
         return {
             list: list
         }
