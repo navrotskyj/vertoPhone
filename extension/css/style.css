@@ -1,0 +1,68 @@
+body {
+    width: 250px;
+}
+
+body.error{
+    margin: 0;
+}
+
+button.retry {
+    background-color: #ffb046;
+    width: 100%;
+    height: 32px;
+    border: 0;
+    color: #fff;
+}
+
+.actions {
+    padding-top: 5px;
+}
+
+button.open {
+    width: 49%;
+    background-color: #f0f0f8;
+    border: 0;
+    height: 24px;
+}
+
+.make-call {
+    background: rgba(0, 0, 0, 0);
+    border: 0;
+    height: 24px;
+    width: 24px;
+    float: right;
+    margin-top: 1px;
+    outline: 0;
+}
+
+.make-call img{
+    width: 24px;
+    height: 24px;
+}
+
+input.input-field{
+    margin: auto;
+    width: 224px;
+    box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    border: 1px solid #C2C2C2;
+    box-shadow: 1px 1px 4px #EBEBEB;
+    -moz-box-shadow: 1px 1px 4px #EBEBEB;
+    -webkit-box-shadow: 1px 1px 4px #EBEBEB;
+    border-radius: 3px;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    padding: 7px;
+    outline: none;
+}
+.input-field:focus{
+    border: 1px solid #0C0;
+}
+
+
+.alert {
+    padding: 20px;
+    background-color: #f44336;
+    color: white;
+}

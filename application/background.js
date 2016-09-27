@@ -1,5 +1,6 @@
 var phoneWindow = null,
 	session,
+	extensionPort = null,
 	videoParamsBest = {},
 	maxCallCount = 5;
 
@@ -95,6 +96,7 @@ var Session = function (option) {
 	if (phoneWindow) {
 		phoneWindow.setAlwaysOnTop(this.alwaysOnTop)
 	}
+
 };
 
 Session.prototype.listCollection = function (collectionName, params, cb) {
@@ -322,6 +324,7 @@ Session.prototype.onWSLogin = function (e, success) {
 	this.isLogin = success;
 	if (success) {
 		createNotification('Login', 'Success', 'login ' + this.vertoLogin, 'images/bell64.png', 2000);
+		this.sendLoginToExtension();
 	} else {
 		createNotification('Login', 'Error', 'bad credentials ' + this.vertoLogin, 'images/error64.png', 10000)
 	}
@@ -336,6 +339,7 @@ Session.prototype.onWSClose = function (e) {
 	console.info('onWSClose');
 	console.info(e);
 	this.isLogin = false;
+	this.sendLogoutToExtension();
 };
 
 Session.prototype.onEvent = function (e) {
@@ -347,6 +351,24 @@ Session.prototype.onError = function (dialog, e) {
 	this.lastError = {
 		dialog: dialog,
 		error: e
+	}
+};
+
+Session.prototype.sendLoginToExtension = function () {
+	if (extensionPort && this.isLogin) {
+		extensionPort.postMessage({
+			action: "login",
+			data: {}
+		});
+	}
+};
+
+Session.prototype.sendLogoutToExtension = function () {
+	if (extensionPort && this.isLogin) {
+		extensionPort.postMessage({
+			action: "logout",
+			data: {}
+		});
 	}
 };
 
@@ -735,8 +757,15 @@ function makeCall(number, options) {
 function sendSession(action, obj) {
 	chrome.runtime.sendMessage({
 		action: action,
-		data: obj,
+		data: obj
 	});
+
+	// if (extensionPort) {
+	// 	extensionPort.postMessage({
+	// 		action: action,
+	// 		data: obj
+	// 	});
+	// }
 }
 
 chrome.runtime.onMessage.addListener(
@@ -746,8 +775,44 @@ chrome.runtime.onMessage.addListener(
 	}
 );
 
+chrome.runtime.onConnectExternal.addListener(function(port) {
+
+	if (port.name === 'vertoExtension') {
+		extensionPort = port;
+		console.debug(`Open port vertoExtension`);
+		extensionPort.onDisconnect.addListener(() => {
+			console.warn(`Close port vertoExtension`);
+			extensionPort = null;
+		});
+		if (session && session.isLogin) {
+			session.sendLoginToExtension();
+		} else {
+			extensionPort.postMessage({
+				action: "noLiveConnect",
+				data: {}
+			});
+		}
+		extensionPort.onMessage.addListener((data) => {
+			if (data && data.action && vertoAction.hasOwnProperty(data.action)) {
+				return vertoAction[data.action](data.data);
+			}
+		});
+	} else {
+		port.disconnect()
+	}
+});
+
+
 var vertoAction = {
-	saveSettings: saveSettings
+	saveSettings: saveSettings,
+	initExtension: (params = {}) => {
+		extensionId = params && params.id;
+	},
+	makeCall: (params = {}) => {
+		if (session) {
+			session.makeCall(params.number, params.option);
+		}
+	}
 };
 
 function saveSettings(data) {
