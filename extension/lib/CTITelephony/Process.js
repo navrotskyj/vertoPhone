@@ -40,6 +40,7 @@ var Process = function() {
             }
         },
         enable: function() {
+            pref.set('enabled', true);
             sendPageRequest('parseDOM');
         },
         disable: function() {
@@ -63,7 +64,7 @@ var Process = function() {
 var Preferences = {
     defaults: {
         timeout: 3000,
-        enabled: true
+        enabled: false
     },
     set: function(name, value) {
         window.localStorage[name] = JSON.stringify(value);

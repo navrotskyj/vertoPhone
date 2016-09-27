@@ -28,6 +28,10 @@
       "js": ["lib/jquery-1.10.2.min.js", "lib/CTITelephony/ContentPage.js"]
     }
   ],
+  "options_ui": {
+    "page": "options.html",
+    "chrome_style": true
+  },
   "background": {
     "scripts": [
       "lib/CTITelephony/Process.js",

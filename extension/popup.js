@@ -8,6 +8,8 @@ var ext = chrome.extension.getBackgroundPage().ext;
 var input = document.getElementById('callInput');
 var activeCallsDiv = document.getElementById('activeCalls');
 var open = document.getElementById('open');
+var c2c = document.getElementById('c2c');
+c2c.checked = ext.c2cEnabled();
 
 function createCall(id) {
     var ul = document.createElement('ul');
@@ -28,4 +30,9 @@ document.getElementById('makeCall').addEventListener('submit', (e) => {
 open.addEventListener('click', (e) => {
     ext.runVerto();
     window.close();
+});
+
+c2c.addEventListener('click', (e) => {
+    ext.c2cToggle();
+    //window.close();
 });

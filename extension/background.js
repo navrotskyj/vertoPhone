@@ -191,6 +191,20 @@ class Extension {
             this.CTITelephony.isPageComplete();
         }, 5000);
     }
+
+    c2cEnabled () {
+        return pref.get("enabled");
+    }
+
+    c2cToggle () {
+        var ON = pref.get('enabled');
+        console.log(ON);
+        if (ON) {
+            this.CTITelephony.disable();
+        } else {
+            this.CTITelephony.enable();
+        }
+    }
 }
 
 var pref = Preferences; // alias for the Preferences object
