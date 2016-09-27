@@ -23,7 +23,7 @@ class Extension {
             }
         });
 
-
+        this.initCTITelephony();
     }
 
     get NOT_INSTALL_TITLE () {
@@ -173,6 +173,25 @@ class Extension {
     hangupCall () {
 
     }
+
+    initCTITelephony () {
+        this.CTITelephony = new Process();
+        this.CTITelephony.init();
+
+        chrome.extension.onRequest.addListener((request, sender, sendResponse) => {
+            if (request.pageLoad)
+                sendResponse({ parseDOM: true });
+
+            if (request.hasOwnProperty('number')) {
+                this.makeCall(request.number)
+            }
+        });
+
+        window.setInterval(() => {
+            this.CTITelephony.isPageComplete();
+        }, 5000);
+    }
 }
 
+var pref = Preferences; // alias for the Preferences object
 var ext = new Extension();

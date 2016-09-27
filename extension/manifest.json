@@ -15,12 +15,22 @@
   },
   "permissions": [
     "activeTab",
+    "tabs",
     "contextMenus",
+    "storage",
     "background",
+    "<all_urls>",
     "management"
+  ],
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["lib/jquery-1.10.2.min.js", "lib/CTITelephony/ContentPage.js"]
+    }
   ],
   "background": {
     "scripts": [
+      "lib/CTITelephony/Process.js",
       "background.js"
     ]
   },
