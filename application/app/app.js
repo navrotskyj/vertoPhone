@@ -82,7 +82,7 @@ vertoPhone.run(function($rootScope, $window, CallService, $timeout) {
             document.title = $window.vertoSession.vertoLogin;
             $rootScope.useVideo = $window.vertoSession.useVideo;
             $rootScope.isLoged = true;
-            $rootScope.changeState('dialpad', false);
+            $rootScope.changeState(Object.keys($window.vertoSession.activeCalls).length == 0 ? 'dialpad' : 'call', false);
         } else {
             $rootScope.changeState('settings', false);
         }

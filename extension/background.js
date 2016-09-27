@@ -167,6 +167,7 @@ class Extension {
         this.sendMethod('makeCall', {
             number: number
         });
+        this.runVerto();
     }
 
     hangupCall () {

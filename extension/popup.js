@@ -22,7 +22,6 @@ document.getElementById('makeCall').addEventListener('submit', (e) => {
     if (input.value) {
         ext.makeCall(input.value);
         window.close();
-        ext.runVerto();
     }
 });
 
