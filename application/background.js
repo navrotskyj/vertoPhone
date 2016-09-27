@@ -3,9 +3,6 @@ var phoneWindow = null,
 	videoParamsBest = {},
 	maxCallCount = 5;
 
-setInterval(function () {
-	console.log('runtime', chrome.app.window.get('vertoPhone') )
-}, 4000);
 
 modelVerto.init();
 $.verto.init({skipPermCheck: true}, ()=> {
@@ -72,7 +69,7 @@ var Session = function (option) {
             minHeight: videoParamsBest[this.selectedVideo].h,
             maxWidth: videoParamsBest[this.selectedVideo].w,
             maxHeight: videoParamsBest[this.selectedVideo].h,
-            minFrameRate: 15,
+            minFrameRate: 15
 		}
 	}
 
