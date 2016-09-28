@@ -42,6 +42,13 @@ class Extension {
         return `Please enable ${VERTO_APP_NAME}`;
     }
 
+    get NO_SETTINGS_TITLE () {
+        return `No settings ${VERTO_APP_NAME}`;
+    }
+    get NO_SETTINGS_MSG () {
+        return `Please set settings ${VERTO_APP_NAME}`;
+    }
+
     createContextMenu () {
         this.contextMenu = chrome.contextMenus.create({
             id: CONTEXT_MENU_ID,
@@ -179,7 +186,7 @@ class Extension {
         this.CTITelephony.init();
 
         chrome.extension.onRequest.addListener((request, sender, sendResponse) => {
-            if (request.pageLoad)
+            if (request.pageLoad && pref.get('enabled'))
                 sendResponse({ parseDOM: true });
 
             if (request.hasOwnProperty('number')) {

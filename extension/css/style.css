@@ -18,11 +18,14 @@ button.retry {
     padding-top: 5px;
 }
 
-button.open {
+button.btn {
     width: 49%;
     background-color: #f0f0f8;
     border: 0;
     height: 24px;
+}
+button.btn.active {
+    background-color: #8ac149;
 }
 
 .make-call {

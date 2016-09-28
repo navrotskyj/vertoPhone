@@ -3,26 +3,77 @@
 <head>
   <title>My Test Extension Options</title>
   <style>
-    body: { padding: 10px; }
+
+    span {
+        margin-left: 5px;
+        margin-top: 3px;
+    }
+
+    ul {
+        list-style: square outside;
+    }
+
+    li {
+        margin-top: 5px;
+    }
   </style>
 </head>
 
 <body>
-  Favorite color:
-  <select id="color">
-   <option value="red">red</option>
-   <option value="green">green</option>
-   <option value="blue">blue</option>
-   <option value="yellow">yellow</option>
-  </select>
+    <div>
+        <div style="margin-left: 20px;">
+            <h3>Protocol Replacement:</h3>
+            <p style="margin-top: -10px;">Replace existing protocols with protocol defined above:</p>
 
-  <label>
-    <input type="checkbox" id="like">
-    I like colors.
-  </label>
+            <div>
+                <input type="checkbox" id="r_enable" style="margin-left: 10px;">
+                <span>Enable Protocol Replacement</span>
+            </div>
 
-  <div id="status"></div>
-  <button id="save">Save</button>
+            <h4 style="margin-bottom: 0;">Replace:</h4>
+            <ul>
+                <li>
+                    <div>
+                        <input type="checkbox" id="r_tel"><span>tel://</span>
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        <input type="checkbox" id="r_dial"><span>dial://</span>
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        <input type="checkbox" id="r_callto"><span>callto://</span>
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        <input type="checkbox" id="r_ucdial"><span>ucdial://</span>
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        <input type="checkbox" id="r_sip"><span>sip://</span>
+                    </div>
+                </li>
+            </ul>
+
+            <h4 style="margin-bottom: 0;">Valid Telephone number length:</h4>
+            <div style="margin-top: 5px;">
+                Min: <input type="number" id="minTel" min="1" max="10" style="margin-left: 2px; width: 40px;" >
+                Max: <input type="number" id="maxTel" min="1" max="25" style="width: 40px;" >
+            </div>
+
+            <h4 style="color: red" id="errorStr"></h4>
+        </div>
+    </div>
+
+  <hr>
+  <div>
+      <button style="width: 75%" id="saveBtn">Save</button>
+      <button style="width: 23%;" id="eraseBtn">Defaults</button>
+  </div>
 
   <script src="options.js"></script>
 </body>

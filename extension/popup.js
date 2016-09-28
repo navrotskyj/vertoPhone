@@ -9,16 +9,8 @@ var input = document.getElementById('callInput');
 var activeCallsDiv = document.getElementById('activeCalls');
 var open = document.getElementById('open');
 var c2c = document.getElementById('c2c');
-c2c.checked = ext.c2cEnabled();
 
-function createCall(id) {
-    var ul = document.createElement('ul');
-    ul.id = id;
-    var li = document.createElement('li');
-    li.textContent = id;
-    ul.appendChild(li);
-    activeCallsDiv.appendChild(ul);
-}
+setC2C(ext.c2cEnabled());
 
 document.getElementById('makeCall').addEventListener('submit', (e) => {
     if (input.value) {
@@ -34,5 +26,13 @@ open.addEventListener('click', (e) => {
 
 c2c.addEventListener('click', (e) => {
     ext.c2cToggle();
-    //window.close();
+    window.close();
 });
+
+function setC2C(active) {
+    if (active) {
+        c2c.classList.add('active')
+    } else {
+        c2c.classList.remove('active')
+    }
+}

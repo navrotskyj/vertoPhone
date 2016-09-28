@@ -19,7 +19,10 @@ if (!ext.checkInstall()) {
     retry.textContent = 'Enable application';
     installed = true;
 } else {
-    // OPSSSS
+    title.textContent = ext.NO_SETTINGS_TITLE;
+    msg.textContent = ext.NO_SETTINGS_MSG;
+    retry.textContent = 'Open';
+    installed = true;
 }
 
 retry.addEventListener('click', (e) => {
