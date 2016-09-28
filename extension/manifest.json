@@ -7,11 +7,15 @@
   "author"          : "navrotskyj@gmail.com",
   "minimum_chrome_version": "23",
   "icons": {
-    "16": "images/call64.png",
-    "24": "images/call64.png",
-    "48": "images/call64.png",
+    "16": "images/call16.png",
+    "20": "images/call20.png",
+    "24": "images/call24.png",
+    "32": "images/call32.png",
+    "48": "images/call48.png",
     "64": "images/call64.png",
-    "124": "images/call64.png"
+    "128": "images/call128.png",
+    "256": "images/call256.png",
+    "512": "images/call512.png"
   },
   "permissions": [
     "activeTab",

@@ -70,7 +70,11 @@ class Extension {
     }
 
     setVertoConnectError () {
-        this.changeIcon('error64.png');
+        if (!this.checkInstall()) {
+            this.changeIcon('error64.png');
+        } else {
+            this.changeIcon('exclamation64.png');
+        }
         this.connected = false;
         chrome.browserAction.setPopup({popup: `errorPopup.html`});
         this.removeContextMenu();

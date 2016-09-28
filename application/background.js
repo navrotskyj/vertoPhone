@@ -647,7 +647,7 @@ Call.prototype.showMissed = function () {
 		var number = this.calleeIdNumber;
 		chrome.notifications.create({
 			type: 'basic',
-			iconUrl: 'images/error64.png',
+			iconUrl: 'images/exclamation64.png',
 			title: "Missed call!",
 			message: number,
 			contextMessage: this.calleeIdName + '(' + new Date().toLocaleString() + ')',
