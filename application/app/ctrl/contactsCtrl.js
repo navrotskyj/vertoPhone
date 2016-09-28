@@ -62,7 +62,8 @@ angular
 		};
 		
 		$scope.makeCall = function (number) {
-			CallService.makeCall(number)
+			if (number)
+				CallService.makeCall(number.replace(/\D/g, ''))
 		};
 		
 		$scope.save = function (contact) {
