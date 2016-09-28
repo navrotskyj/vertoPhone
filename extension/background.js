@@ -4,7 +4,7 @@
 
 "use strict";
 
-const VERTO_APP_NAME = 'Verto SofthPhone',
+const VERTO_APP_NAME = 'Verto Phone',
     ERR_NOT_INSTALLED = new Error(`Not installed ${VERTO_APP_NAME}`),
     ERR_NOT_RUNING = new Error(`No running ${VERTO_APP_NAME}`),
     CONTEXT_MENU_ID = 'selectAndCallVerto'

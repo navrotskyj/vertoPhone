@@ -29,7 +29,7 @@ var setDraw = function() {
     renderFrame();
 };
 
-setTimeout(setDraw, 10000);
+setTimeout(setDraw, 1000);
 
 var Render = function() {
     var barsArr = [], initialized = false, barsEl;
@@ -44,7 +44,8 @@ var Render = function() {
                 var nunode = document.createElement('div');
                 nunode.classList.add('bar');
                 nunode.style.width = barWidth + 'px';
-                nunode.style.left = (barWidth * i) + 'px';
+                // nunode.style.left = (barWidth * i) + 'px';
+                nunode.style.marginLeft = (barWidth * i) + 'px';
                 barsArr.push(nunode);
                 barsEl.appendChild(nunode);
             }

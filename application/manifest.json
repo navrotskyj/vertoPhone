@@ -1,6 +1,6 @@
 {
   "manifest_version": 2,
-  "name"            : "Verto SofthPhone",
+  "name"            : "Verto Phone",
   "description"     : "FreeSWITCH verto phone.",
   "short_name"      : "vertoSoftPhone",
   "version"         : "0.1",
