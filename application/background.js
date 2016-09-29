@@ -83,7 +83,8 @@ var Session = function (option) {
 		useSpeak: this.selectedSpeaker,
 		useMic: this.selectedAudio,
 		videoParams: this.videoParams,
-		sessid: option.sessid
+		sessid: option.sessid,
+		iceServers: option.iceServers
 	}, this);
 
 	this.activeCalls = {

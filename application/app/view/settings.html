@@ -3,11 +3,16 @@
 	    <form ng-controller="settingsCtrl" method="post">
 	        <input ng-model="settings.login" type="text" id="settingsLogin" placeholder="login">
 	        <input ng-model="settings.password" type="password" id="settingsPassword" placeholder="password">
-	        <input ng-model="settings.server" type="text" id="settingsServer" placeholder="server">
+	        <input ng-model="settings.server" type="text" class="small-placeholder" id="settingsServer" placeholder="wss://webrtc.freeswitch.org:8082">
 
 			<li class="table-view-cell">
 				Use video
 				<div ui-toggle ng-model="settings.useVideo"></div>
+			</li>
+
+			<li class="table-view-cell">
+				iceServers
+				<div ui-toggle ng-model="settings.iceServers"></div>
 			</li>
 
 			<li class="table-view-cell">

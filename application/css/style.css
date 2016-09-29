@@ -7,6 +7,16 @@ html, body {
 	height: 400px;*/	
 }
 
+input[placeholder] {
+    text-overflow:ellipsis;
+}
+
+
+input[placeholder].small-placeholder::-webkit-input-placeholder{
+    font-size: 11px;
+}
+
+    
 #phone .call-group .btn.circle-btn.icon.ion-ios-videocam.call.make-call-video {
     display: none;
     position: absolute;
