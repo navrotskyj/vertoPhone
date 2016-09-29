@@ -45,6 +45,9 @@ var Session = function (option) {
 	this.vertoLogin = option.login;
 	this.lastCallNumber = null;
 
+	this.cidName = option.cidName || this.vertoLogin;
+	this.cidNnumber = option.cidNnumber || this.vertoLogin;
+
 	this.notificationMissed = option.notificationMissed;
 	this.notificationNewCall = option.notificationNewCall;
 
@@ -149,15 +152,24 @@ Session.prototype.makeCall = function (number, option) {
 	this.lastCallNumber = number;
 	this.verto.newCall({
 		destination_number: number,
-		caller_id_name: this.vertoLogin,
-		caller_id_number: this.vertoLogin,
+		caller_id_name: this.cidName,
+		caller_id_number: this.cidNnumber,
+
 		useVideo: this.useVideo && option && option.useVideo,
-		
-		useStereo: false,
 
 		useCamera: this.selectedVideo,
 		useSpeak: this.selectedSpeaker,
 		useMic: this.selectedAudio
+
+		// TODO Move settings
+		// useStereo: false,
+		// dedEnc: false,
+		// mirrorInput: false,
+  //       userVariables: {
+  //           avatar: '',
+  //           email: '@',
+  //       }
+
 	});
 };
 
@@ -214,7 +226,11 @@ Session.prototype.answerCall = function (id, params) {
 	var call = this.activeCalls[id];
 	if (d && call && !call.onActiveTime) {
 		d.answer({
-			useVideo: params && params.useVideo
+			useVideo: params && params.useVideo,
+		    callee_id_name: this.cidName,
+		    callee_id_number: this.cidNnumber
+		    //  TODO move to conf		
+		    // useStereo: false	
 		});
 	}
 };
