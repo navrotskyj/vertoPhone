@@ -12,7 +12,11 @@ var installed = false;
 
 if (!ext.checkInstall()) {
     title.textContent = ext.NOT_INSTALL_TITLE;
-    msg.textContent = ext.NOT_INSTALL_MSG;
+    var a = document.createElement('a');
+    a.textContent = ext.NOT_INSTALL_MSG;
+    a.target = '_blank';
+    a.href = "https://chrome.google.com/webstore/detail/verto-phone/alielclaaklopeegndabapgabdkbdkkh?utm_source=chrome-ntp-icon";
+    msg.appendChild(a);
 } else if (!ext.checkEnabled()) {
     title.textContent = ext.NOT_RUN_TITLE;
     msg.textContent = ext.NOT_RUN_MSG;

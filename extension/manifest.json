@@ -1,9 +1,9 @@
 {
   "manifest_version": 2,
-  "name"            : "Verto Phone",
+  "name"            : "Verto Phone Extension",
   "description"     : "FreeSWITCH verto phone extension.",
-  "short_name"      : "vertoSoftPhoneApp",
-  "version"         : "0.2",
+  "short_name"      : "Verto phone extension",
+  "version"         : "0.3.0",
   "author"          : "navrotskyj@gmail.com",
   "minimum_chrome_version": "23",
   "icons": {
