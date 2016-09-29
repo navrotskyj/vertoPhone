@@ -186,8 +186,8 @@ Session.prototype.screenShare = function (parentCallId) {
 
 	this.verto.newCall({
 		destination_number: call.calleeIdNumber + '-screen',
-		caller_id_name: this.vertoLogin,
-		caller_id_number: this.vertoLogin,
+		caller_id_name: this.cidName,
+		caller_id_number: this.cidNnumber,
 		useAudio: false,
 		useStereo: false,
 		useVideo: true,
