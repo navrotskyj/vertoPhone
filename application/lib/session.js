@@ -28,7 +28,7 @@ class Session {
         this.alwaysOnTop = options.alwaysOnTop || false;
 
 
-        if (videoParamsBest[this.selectedVideo]) {
+        if (Helper.videoParamsBest[this.selectedVideo]) {
             this.videoParams = {
                 minWidth: videoParamsBest[this.selectedVideo].w,
                 minHeight: videoParamsBest[this.selectedVideo].h,
@@ -39,8 +39,6 @@ class Session {
         }
 
         this.isLogin = false;
-
-        this.verto.login();
 
         // TODO
         this._settings = option;
@@ -56,10 +54,11 @@ class Session {
             videoParams: this.videoParams,
             sessid: options.sessid,
             iceServers: options.iceServers
-        }, this.getVetoCallback);
+        }, this.vetoCallbacks);
+        this.verto.login();
     }
 
-    get getVetoCallback () {
+    get vetoCallbacks () {
         // TODO move helper
         function addVideo(id) {
             var video = document.createElement('video');
