@@ -436,10 +436,10 @@ Session.prototype.onDialogState = function (d) {
 				} else if (d.state == $.verto.enum.state.requesting) {
 					this.activeCalls[key].setScreenShareCall(d);
 					return sendSession('changeCall', this.activeCalls);
-				} else if (d.state == $.verto.enum.state.hangup) {
-					d.rtc.stop();
+				} else if (d.state == $.verto.enum.state.destroy) {
 					this.activeCalls[key].removeScreenShareCall(d);
-					return sendSession('changeCall', this.activeCalls);
+					sendSession('changeCall', this.activeCalls);
+					d.rtc.stop();
 				}
 				return;
 			}

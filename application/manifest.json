@@ -3,7 +3,7 @@
   "name"            : "Verto Phone",
   "description"     : "FreeSWITCH verto phone.",
   "short_name"      : "Verto Phone",
-  "version"         : "0.3.0",
+  "version"         : "0.3.1",
   "author"          : "navrotskyj@gmail.com",
   "minimum_chrome_version": "23",
   "icons": {
