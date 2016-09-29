@@ -96,6 +96,8 @@ var Session = function (option) {
 	if (phoneWindow) {
 		phoneWindow.setAlwaysOnTop(this.alwaysOnTop)
 	}
+	// TODO
+	this._settings = option;
 
 };
 
@@ -331,7 +333,8 @@ Session.prototype.onWSLogin = function (e, success) {
 
 	sendSession('onWSLogin', {
 		login: this.vertoLogin,
-		success: success
+		success: success,
+		settings: this._settings
 	});
 };
 

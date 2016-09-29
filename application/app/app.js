@@ -64,6 +64,10 @@ vertoPhone.run(function($rootScope, $window, CallService, $timeout) {
         });
 
         $rootScope.$on('bg:onWSLogin', function (e, data) {
+
+            if (data.settings) {
+                $rootScope.vertoSettings = data.settings;
+            }
             if (data.success) {
                 document.title = data.login;
                 $rootScope.useVideo = $window.vertoSession.useVideo;
