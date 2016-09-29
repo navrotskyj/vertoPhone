@@ -4019,6 +4019,7 @@
                 self._ws_socket.onclose = function (w) {console.log("Closing Socket");};
                 self._ws_socket.close();
             }
+            clearTimeout(self.to)
         };
 
         $.JsonRpcClient.prototype.loginData = function(params) {

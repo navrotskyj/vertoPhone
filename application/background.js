@@ -119,7 +119,13 @@ Session.prototype.removeCollection = function (collectionName, id, cb) {
 
 
 Session.prototype.logout = function () {
-	this.verto.logout();
+	try {
+		this.verto.logout();
+	} catch (e) {
+		console.log(e);
+	}
+
+	return true;
 };
 
 Session.prototype.getLastCallNumber = function () {
@@ -706,10 +712,9 @@ chrome.app.runtime.onLaunched.addListener(function() {
 	createVertoWindow();
 });
 
-
-chrome.storage.local.get('settings', function(data) {
-	if (!session && data && data.settings) {
-		session = new Session(data && data.settings);
+getSettings(function (data) {
+	if (!session && data && data.server) {
+		session = new Session(data);
 	}
 });
 
@@ -737,18 +742,16 @@ function createVertoWindow() {
 			phoneWindow.contentWindow.onload = function () {
 				phoneWindow.session = session;
 
-
-				chrome.storage.local.get('settings', function(data) {
+				getSettings(function (data) {
 					phoneWindow.contentWindow.vertoSession = session;
 
 					sendSession('init', {
-						settings: (data && data.settings) || {},
+						settings: data || {},
 						activeCalls: session && session.activeCalls,
 						logged: session && session.isLogin
 					});
 				});
 			};
-
 		}
 	);
 }
@@ -822,16 +825,13 @@ function saveSettings(data) {
 	if (!data.sessid ) {
 		data.sessid = $.verto.genUUID();
 	}
-	var obj = {
-		settings: data
-	};
-	chrome.storage.local.set(obj, function () {
 
+	setSettings(data, function () {
 		if (session) {
 			session.logout();
 		}
 
-		session = new Session(obj.settings);
+		session = new Session(data);
 
 		if (phoneWindow)
 			phoneWindow.contentWindow.vertoSession = session;
@@ -855,4 +855,49 @@ function createNotification(title, messsage, contextMessage, imgUri, time) {
 			}, time)
 	});
 
+};
+
+
+const SETTINGS_LOCAL_STORAGE = ['selectedAudio', 'selectedSpeaker', 'selectedVideo', 'sessid'];
+function setSettings(data, cb) {
+	var sync = {};
+	var local = {};
+
+	for (var key in data) {
+		if (!data.hasOwnProperty(key)) continue;
+
+		if (~SETTINGS_LOCAL_STORAGE.indexOf(key)) {
+			local[key] = data[key]
+		} else {
+			sync[key] = data[key]
+		}
+	}
+
+	chrome.storage.sync.set({settings: sync});
+	chrome.storage.local.set({settings: local}, cb);
+
+}
+
+function getSettings(cb) {
+
+	if (session && session._settings)
+		return cb(session._settings);
+
+	var settings = {};
+
+	function copyTo(to, from) {
+		for (var key in from) {
+			if (from.hasOwnProperty(key)) {
+				to[key] = from[key]
+			}
+		}
+	}
+
+	chrome.storage.sync.get('settings', function (sync) {
+		copyTo(settings, sync && sync.settings);
+		chrome.storage.local.get('settings', function (local) {
+			copyTo(settings, local && local.settings);
+			cb(settings);
+		});
+	});
 }
