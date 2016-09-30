@@ -78,8 +78,13 @@ class Session {
         function removeVideo(id) {
             const videoTag = document.getElementById(id);
             if (videoTag) {
-                videoTag.src = "";
-                videoTag.remove();
+                try {
+                    videoTag.pause();
+                    videoTag.src = "";
+                    videoTag.remove();
+                } catch (e) {
+                    console.error(e)
+                }
             }
         }
 
