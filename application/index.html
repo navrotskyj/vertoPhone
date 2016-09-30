@@ -11,7 +11,7 @@
         <header class="bar bar-nav">
             <div class="segmented-control">
                 <a ng-click="setViewCall(call)" ng-class="{'bg-success': call.state == 'active', 'bg-danger': call.state == 'held'}" class="control-item" ng-repeat="call in activeCalls">
-                    <span class="h5">{{call.calleeIdNumber.substr(call.calleeIdNumber.length - 4)}}</span>
+                    <span class="h5">{{call.calleeIdNumber.substring(call.calleeIdNumber.length - 4)}}</span>
                 </a>
             </div>
 
