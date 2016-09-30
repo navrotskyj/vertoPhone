@@ -2,6 +2,8 @@
  * Created by igor on 29.09.16.
  */
 
+const MAX_CALL_COUNT = 5;
+
 class Session {
 	constructor (options = {}) {
 
@@ -170,7 +172,7 @@ class Session {
                         case $.verto.enum.state.recovering:
                         case $.verto.enum.state.ringing:
                         case $.verto.enum.state.requesting:
-                            if (Object.keys(this.activeCalls).length >= maxCallCount) {
+                            if (Object.keys(this.activeCalls).length >= MAX_CALL_COUNT) {
                                 d.hangup();
                                 return;
                             }

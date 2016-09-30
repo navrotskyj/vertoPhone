@@ -142,7 +142,11 @@ let Helper = {
         if (Helper.session && Helper.session._settings)
             return cb(Helper.session._settings);
 
-        let settings = {};
+        let settings = {
+            iceServers: true,
+            ring: true,
+            alwaysOnTop: true
+        };
 
         function copyTo(to, from) {
             for (var key in from) {

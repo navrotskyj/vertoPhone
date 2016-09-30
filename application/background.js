@@ -1,5 +1,3 @@
-var maxCallCount = 5;
-
 const helper = Helper;
 
 modelVerto.init();
