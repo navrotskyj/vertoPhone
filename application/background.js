@@ -7,12 +7,6 @@ modelVerto.init();
 helper.refreshVertoDevice();
 helper.init();
 
-var video = document.createElement('video');
-video.id = "localTagVideo";
-video.volume = 1;
-video.style.display = 'none';
-document.body.appendChild(video);
-
 
 chrome.notifications.onClosed.addListener((notifId, byUser) => {
 	if (byUser && Helper.missedNotifications.hasOwnProperty(notifId))

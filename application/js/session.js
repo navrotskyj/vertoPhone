@@ -75,6 +75,14 @@ class Session {
             return video
         }
 
+        function removeVideo(id) {
+            const videoTag = document.getElementById(id);
+            if (videoTag) {
+                videoTag.src = "";
+                videoTag.remove();
+            }
+        }
+
         return {
             onRemoteStream: (d) => {
                 const call = this.activeCalls[d.callID];
@@ -146,6 +154,7 @@ class Session {
                                 this.activeCalls[key].removeScreenShareCall(d);
                                 Helper.sendSession('changeCall', this.activeCalls);
                                 d.rtc.stop();
+                                removeVideo(d.callID);
                             }
                             return;
                         }
@@ -182,11 +191,6 @@ class Session {
                             break;
                         case $.verto.enum.state.hangup:
                         case $.verto.enum.state.destroy:
-                            const videoTag = document.getElementById(d.callID);
-                            if (videoTag) {
-                                videoTag.src = "";
-                                videoTag.remove();
-                            }
                             if (this.activeCalls[d.callID]) {
                                 modelVerto.add('history', {
                                     createdOn: d.createdOn,
@@ -205,6 +209,7 @@ class Session {
                                     delete this.activeCalls[d.callID];
                                 }
                             }
+                            removeVideo(d.callID);
                             break;
                         default:
                             console.warn('No handle: ', d.state);

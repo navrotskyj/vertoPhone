@@ -14,6 +14,12 @@ let Helper = {
     extensionPort: null,
 
     init: () => {
+        const video = document.createElement('video');
+        video.id = "localTagVideo";
+        video.volume = 1;
+        video.style.display = 'none';
+        document.body.appendChild(video);
+
         Helper.getSettings(data => {
             if (!Helper.session && data && data.server) {
                 Helper.session  = new Session(data);
