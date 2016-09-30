@@ -1,6 +1,4 @@
-var phoneWindow = null,
-	session,
-	maxCallCount = 5;
+var maxCallCount = 5;
 
 const helper = Helper;
 

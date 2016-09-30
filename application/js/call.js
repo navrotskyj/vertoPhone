@@ -76,7 +76,7 @@ class Call {
     destroy (userDropCall) {
         this._clearNotification();
         // TODO add direction;
-        if (!userDropCall && !this.onActiveTime)
+        if (!userDropCall && !this.onActiveTime && this.direction === $.verto.enum.direction.inbound)
             this.showMissed();
 
         if (this.screenShareCall) {
@@ -144,7 +144,7 @@ class Call {
     }
 
     showMissed () {
-        if  (this.session && this.session.notificationMissed) {
+        if  (Helper.session && Helper.session.notificationMissed) {
             const number = this.calleeIdNumber;
             Helper.createNotification({
                 type: 'basic',

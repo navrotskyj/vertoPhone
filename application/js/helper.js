@@ -186,7 +186,7 @@ let Helper = {
             Helper.session = new Session(data);
 
             if (Helper.phoneWindow)
-                Helper.phoneWindow.contentWindow.vertoSession = session;
+                Helper.phoneWindow.contentWindow.vertoSession = Helper.session;
 
             Helper.createNotificationMsg('Save', 'Saved settings', '', 'images/success64.png', 2000);
         });
