@@ -1,5 +1,6 @@
-
-// todo import helper
+/**
+ * Created by igor on 29.09.16.
+ */
 
 class Session {
 	constructor (options = {}) {
@@ -30,10 +31,11 @@ class Session {
 
         if (Helper.videoParamsBest[this.selectedVideo]) {
             this.videoParams = {
-                minWidth: videoParamsBest[this.selectedVideo].w,
-                minHeight: videoParamsBest[this.selectedVideo].h,
-                maxWidth: videoParamsBest[this.selectedVideo].w,
-                maxHeight: videoParamsBest[this.selectedVideo].h,
+                minWidth: Helper.videoParamsBest[this.selectedVideo].w,
+                minHeight: Helper.videoParamsBest[this.selectedVideo].h,
+                maxWidth: Helper.videoParamsBest[this.selectedVideo].w,
+                maxHeight: Helper.videoParamsBest[this.selectedVideo].h,
+                // TODO move conf
                 minFrameRate: 15
             }
         }
@@ -41,7 +43,7 @@ class Session {
         this.isLogin = false;
 
         // TODO
-        this._settings = option;
+        this._settings = options;
 
         this.verto = new $.verto({
             login: options.login,
@@ -59,7 +61,7 @@ class Session {
     }
 
     get vetoCallbacks () {
-        // TODO move helper
+        // TODO move helper ?
         function addVideo(id) {
             var video = document.createElement('video');
             video.id = id;
@@ -87,7 +89,7 @@ class Session {
                 console.info('onWSLogin', e, success);
                 this.isLogin = success;
                 if (success) {
-                    Helper.createNotification(
+                    Helper.createNotificationMsg(
                         'Login', 
                         'Success', 
                         'login ' + this.vertoLogin, 
@@ -96,7 +98,7 @@ class Session {
                     );
                     this.sendLoginToExtension();
                 } else {
-                    Helper.createNotification(
+                    Helper.createNotificationMsg(
                         'Login', 
                         'Error', 
                         'bad credentials ' + this.vertoLogin, 
@@ -121,7 +123,94 @@ class Session {
 
             // TODO;
             onDialogState: (d) => {
+                const screenShare = /^(\d+).*-screen$/.exec(d.params.destination_number || d.params.remote_caller_id_number);
 
+                if (screenShare) {
+                    const number = screenShare[1];
+                    for (let key in this.activeCalls) {
+                        if (this.activeCalls[key].calleeIdNumber === number) {
+                            d.screenShare = true;
+                            if (d.state == $.verto.enum.state.ringing) {
+                                d.answer({useVideo: true});
+                            } else if (d.state == $.verto.enum.state.answering) {
+                                this.activeCalls[key].setScreenShareCall(d);
+                                return Helper.sendSession('changeCall', this.activeCalls);
+                            } else if (d.state == $.verto.enum.state.requesting) {
+                                this.activeCalls[key].setScreenShareCall(d);
+                                return Helper.sendSession('changeCall', this.activeCalls);
+                            } else if (d.state == $.verto.enum.state.destroy) {
+                                this.activeCalls[key].removeScreenShareCall(d);
+                                Helper.sendSession('changeCall', this.activeCalls);
+                                d.rtc.stop();
+                            }
+                            return;
+                        }
+                    }
+                    console.error('WTF screen');
+                } else {
+                    switch (d.state) {
+                        case $.verto.enum.state.recovering:
+                        case $.verto.enum.state.ringing:
+                        case $.verto.enum.state.requesting:
+                            if (Object.keys(this.activeCalls).length >= maxCallCount) {
+                                d.hangup();
+                                return;
+                            }
+                            d.createdOn = Date.now();
+                            this.activeCalls[d.callID] = new Call(d);
+                            break;
+                        case $.verto.enum.state.active:
+                            const dialogs = this.verto.dialogs;
+                            for (let key in dialogs) {
+                                if (key != d.callID
+                                    && dialogs.hasOwnProperty(key)
+                                    && dialogs[key].state == $.verto.enum.state.active
+                                    && !dialogs[key].screenShare
+                                ) {
+                                    dialogs[key].hold();
+                                }
+                            }
+                        case $.verto.enum.state.trying:
+                        case $.verto.enum.state.held:
+                            if (this.activeCalls.hasOwnProperty(d.callID)) {
+                                this.activeCalls[d.callID].setState(d.state.name)
+                            }
+                            break;
+                        case $.verto.enum.state.hangup:
+                        case $.verto.enum.state.destroy:
+                            const videoTag = document.getElementById(d.callID);
+                            if (videoTag) {
+                                videoTag.src = "";
+                                videoTag.remove();
+                            }
+                            if (this.activeCalls[d.callID]) {
+                                modelVerto.add('history', {
+                                    createdOn: d.createdOn,
+                                    answeredOn: this.activeCalls[d.callID].onActiveTime,
+                                    hangupOn: Date.now(),
+                                    endCause: d.cause,
+                                    number: d.params.remote_caller_id_number,
+                                    name: this.activeCalls[d.callID].contact && this.activeCalls[d.callID].contact.name,
+                                    direction: d.direction.name
+                                }, (err) => {
+                                    if (err)
+                                        console.error(err);
+                                });
+                                if (this.activeCalls[d.callID]) {
+                                    this.activeCalls[d.callID].destroy(d.userDropCall);
+                                    delete this.activeCalls[d.callID];
+                                }
+                            }
+                            break;
+                        default:
+                            console.warn('No handle: ', d.state);
+                            this.activeCalls[d.callID].setState(d.state.name);
+
+                    }
+
+                    console.log(this.activeCalls);
+                    Helper.sendSession('changeCall', this.activeCalls);
+                }
             }
 
         }
@@ -140,6 +229,15 @@ class Session {
         return this.lastCallNumber || "";
     }
 
+    sendLoginToExtension () {
+        if (Helper.extensionPort && this.isLogin) {
+            Helper.extensionPort.postMessage({
+                action: "login",
+                data: {}
+            });
+        }
+    }
+
     refreshDevicesList () {
         $.verto.init({skipPermCheck: true}, ()=> {});
     }
@@ -148,7 +246,7 @@ class Session {
         return {
             audioInDevices: $.verto.audioInDevices,
             audioOutDevices: $.verto.audioOutDevices,
-            videoDevices: $.verto.videoDevices,
+            videoDevices: $.verto.videoDevices
         }
     }
 
