@@ -6,11 +6,48 @@
 
 const SETTINGS_LOCAL_STORAGE = ['selectedAudio', 'selectedSpeaker', 'selectedVideo', 'sessid'];
 
-const Helper = {
+let Helper = {
     session: null,
+    phoneWindow: null,
     missedNotifications: {},
     videoParamsBest: {},
     extensionPort: null,
+
+    init: () => {
+        Helper.getSettings(data => {
+            if (!Helper.session && data && data.server) {
+                Helper.session  = new Session(data);
+            }
+        });
+    },
+
+    refreshVertoDevice: () => {
+        $.verto.init({skipPermCheck: true}, ()=> {
+            Helper.videoParamsBest = {};
+            let count = $.verto.videoDevices.length;
+
+            $.verto.videoDevices.forEach( (i) => {
+                console.log('try check test video ', i);
+                $.FSRTC.getValidRes(i.id, (r) => {
+                    Helper.videoParamsBest[i.id] = {
+                        w: r.bestResSupported[0],
+                        h: r.bestResSupported[1]
+                    };
+
+                    if (!--count && Helper.session && Helper.videoParamsBest[Helper.session.selectedVideo]) {
+                        Helper.session.verto.videoParams({
+                            minWidth: Helper.videoParamsBest[Helper.session.selectedVideo].w,
+                            minHeight: Helper.videoParamsBest[Helper.session.selectedVideo].h,
+                            maxWidth: Helper.videoParamsBest[Helper.session.selectedVideo].w,
+                            maxHeight: Helper.videoParamsBest[Helper.session.selectedVideo].h
+                        })
+                    }
+                });
+
+
+            })
+        })
+    },
 
     deleteDomain: (param) => {
         if (typeof param == "string") {
@@ -38,7 +75,7 @@ const Helper = {
     },
 
     createNotificationMsg: (title, messsage, contextMessage, imgUri, time) => {
-        this.createNotification({
+        Helper.createNotification({
             type: 'basic',
             iconUrl: imgUri || 'images/phone16.png',
             title: title,
@@ -61,7 +98,7 @@ const Helper = {
         chrome.app.window.create('index.html',
             {
                 id: "vertoPhone",
-                alwaysOnTop: this.session && this.session.alwaysOnTop,
+                alwaysOnTop: Helper.session && Helper.session.alwaysOnTop,
                 innerBounds: {
                     width: 235,
                     height: 430,
@@ -71,7 +108,7 @@ const Helper = {
                 }
             },
             (window) => {
-                phoneWindow = window;
+                const phoneWindow = Helper.phoneWindow = window;
                 phoneWindow.contentWindow.vertoDevices = {
                     audioInDevices: $.verto.audioInDevices,
                     audioOutDevices: $.verto.audioOutDevices,
@@ -79,15 +116,15 @@ const Helper = {
                 };
 
                 phoneWindow.contentWindow.onload = () => {
-                    phoneWindow.session = this.session;
+                    phoneWindow.vertoSession = Helper.session;
 
-                    this.getSettings(function (data) {
-                        phoneWindow.contentWindow.vertoSession = session;
+                    Helper.getSettings(function (data) {
+                        phoneWindow.contentWindow.vertoSession = Helper.session;
 
-                        this.sendSession('init', {
+                        Helper.sendSession('init', {
                             settings: data || {},
-                            activeCalls: this.session && this.session.activeCalls,
-                            logged: this.session && this.session.isLogin
+                            activeCalls: Helper.session && Helper.session.activeCalls,
+                            logged: Helper.session && Helper.session.isLogin
                         });
                     });
                 };
@@ -96,8 +133,8 @@ const Helper = {
     },
 
     getSettings: (cb) => {
-        if (this.session && this.session._settings)
-            return cb(this.session._settings);
+        if (Helper.session && Helper.session._settings)
+            return cb(Helper.session._settings);
 
         let settings = {};
 
@@ -134,5 +171,24 @@ const Helper = {
 
         chrome.storage.sync.set({settings: sync});
         chrome.storage.local.set({settings: local}, cb);
+    },
+
+    saveSettings: (data) => {
+        if (!data.sessid ) {
+            data.sessid = $.verto.genUUID();
+        }
+
+        Helper.setSettings(data, () => {
+            if (Helper.session) {
+                Helper.session.logout();
+            }
+
+            Helper.session = new Session(data);
+
+            if (Helper.phoneWindow)
+                Helper.phoneWindow.contentWindow.vertoSession = session;
+
+            Helper.createNotificationMsg('Save', 'Saved settings', '', 'images/success64.png', 2000);
+        });
     }
 };

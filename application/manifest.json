@@ -36,7 +36,10 @@
             "lib/jquery/jquery-2.1.3.min.js",
             "lib/ratchet-v2.0.2/js/ratchet.min.js",
             "lib/verto.js",
-            "app/model/db.js",
+            "js/db.js",
+            "js/helper.js",
+            "js/call.js",
+            "js/session.js",
             "background.js"
         ]
     }

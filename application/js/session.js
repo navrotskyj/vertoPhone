@@ -58,6 +58,10 @@ class Session {
             iceServers: options.iceServers
         }, this.vetoCallbacks);
         this.verto.login();
+
+        if (Helper.phoneWindow) {
+            Helper.phoneWindow.setAlwaysOnTop(this.alwaysOnTop);
+        }
     }
 
     get vetoCallbacks () {
@@ -238,6 +242,15 @@ class Session {
         }
     }
 
+    sendLogoutToExtension() {
+        if (Helper.extensionPort && this.isLogin) {
+            Helper.extensionPort.postMessage({
+                action: "logout",
+                data: {}
+            });
+        }
+    }
+
     refreshDevicesList () {
         $.verto.init({skipPermCheck: true}, ()=> {});
     }
@@ -247,6 +260,58 @@ class Session {
             audioInDevices: $.verto.audioInDevices,
             audioOutDevices: $.verto.audioOutDevices,
             videoDevices: $.verto.videoDevices
+        }
+    }
+
+    openMenu (id, name) {
+        const call = this.activeCalls[id];
+        if (call) {
+            call.openMenu(name);
+            Helper.sendSession('changeCall', this.activeCalls);
+        }
+    }
+
+    openVideo (id) {
+        const call = this.activeCalls[id];
+        let scope = this;
+        if (call && call.initRemoteStream) {
+            console.warn('open window');
+            const title = ' ' + call.calleeIdNumber + ' (' + call.calleeIdName + ')';
+            var screenShareCallStreamSrc = call.screenShareCallStreem;
+            chrome.app.window.create('app/view/videoCall.html',
+                {
+                    id: id,
+                    // alwaysOnTop: true,
+                    innerBounds: {
+                        width: 640,
+                        height: 480
+                    }
+                },
+                (window) => {
+                    window.contentWindow.onload = function (e) {
+                        this.document.title += title;
+                        var videoLeft = e.target.getElementById('remoteVideoLeft');
+                        var videoL = e.target.getElementById('localVideo');
+                        var stream = scope.getCallStream(id);
+                        if (stream) {
+                            videoLeft.srcObject = stream.remoteStream;
+                            videoLeft.volume = 0;
+                            videoLeft.play();
+                            videoL.srcObject = stream.localStream;
+                            videoL.volume = 0;
+                            videoL.play();
+                            if (screenShareCallStreamSrc) {
+                                var videoRight = e.target.getElementById('remoteVideoRight');
+                                videoRight.volume = 0;
+                                videoRight.src = screenShareCallStreamSrc;
+                                videoRight.play();
+                                e.target.getElementsByClassName('right')[0].style.display = 'flex'
+                            }
+
+                        }
+                    }
+                }
+            );
         }
     }
 
@@ -378,4 +443,20 @@ class Session {
 
     // endregion
 
+
+    listCollection (collectionName, params, cb) {
+        modelVerto.list(collectionName, params, cb);
+    }
+
+    addCollection (collectionName, params, cb) {
+        modelVerto.add(collectionName, params, cb);
+    }
+
+    updateCollection (collectionName, id, params, cb) {
+        modelVerto.update(collectionName, id, params, cb);
+    }
+
+    removeCollection (collectionName, id, cb) {
+        modelVerto.remove(collectionName, id, cb);
+    }
 }
