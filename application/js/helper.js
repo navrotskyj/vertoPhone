@@ -104,7 +104,6 @@ let Helper = {
         chrome.app.window.create('index.html',
             {
                 id: "vertoPhone",
-                alwaysOnTop: Helper.session && Helper.session.alwaysOnTop,
                 innerBounds: {
                     width: 235,
                     height: 430,
@@ -123,9 +122,12 @@ let Helper = {
 
                 phoneWindow.contentWindow.onload = () => {
                     phoneWindow.vertoSession = Helper.session;
-
                     Helper.getSettings(function (data) {
                         phoneWindow.contentWindow.vertoSession = Helper.session;
+
+                        if (Helper.session) {
+                            phoneWindow.setAlwaysOnTop(!!Helper.session.alwaysOnTop);
+                        }
 
                         Helper.sendSession('init', {
                             settings: data || {},
