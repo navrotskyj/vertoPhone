@@ -16,20 +16,19 @@ angular
 
         var onKeyUp = $rootScope.$on('key:down', function (e, key) {
             if (key.target.nodeName == "INPUT") return;
-            var myKey = false;
+            var myKey = true;
             if (between(key.keyCode, 48, 90) || between(key.keyCode, 96, 105)) {
                 dtmf(key.key);
-                myKey = true;
             } else if (key.keyCode == 8) {
                 if (key.ctrlKey) {
                     $scope.number = '';
                 } else {
                     delLastNumber();
                 }
-                myKey = true;
             } else if (key.keyCode == 13) {
-                myKey = true;
                 makeCall()
+            } else {
+                myKey = false;
             }
 
             if (myKey) {

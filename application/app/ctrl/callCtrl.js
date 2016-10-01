@@ -10,23 +10,20 @@ angular
 
         var onKeyUp = $rootScope.$on('key:down', function (e, key) {
             if (key.target.nodeName == "INPUT") return;
-            var myKey = false;
+            var myKey = true;
 
             if (key.keyCode == 77) {
-                myKey = true;
                 toggleMute(getActiveCallId());
             } else if (key.keyCode == 72) {
-                myKey = true;
                 toggleHold(getActiveCallId());
             } else if (between(key.keyCode, 48, 57) || between(key.keyCode, 96, 105)) {
-                myKey = true;
                 dtmf(key.key)
             } else if (key.keyCode == 13 || key.keyCode == 65 ) {
-                myKey = true;
                 answerCall(getActiveCallId())
             } else if (key.keyCode == 81) {
-                myKey = true;
                 dropCall(getActiveCallId())
+            } else {
+                myKey = false;
             }
 
             if (myKey) {
