@@ -46,6 +46,7 @@ class Session {
 
         // TODO
         this._settings = options;
+        this.initLastCallNumber();
 
         this.verto = new $.verto({
             login: options.login,
@@ -230,6 +231,14 @@ class Session {
             }
 
         }
+    }
+
+    initLastCallNumber () {
+        this.listCollection('history', {limit: 1, index: "createdOn", sort: 'prev'}, (data) => {
+            if (data && data.length > 0) {
+                this.lastCallNumber = data[0].number;
+            }
+        });
     }
 
     logout () {
