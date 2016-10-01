@@ -120,11 +120,6 @@ var modelVerto = {
             function initTable(prop, callback) {
                 var objectStore = db.createObjectStore(prop.name, { keyPath: prop.keyPath,  autoIncrement: prop.autoIncrement});
 
-                // Create an index to search customers by name. We may have duplicates
-                // so we can't use a unique index.
-                // Create an index to search customers by email. We want to ensure that
-                // no two customers have the same email, so use a unique index.
-
                 for (var i of prop.index) {
                     objectStore.createIndex(i.name, i.columns, { unique: i.unique == true, multiEntry: i.multiEntry == true });
                 }

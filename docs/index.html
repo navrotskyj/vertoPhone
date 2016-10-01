@@ -77,42 +77,42 @@
             <div class="col-lg-12">
                 <h3>Verto Phone step-by-step</h3>
             </div>
+                <div class="col-lg-12">
+                    <ul style="list-style: decimal; color: #FFF; font-size: 24px;">
+                    <li>
+                        Setup FreeSWITCH
+                        <ul style="list-style: decimal;">
+                            <li>
+                                <h4><a href="https://freeswitch.org/confluence/display/FREESWITCH/Debian+8+Jessie">Install FreeSWITCH</a> with mod_verto.</h4>
+                            </li>
+                            <li>
+                                <h4><a href="https://freeswitch.org/confluence/display/FREESWITCH/mod_verto">Setup mod_verto.</a></h4>
+                            </li>
+                            <li>
+                                <h4>For screen sharing, please, add new extension in the default context:</h4>
+                        <pre class="">
+                            <code>
+    <span class="tag">&lt;extension</span><span class="pln"> </span><span class="atn">name</span><span class="pun">=</span><span class="atv">"screen_sharing"</span><span class="tag">&gt;</span><span class="pln">
+        </span><span class="tag">&lt;condition</span><span class="pln"> </span><span class="atn">field</span><span class="pun">=</span><span class="atv">"destination_number"</span><span class="pln"> </span><span class="atn">expression</span><span class="pun">=</span><span class="atv">"^(\d )-screen$"</span><span class="tag">&gt;</span><span class="pln">
+            </span><span class="tag">&lt;action</span><span class="pln"> </span><span class="atn">application</span><span class="pun">=</span><span class="atv">"set"</span><span class="pln"> </span><span class="atn">data</span><span class="pun">=</span><span class="atv">"effective_caller_id_number=${caller_id_number}-screen"</span><span class="tag">/&gt;</span><span class="pln">
+            </span><span class="tag">&lt;action</span><span class="pln"> </span><span class="atn">application</span><span class="pun">=</span><span class="atv">"transfer"</span><span class="pln"> </span><span class="atn">data</span><span class="pun">=</span><span class="atv">"$1 XML default"</span><span class="tag">/&gt;</span><span class="pln">
+        </span><span class="tag">&lt;/condition&gt;</span><span class="pln">
+    </span><span class="tag">&lt;/extension&gt;</span>
+                            </code>
+                        </pre>
+                            </li>
+                        </ul>
+                    </li>
 
-            <ul style="list-style: decimal; color: #FFF; font-size: 24px;">
-                <li>
-                    <h4>Setup FreeSWITCH</h4>
-                    <ul style="list-style: decimal;">
-                        <li>
-                            <h4><a href="https://freeswitch.org/confluence/display/FREESWITCH/Debian+8+Jessie">Install FreeSWITCH</a> with mod_verto.</h4>
-                        </li>
-                        <li>
-                            <h4><a href="https://freeswitch.org/confluence/display/FREESWITCH/mod_verto">Setup mod_verto.</a></h4>
-                        </li>
-                        <li>
-                            <h4>For screen sharing, please, add new extension in the default context:</h4>
-                    <pre class="">
-                        <code>
-<span class="tag">&lt;extension</span><span class="pln"> </span><span class="atn">name</span><span class="pun">=</span><span class="atv">"screen_sharing"</span><span class="tag">&gt;</span><span class="pln">
-    </span><span class="tag">&lt;condition</span><span class="pln"> </span><span class="atn">field</span><span class="pun">=</span><span class="atv">"destination_number"</span><span class="pln"> </span><span class="atn">expression</span><span class="pun">=</span><span class="atv">"^(\d )-screen$"</span><span class="tag">&gt;</span><span class="pln">
-        </span><span class="tag">&lt;action</span><span class="pln"> </span><span class="atn">application</span><span class="pun">=</span><span class="atv">"set"</span><span class="pln"> </span><span class="atn">data</span><span class="pun">=</span><span class="atv">"effective_caller_id_number=${caller_id_number}-screen"</span><span class="tag">/&gt;</span><span class="pln">
-        </span><span class="tag">&lt;action</span><span class="pln"> </span><span class="atn">application</span><span class="pun">=</span><span class="atv">"transfer"</span><span class="pln"> </span><span class="atn">data</span><span class="pun">=</span><span class="atv">"$1 XML default"</span><span class="tag">/&gt;</span><span class="pln">
-    </span><span class="tag">&lt;/condition&gt;</span><span class="pln">
-</span><span class="tag">&lt;/extension&gt;</span>
-                        </code>
-                    </pre>
-                        </li>
-                    </ul>
-                </li>
-
-                <li>
-                    <h4>Install <a href="https://chrome.google.com/webstore/search/webitel">chrome Application and Extension</a> </h4>
-                </li>
-                <li>
-                    <h4>Setup Your login, password and WebSocket Uri:</h4>
-                    <img src="img/Screenshot3.png">
-                </li>
-            </ul>
-
+                    <li>
+                        <h4>Install <a href="https://chrome.google.com/webstore/search/webitel">chrome Application and Extension</a> </h4>
+                    </li>
+                    <li>
+                        <h4>Setup Your login, password and WebSocket Uri:</h4>
+                        <img src="img/Screenshot3.png">
+                    </li>
+                </ul>
+            </div>
 
         </div>
 

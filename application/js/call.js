@@ -75,7 +75,7 @@ class Call {
 
     destroy (userDropCall) {
         this._clearNotification();
-        // TODO add direction;
+ 
         if (!userDropCall && !this.onActiveTime && this.direction === $.verto.enum.direction.inbound)
             this.showMissed();
 
