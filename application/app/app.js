@@ -134,7 +134,9 @@ vertoPhone.run(function($rootScope, $window, CallService, $timeout) {
         if ($rootScope.activeCalls.length > 0) {
             setCallView()
         } else {
-            changeState($rootScope._prevActiveTabName || 'dialpad');
+            changeState($rootScope.activeTabName != 'call' && $rootScope.activeTabName != 'settings' 
+                ? $rootScope.activeTabName
+                : 'dialpad');
         }
         $rootScope.$apply();
     }
@@ -151,6 +153,7 @@ vertoPhone.run(function($rootScope, $window, CallService, $timeout) {
         }
         console.debug(arguments);
         var newTemplate = stateName;
+        
         $rootScope._prevActiveTabName = $rootScope.activeTabName;
         $rootScope.activeTabName = stateName;
         if (isPage) {
