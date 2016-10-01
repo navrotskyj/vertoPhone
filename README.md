@@ -10,6 +10,6 @@ Verto Phone is a Chrome Application that can be used with FreeSWITCH mod_verto.
 [Home suite](http://verto.webitel.com/)
 
 Screenshot
-[1](docs/img/Screenshot1.png)
-[2](docs/img/Screenshot1.png)
-[3](docs/img/Screenshot1.png)
+[<img src="docs/img/Screenshot1.png">](http://verto.webitel.com/)
+[<img src="docs/img/Screenshot2.png">](http://verto.webitel.com/)
+[<img src="docs/img/Screenshot3.png">](http://verto.webitel.com/)
