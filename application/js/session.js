@@ -40,6 +40,16 @@ class Session {
                 // TODO move conf
                 minFrameRate: 15
             }
+        } else if (Object.keys(Helper.videoParamsBest).length == 1) {
+            let bp = Helper.videoParamsBest[Object.keys(Helper.videoParamsBest)[0]];
+            this.videoParams = {
+                minWidth: bp.w,
+                minHeight: bp.h,
+                maxWidth: bp.w,
+                maxHeight: bp.h,
+                // TODO move conf
+                minFrameRate: 15
+            }
         }
 
         this.isLogin = false;
