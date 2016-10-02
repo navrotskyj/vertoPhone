@@ -2,7 +2,7 @@
 
     <div class="card card-call-info no-border bg-default" style="height: 55px; margin: 0;">
         <div style="text-align: center;" >
-            <p>{{activeCall.contact.name ? activeCall.contact.name  + ' (' + activeCall.calleeIdNumber + ')': activeCall.calleeIdNumber}}</p>
+            <p class="call-view-number">{{activeCall.contact.name ? activeCall.contact.name  + ' (' + activeCall.calleeIdNumber + ')': activeCall.calleeIdNumber}}</p>
             <p ui-timer start="activeCall.onActiveTime"></p>
         </div>
     </div>

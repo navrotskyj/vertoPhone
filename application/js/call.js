@@ -26,7 +26,7 @@ class Call {
         this.initRemoteStream = false;
         this.screenShareCall = null;
         this.screenShareCallStreem = null;
-        this.dtmf = [];
+        this.dtmfArray = [];
 
         this.contact = null;
         var scope = this;
@@ -56,6 +56,14 @@ class Call {
         this.mute = mute;
     }
 
+    dtmf (digit) {
+        if (this.dtmfArray.push(digit) === 1) {
+            this.calleeIdNumber += ':';
+        }
+
+        this.calleeIdNumber+= digit;
+    }
+
     setState (state) {
         this.state = state;
         if (!this.onActiveTime && state == 'active') {
@@ -73,7 +81,7 @@ class Call {
             Helper.clearNotificationId(this.notificationId);
     }
 
-    destroy (userDropCall) {
+    destroy (userDropCall, d) {
         this._clearNotification();
  
         if (!userDropCall && !this.onActiveTime && this.direction === $.verto.enum.direction.inbound)

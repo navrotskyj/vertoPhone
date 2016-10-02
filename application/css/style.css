@@ -16,6 +16,29 @@ input[placeholder].small-placeholder::-webkit-input-placeholder{
     font-size: 11px;
 }
 
+#phone .error{
+    position: fixed;
+    left: 0;
+    top: 0;
+    right: 0;
+}
+
+#phone .call-view-number {
+    max-width: 200px;
+    display: inline-block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+
+#phone .error .error-msg{
+    background-color: red;
+    color: #fff;
+    padding-left: 3px;
+    margin: 3px;
+    cursor: pointer;
+}
     
 #phone .call-group .btn.circle-btn.icon.ion-ios-videocam.call.make-call-video {
     display: none;

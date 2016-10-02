@@ -15,6 +15,10 @@
                 </a>
             </div>
 
+            <div class="error">
+                <div ng-click="closeError(e)" ng-repeat="e in errors" class="error-msg">{{e.message}}</div>
+            </div>
+
         </header>
 
         <nav ng-controller="navigate" class="bar bar-tab">

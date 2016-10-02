@@ -141,6 +141,10 @@ class Session {
                 this.sendLogoutToExtension();                
             },
 
+            onError: (e) => {
+                console.error(e);
+            },
+
             // TODO;
             onDialogState: (d) => {
                 const screenShare = /^(\d+).*-screen$/.exec(d.params.destination_number || d.params.remote_caller_id_number);
@@ -212,10 +216,8 @@ class Session {
                                     if (err)
                                         console.error(err);
                                 });
-                                if (this.activeCalls[d.callID]) {
-                                    this.activeCalls[d.callID].destroy(d.userDropCall);
-                                    delete this.activeCalls[d.callID];
-                                }
+                                this.activeCalls[d.callID].destroy(d.userDropCall, d);
+                                delete this.activeCalls[d.callID];
                             }
                             removeVideo(d.callID);
                             break;
@@ -439,10 +441,18 @@ class Session {
     }
 
     dtmf (id, digit) {
-        const call = this.verto.dialogs[id];
+        const call = this.activeCalls[id],
+            dialog = this.verto.dialogs[id]
+            ;
         if (call) {
             call.dtmf(digit);
+        }    
+
+        if (dialog) {
+            dialog.dtmf(digit);
         }        
+
+        Helper.sendSession('changeCall', this.activeCalls);    
     }
 
     transfer (id, dest, params = {}) {

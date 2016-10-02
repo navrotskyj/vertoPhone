@@ -50,6 +50,25 @@ vertoPhone.run(function($rootScope, $window, CallService, $timeout) {
     $rootScope.session = null;
     $rootScope.activeCalls = [];
     $rootScope.activeCall = {};
+
+    $rootScope.errors = [];
+    $rootScope.addError = function (msg, time) {
+        var err = new Error(msg);
+        $rootScope.errors.push(err);
+        if (time) {
+            $timeout(function() {
+                $rootScope.closeError(err);
+            }, time)
+        }
+    };
+
+    $rootScope.closeError = function (err) {
+        var pos = $rootScope.errors.indexOf(err);
+        if (~pos) {
+            $rootScope.errors.splice(pos, 1)
+        }
+    } 
+
     $rootScope.$on('bg:init', function (e, data) {
         if (data.hasOwnProperty('settings')) {
             $rootScope.vertoSettings = data.settings;
