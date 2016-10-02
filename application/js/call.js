@@ -33,7 +33,7 @@ class Call {
         modelVerto.list('contacts', {limit: 1, sort: 'next', index: "_numbers", search: {text: this.calleeIdNumber}}, function (data) {
             if (data && data.length > 0) {
                 scope.contact = data[0];
-                Helper.sendSession('changeCall', session.activeCalls);
+                Helper.sendSession('changeCall', Helper.session.activeCalls);
             }
         });
 
