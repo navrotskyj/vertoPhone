@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html >
+    <head>
+        <title>Video</title>
+        <link rel="stylesheet" type="text/css" href="../../css/video.css">
+    </head>
+    <body ng-app="videoCall">
+        
+        <div id="mySidenav" class="sidenav">
+            <div class="sidenav-btn">
+                <a class="closebtn" ng-click="closeSide()">&times;</a>
+            </div>
+            
+            <!--<ul class="tab">
+                <li><a href="#" class="tablinks" >Members</a></li>
+                <li><a href="#" class="tablinks" >Chat</a></li>
+            </ul>-->
+            <div class="side-content">
+                <div class="members">
+                    <ul class="people">
+                        <li class="person" ng-repeat="m in members">
+                            <img src="http://s13.postimg.org/ih41k9tqr/img1.jpg" alt="" />
+                            <span class="name">Thomas Bangalter</span>
+                            <span class="time">2:09 PM</span>
+                            <span class="preview">I was wondering...</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+
+        <div id="main">
+            <span style="font-size:30px;cursor:pointer" ng-click="openSide()">&#9776; open</span>
+        </div>
+        <script type="text/javascript" src="../../lib/angular.min.js"></script>
+        <script type="text/javascript" src="../ctrl/video2.js"></script>
+    </body>
+</html>
