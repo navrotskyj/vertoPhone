@@ -1,155 +1,173 @@
 body {
-    font-family: "Lato", sans-serif;
+  background-color: #EEE;
+  font-family: sans-serif;
+  overflow-x: hidden;
 }
 
-.sidenav {
-    height: 100%;
-    width: 0;
-    position: fixed;
-    z-index: 1;
-    top: 0;
-    left: 0;
-    background-color: #111;
-    overflow-x: hidden;
-    transition: 0.5s;
-    padding-top: 60px;
-}
-
-.sidenav .sidenav-btn a {
-    padding: 8px 8px 8px 32px;
-    text-decoration: none;
-    font-size: 25px;
-    color: #818181;
-    display: block;
-    transition: 0.3s
-}
-
-.sidenav .sidenav-btn a:hover, .offcanvas a:focus{
-    color: #f1f1f1;
-}
-
-.sidenav .sidenav-btn .closebtn {
-    position: absolute;
-    top: 0;
-    right: 25px;
-    font-size: 36px;
-    margin-left: 50px;
-}
-
-.side-content {
-    width: 100%;
-    /* height: 100%; */
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 60px;
-    top: 58px;
-    /* background-color: greenyellow; */
-    overflow-y: auto;
-}
-
-#main {
-    transition: margin-left .5s;
-    padding: 16px;
-}
-
-@media screen and (max-height: 450px) {
-  .sidenav {padding-top: 15px;}
-  .sidenav a {font-size: 18px;}
-}
-
-
-
-.people {
-  margin-left: -1px;
-  border-right: 1px solid #e6e6e6;
-  border-left: 1px solid #e6e6e6;
-  padding: 0;
-}
-.people .person {
-  position: relative;
-  padding: 12px 3px 16px;
-  cursor: pointer;
-  background-color: #fff;
-}
-.people .person:after {
-  position: absolute;
-  bottom: 0;
-  left: 50%;
-  display: block;
-  width: 80%;
-  height: 1px;
-  content: '';
-  background-color: #e6e6e6;
-  -webkit-transform: translate(-50%, 0);
-          transform: translate(-50%, 0);
-}
-.people .person img {
-  float: left;
-  width: 40px;
-  height: 40px;
-  margin-right: 12px;
-  border-radius: 50%;
-}
-.people .person .name {
-  font-size: 14px;
-  line-height: 22px;
-  color: #1a1a1a;
-  font-family: 'Source Sans Pro', sans-serif;
-  font-weight: 600;
-}
-.people .person .time {
-  font-size: 14px;
-  position: absolute;
-  top: 16px;
-  right: 10%;
-  padding: 0 0 5px 5px;
-  color: #999;
-  background-color: #fff;
-}
-.people .person .preview {
-  font-size: 14px;
-  display: inline-block;
-  overflow: hidden !important;
-  width: 70%;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  color: #999;
-}
-.people .person.active, .people .person:hover {
-  margin-top: -1px;
-  margin-left: -1px;
-  padding-top: 13px;
-  border: 0;
-  background-color: #00b0ff;
-}
-.people .person.active span, .people .person:hover span {
-  color: #fff;
-  background: transparent;
-}
-.people .person.active:after, .people .person:hover:after {
+#menu-trigger {
   display: none;
 }
+#menu-trigger + label {
+  background-color: #333;
+  color: #FFF;
+  cursor: pointer;
+  padding: 20px 10px;
+  margin: 10px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  border-radius: 8px;
+  -webkit-transition: -webkit-transform .3s ease;
+  transition: -webkit-transform .3s ease;
+  transition: transform .3s ease;
+  transition: transform .3s ease, -webkit-transform .3s ease;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -o-user-select: none;
+  -ms-user-select: none;
+      user-select: none;
+}
+#menu-trigger + label:hover {
+  background-color: #222;
+}
+#menu-trigger:checked + label {
+  -webkit-transform: translateX(250px);
+          transform: translateX(250px);
+}
+#menu-trigger:checked ~ header {
+  -webkit-transform: translateX(0px);
+          transform: translateX(0px);
+}
+#menu-trigger:checked ~ #wrap {
+  -webkit-transform: translateX(250px);
+          transform: translateX(250px);
+}
 
-/* Let's get this party started */
-::-webkit-scrollbar {
-    width: 12px;
+#wrap {
+  -webkit-transition: -webkit-transform .3s ease;
+  transition: -webkit-transform .3s ease;
+  transition: transform .3s ease;
+  transition: transform .3s ease, -webkit-transform .3s ease;
 }
- 
-/* Track */
-::-webkit-scrollbar-track {
-    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3); 
-    -webkit-border-radius: 10px;
-    border-radius: 10px;
+
+.stuff {
+  width: 60%;
+  margin: 10px auto;
+  background-color: #CCC;
+  border-radius: 8px;
+  height: 100px;
 }
- 
-/* Handle */
-::-webkit-scrollbar-thumb {
-    -webkit-border-radius: 10px;
-    border-radius: 10px;
-    background: rgba(255,0,0,0.8); 
-    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5); 
+
+header {
+  background-color: #333;
+  height: 100%;
+  width: 250px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  -webkit-transform: translateX(-250px);
+          transform: translateX(-250px);
+  -webkit-transition: -webkit-transform .3s ease;
+  transition: -webkit-transform .3s ease;
+  transition: transform .3s ease;
+  transition: transform .3s ease, -webkit-transform .3s ease;
 }
-::-webkit-scrollbar-thumb:window-inactive {
-	background: rgba(255,0,0,0.4); 
+
+.device {
+    position: absolute;
+    overflow: hidden;
+    width: 100%;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 100%;
+}
+.device * {
+  box-sizing: border-box;
+}
+.device .inner {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  background: white;
+  padding: 0;
+  overflow: hidden;
+}
+.device .content {
+  min-height: 100%;
+  width: 100%;
+}
+.device .status {
+  height: 40px;
+  padding: 3px 10px;
+  background: #2962FF;
+  font-size: 16px;
+  line-height: 40px;
+  font-family: "RobotoDraft", "Roboto", sans-serif;
+  fill: white;
+  color: white;
+  text-indent: 40px;
+}
+.device .status svg {
+  position: absolute;
+  top: 8px;
+  left: 10px;
+}
+
+.content .list {
+    overflow: auto;
+    position: absolute;
+    width: 100%;
+    top: 40px;
+    bottom: 0;
+    left: 0;
+}
+.content .tabs {
+  position: absolute;
+  z-index: 3;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 40px;
+  background: #2962FF;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+}
+.content .tabs .tab {
+  -webkit-box-flex: 1;
+  -webkit-flex: 1 1 1%;
+      -ms-flex: 1 1 1%;
+          flex: 1 1 1%;
+  font: 16px/1 "RobotoDraft", "Roboto", sans-serif;
+  color: #fff;
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  -webkit-align-content: center;
+      -ms-flex-line-pack: center;
+          align-content: center;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
+  cursor: pointer;
+  border-bottom: 5px solid transparent;
+}
+.content .tabs .tab.active {
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+.content .item {
+  padding: 5px;
 }
