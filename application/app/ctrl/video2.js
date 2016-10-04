@@ -1,5 +1,5 @@
 const app = angular.module('videoCall', []);
-app.run(($rootScope) => {
+app.run(($rootScope, $document) => {
     $rootScope.openSide = () => {
         document.getElementById("mySidenav").style.width = "300px";
         document.getElementById("main").style.marginLeft = "300px";
@@ -79,24 +79,46 @@ app.run(($rootScope) => {
         $rootScope.activeMember = m;
     };
     $rootScope.fullScreen = () => document.body.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
+
+    console.log($document.find('#menu-icn'))
 })
-.directive('menuBtn', function () {
-    console.log('INIT')
-    return {
-        scope: {
-            open: "="
-        },
-        restrict: 'AE',
-        link: function (scope, $el) {
-            console.dir(arguments);
-            $el.on('click', function () {
-                debugger
-                $('body').toggleClass('overflow-hidden');
-                $('.menu-button').toggleClass('open').toggleClass('close');
-                $('nav header').toggleClass('open');
-                $('nav .posts').toggleClass('open');
-                $('.overlay').fadeToggle();
-            });
-        }
+
+
+
+//Exelent little functions to use any time when class modification is needed
+function hasClass(ele, cls) {
+    return !!ele.className.match(new RegExp('(\\s|^)' + cls + '(\\s|$)'));
+}
+
+function addClass(ele, cls) {
+    if (!hasClass(ele, cls)) ele.className += " " + cls;
+}
+
+function removeClass(ele, cls) {
+    if (hasClass(ele, cls)) {
+        var reg = new RegExp('(\\s|^)' + cls + '(\\s|$)');
+        ele.className = ele.className.replace(reg, ' ');
+    }
+}
+
+//Add event from js the keep the marup clean
+function init() {
+    document.getElementById("menu-toggle").addEventListener("click", toggleMenu);
+}
+
+//The actual fuction
+function toggleMenu() {
+    var ele = document.getElementsByTagName('body')[0];
+    if (!hasClass(ele, "open")) {
+        addClass(ele, "open");
+    } else {
+        removeClass(ele, "open");
+    }
+}
+
+//Prevent the function to run before the document is loaded
+document.addEventListener('readystatechange', function() {
+    if (document.readyState === "complete") {
+        init();
     }
 });

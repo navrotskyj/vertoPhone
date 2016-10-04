@@ -6,63 +6,23 @@
     </head>
     <body ng-app="videoCall" >
 
-    <div class="menu-button" menu-btn>
-        <span class="close"></span>
-    </div>
+            <nav id="menu" role="navigation">           
+                <ul>
+                    <li><a href="#">Item 1</a></li>
+                    <li><a href="#">Item 2</a></li>
+                    <li><a href="#">Item 3</a></li>
+                </ul>
 
-    <nav>
-        <header></header>
 
-        <div class="posts">
-            <div class="post">
-                <a href="#">
-                    <h1>Lorem Ipsum</h1>
-                    <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit.</p>
-                    <span class="timestamp">15 minutes ago</span>
-                </a>
-            </div>
-            <div class="post active">
-                <a href="#">
-                    <h1>Lorem Ipsum</h1>
-                    <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit.</p>
-                    <span class="timestamp">15 minutes ago</span>
-                </a>
-            </div>
-            <div class="post">
-                <a href="#">
-                    <h1>Lorem Ipsum</h1>
-                    <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit.</p>
-                    <span class="timestamp">15 minutes ago</span>
-                </a>
-            </div>
-            <div class="post">
-                <a href="#">
-                    <h1>Lorem Ipsum</h1>
-                    <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit.</p>
-                    <span class="timestamp">15 minutes ago</span>
-                </a>
-            </div>
-            <div class="post">
-                <a href="#">
-                    <h1>Lorem Ipsum</h1>
-                    <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit.</p>
-                    <span class="timestamp">15 minutes ago</span>
-                </a>
-            </div>
-            <div class="post">
-                <a href="#">
-                    <h1>Lorem Ipsum</h1>
-                    <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit.</p>
-                    <span class="timestamp">15 minutes ago</span>
-                </a>
-            </div>
+            </nav>
+            <div class="page-wrap">
+                <div class="video-menu">
+                    <button id="menu-toggle"></button>
+                </div>
+                <div class="container" role="main">
+                    <video></video>
+                </div>
         </div>
-    </nav>
-
-    <div class="content">
-        <div class="overlay"></div>
-    </div>
-
 
         <script type="text/javascript" src="../../lib/angular.min.js"></script>
         <script type="text/javascript" src="../ctrl/video2.js"></script>
