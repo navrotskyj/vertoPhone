@@ -80,3 +80,23 @@ app.run(($rootScope) => {
     };
     $rootScope.fullScreen = () => document.body.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
 })
+.directive('menuBtn', function () {
+    console.log('INIT')
+    return {
+        scope: {
+            open: "="
+        },
+        restrict: 'AE',
+        link: function (scope, $el) {
+            console.dir(arguments);
+            $el.on('click', function () {
+                debugger
+                $('body').toggleClass('overflow-hidden');
+                $('.menu-button').toggleClass('open').toggleClass('close');
+                $('nav header').toggleClass('open');
+                $('nav .posts').toggleClass('open');
+                $('.overlay').fadeToggle();
+            });
+        }
+    }
+});

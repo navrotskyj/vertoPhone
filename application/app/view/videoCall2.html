@@ -5,33 +5,63 @@
         <link rel="stylesheet" type="text/css" href="../../css/video.css">
     </head>
     <body ng-app="videoCall" >
-        
-        <input id="menu-trigger" type="checkbox">
-        <label for="menu-trigger">MENU</label>
-        
 
-        <header>
-            <div class="device">
-                <div class="inner">
-                    <div class="content"> 
-                        <div class="tabs">
-                            <div class="tab _1 active">Members</div>
-                            <div class="tab _2">Chat</div>
-                        </div>
-                        <div class="list">
-                            <div class="item" ng-repeat="m in members" tabindex="-1">
-                                <div class="info"> Randy Morales <br/>randy-morales@gmail.com </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+    <div class="menu-button" menu-btn>
+        <span class="close"></span>
+    </div>
+
+    <nav>
+        <header></header>
+
+        <div class="posts">
+            <div class="post">
+                <a href="#">
+                    <h1>Lorem Ipsum</h1>
+                    <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit.</p>
+                    <span class="timestamp">15 minutes ago</span>
+                </a>
             </div>
-        </header>
-
-        <div id="wrap">
-            <button ng-click="fullScreen()">F</button>
-            <video></video>
+            <div class="post active">
+                <a href="#">
+                    <h1>Lorem Ipsum</h1>
+                    <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit.</p>
+                    <span class="timestamp">15 minutes ago</span>
+                </a>
+            </div>
+            <div class="post">
+                <a href="#">
+                    <h1>Lorem Ipsum</h1>
+                    <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit.</p>
+                    <span class="timestamp">15 minutes ago</span>
+                </a>
+            </div>
+            <div class="post">
+                <a href="#">
+                    <h1>Lorem Ipsum</h1>
+                    <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit.</p>
+                    <span class="timestamp">15 minutes ago</span>
+                </a>
+            </div>
+            <div class="post">
+                <a href="#">
+                    <h1>Lorem Ipsum</h1>
+                    <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit.</p>
+                    <span class="timestamp">15 minutes ago</span>
+                </a>
+            </div>
+            <div class="post">
+                <a href="#">
+                    <h1>Lorem Ipsum</h1>
+                    <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit.</p>
+                    <span class="timestamp">15 minutes ago</span>
+                </a>
+            </div>
         </div>
+    </nav>
+
+    <div class="content">
+        <div class="overlay"></div>
+    </div>
 
 
         <script type="text/javascript" src="../../lib/angular.min.js"></script>
