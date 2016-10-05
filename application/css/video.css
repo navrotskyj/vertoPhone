@@ -39,8 +39,6 @@ h2 {
          -o-transition: all .3s ease-in;
             transition: all .3s ease-in;
     text-align: center;
-
-    background-color: #fff;
 }
 /*#menu .brand {
     height: 51px;
@@ -57,7 +55,7 @@ h2 {
     left: 0;
     right: 0;
     bottom: 0;
-    top: 100px;
+    top: 0;
     overflow-y: auto;
 }
 
@@ -100,7 +98,7 @@ body.open #menu {
 }
 
 .video-menu {
-    display: none;
+    /*display: none;*/
 }
 
 .page-wrap .video-menu:hover {
@@ -183,56 +181,179 @@ video {
 }
 
 
+/* Mmbers*/
 
+#menu .list-group {
+    width: 20rem;
+    display: inline-block;
+    vertical-align: top;
+    background-color: #343841;
+}
+#menu .list-group ul {
+    padding: 0;
+    list-style: none;
+}
+#menu .list-group ul li {
+    position: relative;
+    padding: 0.9rem;
+    cursor: pointer;
+    color: #cccccc;
+    border-bottom: 1px solid #292C33;
+    -moz-transition: background-color 0.2s linear, color 0.2s linear;
+    -o-transition: background-color 0.2s linear, color 0.2s linear;
+    -webkit-transition: background-color 0.2s linear, color 0.2s linear;
+    transition: background-color 0.2s linear, color 0.2s linear;
+}
+#menu .list-group ul li .picture {
+    float: left;
+    width: 3rem;
+    position: relative;
+}
+#menu .list-group ul li .picture img {
+    width: 3rem;
+    height: 3rem;
+    -moz-border-radius: 2rem;
+    -webkit-border-radius: 2rem;
+    border-radius: 2rem;
+}
+#menu .list-group ul li .picture .badge {
+    position: absolute;
+    bottom: -0.2rem;
+    right: -0.5rem;
+    background-color: #2776C5;
+    -moz-transition: border 0.2s linear;
+    -o-transition: border 0.2s linear;
+    -webkit-transition: border 0.2s linear;
+    transition: border 0.2s linear;
+    color: White;
+    font-size: 0.6rem;
+    line-height: 1.1rem;
+    width: 1.5rem;
+    text-align: center;
+    border: 3px solid #343841;
+    -moz-border-radius: 1rem;
+    -webkit-border-radius: 1rem;
+    border-radius: 1rem;
+}
+#menu .list-group ul li .picture .badge.orange {
+    background-color: #D28C1D;
+}
+#menu .list-group ul li .picture .badge.blue {
+    background-color: #3198FD;
+}
+#menu .list-group ul li .picture .badge.green {
+    background-color: #59BA37;
+}
+#menu .list-group ul li .picture .badge.red {
+    background-color: #8A262E;
+}
+#menu .list-group ul li .content {
+    float: right;
+    width: calc(100% - 4rem);
+}
+#menu .list-group ul li .content .title {
+    color: White;
+    font-size: 1.3em;
+    font-family: "Work Sans", Arial, sans-serif;
+}
+#menu .list-group ul li .content .description {
+    font-size: 0.8rem;
+    line-height: 1.2rem;
+}
 
-/* tabs */
-.tabs {
-  border-right: 1px solid #ccc;
+#menu .list-group ul li .content .description .tags {
+    margin-top: 0.4rem;
 }
-.tabs:after {
-  content: "";
-  display: table;
-  clear: both;
+#menu .list-group ul li .content .description .tags .tag {
+    display: inline-block;
+    font-size: 0.7rem;
+    padding: 0px 5px;
+    margin: 2px;
+    color: White;
+    background-color: #2776C5;
+    -moz-border-radius: 4px;
+    -webkit-border-radius: 4px;
+    border-radius: 4px;
 }
-.tabs input[type=radio] {
-  display: none;
+#menu .list-group ul li .content .description .tags .tag.orange {
+    background-color: #D28C1D;
 }
-.tabs label {
-  display: block;
-  float: left;
-  width: 33.33333%;
-  padding: 1em;
-  border: 1px solid #ccc;
-  border-right: none;
-  background-color: #f7f7f7;
-  text-align: center;
-  font-weight: 700;
-  color: coral;
-  cursor: pointer;
-  -webkit-transition: background-color 150ms ease-in-out;
-  transition: background-color 150ms ease-in-out;
+#menu .list-group ul li .content .description .tags .tag.blue {
+    background-color: #3198FD;
 }
-.tabs label:hover {
-  background-color: white;
+#menu .list-group ul li .content .description .tags .tag.green {
+    background-color: #59BA37;
 }
-.tabs [id^="tab"]:checked + label {
-  border-bottom-color: white;
-  background: white;
-  color: #333;
+#menu .list-group ul li .content .description .tags .tag.red {
+    background-color: #8A262E;
+}
+#menu .list-group ul li .footer {
+    display: block;
+    clear: both;
+    width: 100%;
+    padding-top: 0.8rem;
+    font-size: 0.7rem;
+}
+#menu .list-group ul li .footer .info i {
+    margin-right: 0.3rem;
+}
+#menu .list-group ul li .footer .info.left {
+    float: left;
+}
+#menu .list-group ul li .footer .info.right {
+    float: right;
+}
+#menu .list-group ul li .footer:before, .container .list-group ul li .footer:after {
+    content: "";
+    display: table;
+}
+#menu .list-group ul li .footer:after {
+    clear: both;
+}
+#menu .list-group ul li .functions {
+    opacity: 0.1;
+    position: absolute;
+    right: 0.4rem;
+    top: 0.4rem;
+    color: #b3b3b3;
+    font-size: 0.8rem;
+    -moz-transition: opacity 0.2s linear;
+    -o-transition: opacity 0.2s linear;
+    -webkit-transition: opacity 0.2s linear;
+    transition: opacity 0.2s linear;
+}
+#menu .list-group ul li .functions .func {
+    display: inline-block;
+    padding: 2px;
+    cursor: pointer;
+}
+#menu .list-group ul li .functions .func:hover {
+    color: White;
+}
+#menu .list-group ul li:hover {
+    background-color: rgba(39, 118, 197, 0.3);
+}
+#menu .list-group ul li:hover .picture .badge {
+    border: 3px solid rgba(39, 118, 197, 0.6);
+}
+#menu .list-group ul li.active, .container .list-group ul li:active {
+    background-color: rgba(39, 118, 197, 0.6);
+}
+#menu .list-group ul li.active .picture .badge, .container .list-group ul li:active .picture .badge {
+    border: 3px solid #2776C5;
+}
+#menu .list-group ul li.active, .container .list-group ul li:active, .container .list-group ul li:hover {
+    color: White;
 }
 
-.tab-content {
-  display: none;
-  float: left;
-  width: 100%;
-  padding: 1em;
-  border-bottom: 1px solid #ccc;
-  border-left: 1px solid #ccc;
-  background-color: white;
+#menu .list-group ul li.active .functions, .container .list-group ul li:active .functions, .container .list-group ul li:hover .functions {
+    color: White;
+    opacity: 0.7;
 }
-
-#tab1:checked ~ #tab-content1,
-#tab2:checked ~ #tab-content2,
-#tab3:checked ~ #tab-content3 {
-  display: block;
+#menu .list-group ul li:before, .container .list-group ul li:after {
+    content: "";
+    display: table;
+}
+#menu .list-group ul li:after {
+    clear: both;
 }

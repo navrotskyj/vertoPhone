@@ -6,14 +6,35 @@
     </head>
     <body ng-app="videoCall" >
 
-            <nav id="menu" role="navigation">           
-                <ul>
-                    <li><a href="#">Item 1</a></li>
-                    <li><a href="#">Item 2</a></li>
-                    <li><a href="#">Item 3</a></li>
-                </ul>
-
-
+            <nav id="menu" role="navigation">
+                <div class="list-group">
+                    <ul>
+                        <li class___="active" ng-repeat="m in members">
+                            <div class="picture"><img src="{{m.email.avatar}}"/>
+                                <!--ERROR fa fa ????-->
+                                <div class="badge green"><i class="fa fa-check"></i></div>
+                            </div>
+                            <div class="content">
+                                <div class="title">{{m.name}}</div>
+                                <div class="description">
+                                    <div class="location"><i class="fa fa-map-marker"></i>
+                                        <span>{{m.email.email}}</span>
+                                    </div>
+                                    <div class="tags">
+                                        <div class="tag orange">System administrator</div>
+                                        <!--.tag.blue Clerk-->
+                                        <div class="tag green">Online</div>
+                                        <!--.tag.red Inactive-->
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="footer">
+                                <div class="info left"><i class="fa fa-clock-o"></i><span>Last login: online</span></div>
+                                <div class="info right"><i class="fa fa-calendar"></i><span>Added 3 days ago</span></div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
             </nav>
             <div class="page-wrap">
                 <div class="video-menu">

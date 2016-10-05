@@ -10,69 +10,193 @@ app.run(($rootScope, $document) => {
         document.getElementById("main").style.marginLeft= "0";
     };
     $rootScope.members = [
-        {"name": "1",
-        "procesor": "Intel i5",
-        "age": 2011},
-        {"name": "2",
-        "procesor": "Intel i7",
-        "age": 2010},
-        {"name": "3",
-        "procesor": "Intel core 2 duo",
-        "age": 2008},
-        {"name": "4",
-        "procesor": "Intel core 2 duo",
-        "age": 2012},
-        {"name": "5",
-        "procesor": "AMD",
-        "age": 2006},
-        {"name": "6",
-        "procesor": "Intel i5",
-        "age": 2009},
-        {"name": "7",
-        "procesor": "Intel i7",
-        "age": 2008},
-        {"name": "8",
-        "procesor": "Intel i5",
-        "age": 2011},
-        {"name": "9",
-        "procesor": "Intel i7",
-        "age": 2010},
-        {"name": "11",
-        "procesor": "Intel core 2 duo",
-        "age": 2008},
-        {"name": "12",
-        "procesor": "Intel core 2 duo",
-        "age": 2012},
-        {"name": "13",
-        "procesor": "AMD",
-        "age": 2006},
-        {"name": "14",
-        "procesor": "Intel i5",
-        "age": 2009},
-        {"name": "15",
-        "procesor": "Intel i7",
-        "age": 2008},
-        {"name": "16",
-        "procesor": "Intel i5",
-        "age": 2011},
-        {"name": "17",
-        "procesor": "Intel i7",
-        "age": 2010},
-        {"name": "18",
-        "procesor": "Intel core 2 duo",
-        "age": 2008},
-        {"name": "19",
-        "procesor": "Intel core 2 duo",
-        "age": 2012},
-        {"name": "20",
-        "procesor": "AMD",
-        "age": 2006},
-        {"name": "21",
-        "procesor": "Intel i5",
-        "age": 2009},
-        {"name": "22",
-        "procesor": "Intel i7",
-        "age": 2008}
+        {
+            'uuid': "554b9126-1524-965c-8549-416cc8bde50d",
+            'id': "0017",
+            'number': "100",
+            'name': "Igor1",
+            'codec': "opus@48000",
+            'status': {
+                "audio": {
+                    "muted": false,
+                    "deaf": false,
+                    "onHold": false,
+                    "talking": false,
+                    "floor": true,
+                    "energyScore": 0
+                },
+                "video": {
+                    "visible": false,
+                    "videoOnly": false,
+                    "avatarPresented": false,
+                    "mediaFlow": "sendOnly",
+                    "muted": true,
+                    "floor": false,
+                    "reservationID": null,
+                    "videoLayerID": -1
+                },
+                "oldStatus": "FLOOR VIDEO (BLIND)"
+            },
+            'email': {
+                avatar: "../../../images/defaultUserPic.png",
+                email: "navrotskyj@gmail.com"
+            }
+        },{
+            'uuid': "554b9126-1524-965c-8549-416cc8bde50d",
+            'id': "0017",
+            'number': "100",
+            'name': "Igor",
+            'codec': "opus@48000",
+            'status': {
+                "audio": {
+                    "muted": false,
+                    "deaf": false,
+                    "onHold": false,
+                    "talking": false,
+                    "floor": true,
+                    "energyScore": 0
+                },
+                "video": {
+                    "visible": false,
+                    "videoOnly": false,
+                    "avatarPresented": false,
+                    "mediaFlow": "sendOnly",
+                    "muted": true,
+                    "floor": false,
+                    "reservationID": null,
+                    "videoLayerID": -1
+                },
+                "oldStatus": "FLOOR VIDEO (BLIND)"
+            },
+            'email': {
+                avatar: "http://gravatar.com/avatar/c25f1d6e925b2402c40e849b20785f1b.png?s=600",
+                email: "navrotskyj@gmail.com"
+            }
+        },{
+            'uuid': "554b9126-1524-965c-8549-416cc8bde50d",
+            'id': "0017",
+            'number': "100",
+            'name': "Igor",
+            'codec': "opus@48000",
+            'status': {
+                "audio": {
+                    "muted": false,
+                    "deaf": false,
+                    "onHold": false,
+                    "talking": false,
+                    "floor": true,
+                    "energyScore": 0
+                },
+                "video": {
+                    "visible": false,
+                    "videoOnly": false,
+                    "avatarPresented": false,
+                    "mediaFlow": "sendOnly",
+                    "muted": true,
+                    "floor": false,
+                    "reservationID": null,
+                    "videoLayerID": -1
+                },
+                "oldStatus": "FLOOR VIDEO (BLIND)"
+            },
+            'email': {
+                avatar: "http://gravatar.com/avatar/c25f1d6e925b2402c40e849b20785f1b.png?s=600",
+                email: "navrotskyj@gmail.com"
+            }
+        },{
+            'uuid': "554b9126-1524-965c-8549-416cc8bde50d",
+            'id': "0017",
+            'number': "100",
+            'name': "Igor",
+            'codec': "opus@48000",
+            'status': {
+                "audio": {
+                    "muted": false,
+                    "deaf": false,
+                    "onHold": false,
+                    "talking": false,
+                    "floor": true,
+                    "energyScore": 0
+                },
+                "video": {
+                    "visible": false,
+                    "videoOnly": false,
+                    "avatarPresented": false,
+                    "mediaFlow": "sendOnly",
+                    "muted": true,
+                    "floor": false,
+                    "reservationID": null,
+                    "videoLayerID": -1
+                },
+                "oldStatus": "FLOOR VIDEO (BLIND)"
+            },
+            'email': {
+                avatar: "http://gravatar.com/avatar/c25f1d6e925b2402c40e849b20785f1b.png?s=600",
+                email: "navrotskyj@gmail.com"
+            }
+        },{
+            'uuid': "554b9126-1524-965c-8549-416cc8bde50d",
+            'id': "0017",
+            'number': "100",
+            'name': "Igor",
+            'codec': "opus@48000",
+            'status': {
+                "audio": {
+                    "muted": false,
+                    "deaf": false,
+                    "onHold": false,
+                    "talking": false,
+                    "floor": true,
+                    "energyScore": 0
+                },
+                "video": {
+                    "visible": false,
+                    "videoOnly": false,
+                    "avatarPresented": false,
+                    "mediaFlow": "sendOnly",
+                    "muted": true,
+                    "floor": false,
+                    "reservationID": null,
+                    "videoLayerID": -1
+                },
+                "oldStatus": "FLOOR VIDEO (BLIND)"
+            },
+            'email': {
+                avatar: "http://gravatar.com/avatar/c25f1d6e925b2402c40e849b20785f1b.png?s=600",
+                email: "navrotskyj@gmail.com"
+            }
+        },{
+            'uuid': "554b9126-1524-965c-8549-416cc8bde50d",
+            'id': "0017",
+            'number': "100",
+            'name': "Igor",
+            'codec': "opus@48000",
+            'status': {
+                "audio": {
+                    "muted": false,
+                    "deaf": false,
+                    "onHold": false,
+                    "talking": false,
+                    "floor": true,
+                    "energyScore": 0
+                },
+                "video": {
+                    "visible": false,
+                    "videoOnly": false,
+                    "avatarPresented": false,
+                    "mediaFlow": "sendOnly",
+                    "muted": true,
+                    "floor": false,
+                    "reservationID": null,
+                    "videoLayerID": -1
+                },
+                "oldStatus": "FLOOR VIDEO (BLIND)"
+            },
+            'email': {
+                avatar: "http://gravatar.com/avatar/c25f1d6e925b2402c40e849b20785f1b.png?s=600",
+                email: "navrotskyj@gmail.com"
+            }
+        },
     ];
     $rootScope.activeMember = null;
     $rootScope.setActiveMember = m => {
