@@ -9,6 +9,13 @@
     <body ng-app="videoCall" >
 
             <nav id="menu" role="navigation">
+                <div class="brand">
+                    <i class="ion-ios-telephone-outline"></i>
+                    <i ng-click="fullScreen()" class="btn ion-qr-scanner"></i>
+                    <i class="ion-ios-monitor"></i>
+                    <i class="ion-ios-mic-off"></i>
+                    <i class="ion-ios-videocam"></i>
+                </div>
                 <div class="list-group">
                     <ul>
                         <li class___="active" ng-repeat="m in members">
@@ -32,10 +39,12 @@
                                             <i class="ion-ios-videocam"></i>
                                         </div>
                                         <!--.tag.red Inactive-->
+                                        
                                     </div>
                                 </div>
                             </div>
                             <div class="footer">
+                                
                                 <div class="info left"><i class="ion-ios-browsers-outline"></i><span>floor</span></div>
                                 <div class="info right"><i class="ion-monitor"></i><span>Screen share</span></div>
                             </div>
@@ -48,7 +57,7 @@
                     <button id="menu-toggle"></button>
                 </div>
                 <div class="container" role="main">
-                    <video></video>
+                    <video id="remoteVideoLeft"></video>
                 </div>
         </div>
 

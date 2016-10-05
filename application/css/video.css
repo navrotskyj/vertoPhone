@@ -29,7 +29,7 @@ h2 {
 
     width: 300px;
     height: 100%;
-    padding: 50px 30px;
+    /*padding: 50px 30px;*/
     -webkit-box-sizing: border-box;
        -moz-box-sizing: border-box;
             box-sizing: border-box;
@@ -40,15 +40,15 @@ h2 {
             transition: all .3s ease-in;
     text-align: center;
 }
-/*#menu .brand {
+#menu .brand {
     height: 51px;
 
-    font-size: 70px;
+    font-size: 36px;
     font-weight: 900;
     line-height: .6;
 
     color: #ddd;
-}*/
+}
 #menu ul {
     padding: 0;
     position: absolute;
@@ -105,7 +105,7 @@ body.open #menu {
     display: block;
 }
 
-body.open .page-wrap {
+body.open .page-wrap, body.open .page-wrap video {
     margin-left: 300px;
 }
 
@@ -171,13 +171,18 @@ body.open button#menu-toggle:after {
 }
 
 video {
-    position: absolute;
-    height: 100%;
-    width: 100%;
-    background-color: red;
-    top: 5px;
-    margin-left: -45px;
-    padding: 5px;
+ position: fixed;
+    top: 50%;
+    left: 50%;
+    min-width: 100%;
+    min-height: 100%;
+    width: auto;
+    height: auto;
+    z-index: -100;
+    transform: translateX(-50%) translateY(-50%);
+ background: url('//demosthenes.info/assets/images/polina.jpg') no-repeat;
+  background-size: cover;
+  transition: 1s opacity;
 }
 
 
@@ -192,6 +197,7 @@ video {
 #menu .list-group ul {
     padding: 0;
     list-style: none;
+    margin-top: 71px;
 }
 #menu .list-group ul li {
     position: relative;
@@ -199,6 +205,7 @@ video {
     cursor: pointer;
     color: #cccccc;
     border-bottom: 1px solid #292C33;
+    border-right: 1px solid #292C33;
     -moz-transition: background-color 0.2s linear, color 0.2s linear;
     -o-transition: background-color 0.2s linear, color 0.2s linear;
     -webkit-transition: background-color 0.2s linear, color 0.2s linear;
@@ -357,3 +364,19 @@ video {
 #menu .list-group ul li:after {
     clear: both;
 }
+
+::-webkit-scrollbar {
+    width: 12px;
+}
+ 
+::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px #7c848c; 
+    border-radius: 10px;
+}
+ 
+::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    -webkit-box-shadow: inset 0 0 6px #7c848c; 
+}
+
+

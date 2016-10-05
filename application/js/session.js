@@ -311,7 +311,7 @@ class Session {
             console.warn('open window');
             const title = ' ' + call.calleeIdNumber + ' (' + call.calleeIdName + ')';
             var screenShareCallStreamSrc = call.screenShareCallStreem;
-            chrome.app.window.create('app/view/videoCall.html',
+            chrome.app.window.create('app/view/videoCall2.html',
                 {
                     id: id,
                     // alwaysOnTop: true,
