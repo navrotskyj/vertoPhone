@@ -38,7 +38,7 @@ app.run(($rootScope, $document) => {
                 "oldStatus": "FLOOR VIDEO (BLIND)"
             },
             'email': {
-                avatar: "../../../images/defaultUserPic.png",
+                avatar: "../../images/defaultUserPic.png",
                 email: "navrotskyj@gmail.com"
             }
         },{
