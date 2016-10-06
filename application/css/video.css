@@ -106,6 +106,11 @@ body.open #menu {
     position: fixed;
     z-index: 101;
     margin: 50px;
+    font-size: 3.5em;
+}
+
+.video-menu > i {
+    margin: 7px;
 }
 
 .page-wrap .video-menu:hover {
