@@ -53,14 +53,50 @@
                 </div>
             </nav>
             <div class="page-wrap">
-                <div class="video-menu">
-                    <button id="menu-toggle"></button>
-                    <i class="ion-play"></i>
-                    <i class="ion-stop"></i>
-                    <i class="ion-android-radio-button-on"></i>
-                    <i class="ion-ios-monitor"></i>
-                    <br>
-                    <i class="ion-ios-monitor"></i>
+                <div class="video-menu" ng-class="{'open-video-menu': initPage}">
+                    <div class="btn-group">
+                        <!--<button id="menu-toggle"></button>-->
+                        <a class="btn">
+                            <i id="menu-toggle" class="ion-person-stalker"></i>
+                        </a>
+
+                        <a class="btn">
+                            <i class="ion-play"></i>
+                        </a>
+                        <!--<i class="ion-stop"></i>-->
+                        <a class="btn">
+                            <i class="ion-ios-recording"></i>
+                        </a>
+                        <!--<i class="ion-ios-recording-outline"></i>-->
+                        <a class="btn">
+                            <i class="ion-image"></i>
+                        </a>
+                        <a class="btn">
+                            <i class="ion-ios-photos-outline"></i>
+                        </a>
+
+                    </div>
+
+
+                    <div class="btn-group">
+                        <a class="btn">
+                            <i class="ion-ios-mic"></i>
+                        </a>
+                        <!--<i class="ion-ios-mic-off"></i>-->
+                        <a class="btn">
+                            <i class="ion-ios-videocam"></i>
+                        </a>
+                        <!--<i class="ion-ios-videocam-outline"></i>-->
+                        <a class="btn">
+                            <i ng-click="toggleFullScreen()" ng-class="{'ion-android-contract': isFullScreen, 'ion-android-expand': !isFullScreen}" ></i>
+                        </a>
+                        <!--<i ng-click="fullScreen(false)" class="ion-android-contract"></i>-->
+                        <a class="btn">
+                            <i class="ion-ios-keypad"></i>
+                        </a>
+                    </div>
+
+
                 </div>
                 <div class="container" role="main">
                     <video id="remoteVideoLeft"></video>

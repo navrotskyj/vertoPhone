@@ -1,5 +1,5 @@
 const app = angular.module('videoCall', []);
-app.run(($rootScope, $document) => {
+app.run(($rootScope, $document, $timeout) => {
     $rootScope.openSide = () => {
         document.getElementById("mySidenav").style.width = "300px";
         document.getElementById("main").style.marginLeft = "300px";
@@ -198,14 +198,36 @@ app.run(($rootScope, $document) => {
             }
         },
     ];
+
+    $rootScope.initPage = true;
+    $timeout(() => {
+        $rootScope.initPage = false;
+    }, 5000);
     $rootScope.activeMember = null;
     $rootScope.setActiveMember = m => {
         $rootScope.activeMember = m;
     };
-    $rootScope.fullScreen = () => document.body.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
+
+    function apply() {
+        $timeout(() => {
+            $rootScope.$apply();
+        })
+    }
+
+    $rootScope.isFullScreen = false;
+    $rootScope.toggleFullScreen = () => {
+        if (document.webkitCurrentFullScreenElement) {
+            document.webkitExitFullscreen();
+            $rootScope.isFullScreen = false;
+        } else {
+            document.body.webkitRequestFullscreen();
+            $rootScope.isFullScreen = true;
+        }
+        apply();
+    };
 
     console.log($document.find('#menu-icn'))
-})
+});
 
 
 
