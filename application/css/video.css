@@ -402,8 +402,27 @@ video {
 .btn-group{
     display: flex;
 }
-.btn-group i{
+.btn-group i {
     width:auto;
     height:45px;
     border:none;
+}
+
+
+select {
+    background: transparent;
+    width: 40px;
+    border: 0;
+    height: 40px;
+    -webkit-appearance: none;
+    border: 0;
+    color: transparent;
+    cursor: pointer;
+    outline: 0;
+    position: absolute;
+}
+
+select option {
+    background-color: black;
+    color: #fff
 }

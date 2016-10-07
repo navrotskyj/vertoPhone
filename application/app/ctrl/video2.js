@@ -199,6 +199,13 @@ app.run(($rootScope, $document, $timeout) => {
         },
     ];
 
+    $rootScope.layers = [
+        {
+            id: "one",
+            name: "One layer"
+        }
+    ]
+
     $rootScope.initPage = true;
     $timeout(() => {
         $rootScope.initPage = false;
@@ -228,7 +235,6 @@ app.run(($rootScope, $document, $timeout) => {
 
     console.log($document.find('#menu-icn'))
 });
-
 
 
 //Exelent little functions to use any time when class modification is needed

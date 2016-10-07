@@ -9,13 +9,6 @@
     <body ng-app="videoCall" >
 
             <nav id="menu" role="navigation">
-                <div class="brand">
-                    <i class="ion-ios-telephone-outline"></i>
-                    <i ng-click="fullScreen()" class="ion-android-expand"></i>
-                    <i class="ion-ios-monitor"></i>
-                    <i class="ion-ios-mic-off"></i>
-                    <i class="ion-ios-videocam"></i>
-                </div>
                 <div class="list-group">
                     <ul>
                         <li class___="active" ng-repeat="m in members">
@@ -57,7 +50,7 @@
                     <div class="btn-group">
                         <!--<button id="menu-toggle"></button>-->
                         <a class="btn">
-                            <i id="menu-toggle" class="ion-person-stalker"></i>
+                            <i id="menu-toggle" class="ion-ios-people"></i>
                         </a>
 
                         <a class="btn">
@@ -72,8 +65,12 @@
                             <i class="ion-image"></i>
                         </a>
                         <a class="btn">
+                            <select size="1" autocomplete="off">
+                                <option ng-repeat="l in layers" value="{{l.id}}">{{l.name}}</option>                                                                                                                                                     
+                            </select>
                             <i class="ion-ios-photos-outline"></i>
                         </a>
+
 
                     </div>
 
