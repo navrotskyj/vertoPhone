@@ -7,6 +7,7 @@ class Conference {
         this.confRole = pvtData.role;
         this.members = {};
         this.messages = [];
+        this.callId = null;
 
         this.conf = new $.verto.conf(v, {
             dialog: dialog,
@@ -37,12 +38,43 @@ class Conference {
             }
         );
 
-        this.liveArray.onErr = function(obj, args) {
+        this.liveArray.onErr = (obj, args) => {
             console.log('liveArray.onErr', obj, args);
         };
 
-        this.liveArray.onChange = function(obj, args) {
-            console.log('liveArray.onChange', obj, args);
+        this.liveArray.onChange = (la, res) => {
+            console.log('liveArray.onChange', la, res);
+            switch (res.action) {
+                case 'bootObj':
+                    let acctiveCalls = Helper.session && Helper.session.activeCalls,
+                    callKeys = Object.keys(acctiveCalls || {});
+                    res.data.forEach( m => {
+                        let callId = m[0];
+                        this.members[callId] = parseMember(m);
+
+                        if (!this.callId && ~callKeys.indexOf(callId)) {
+                            this.callId = callId;
+                            this.members[callId].im = true;
+                        }
+                    });
+                    break;
+
+                case 'add':
+                    this.members[res.key] = parseMember(res.data);
+                    break;
+                
+                case 'del':
+                    delete this.members[res.key];
+                    break;
+
+                case 'clear':
+                    this.members = {};
+                    break;
+
+                case 'modify':
+                    this.members[res.key] = parseMember([res.key, res.data]);
+                    break;
+            }
         };
     }
 
@@ -60,5 +92,18 @@ class Conference {
             this.conf.destroy();
             this.conf = null;
         }
+        this.members = {};
     }
+}
+
+function parseMember(member) {
+    return {
+        'uuid': member[0],
+        'id': member[1][0],
+        'number': member[1][1],
+        'name': member[1][2],
+        'codec': member[1][3],
+        'status': JSON.parse(member[1][4]),
+        'email': member[1][5].email
+    };
 }

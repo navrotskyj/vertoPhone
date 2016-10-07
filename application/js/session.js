@@ -140,7 +140,6 @@ class Session {
                                 case "conference-liveArray-join":
                                     if (!params.pvtData.screenShare && !params.pvtData.videoOnly) {
                                         console.log("conference-liveArray-join");
-                                        this.stopConference();
                                         this.startConference(v, dialog, params.pvtData);
                                     }
                                 break;
