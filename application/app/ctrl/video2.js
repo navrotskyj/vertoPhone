@@ -237,6 +237,10 @@ app.run(($rootScope, $document, $timeout) => {
 });
 
 
+window.initPort = (id) => {
+    console.warn(id)
+}
+
 //Exelent little functions to use any time when class modification is needed
 function hasClass(ele, cls) {
     return !!ele.className.match(new RegExp('(\\s|^)' + cls + '(\\s|$)'));

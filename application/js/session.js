@@ -9,6 +9,7 @@ class Session {
 
         this.lastCallNumber = null;
         this.activeCalls = {};
+        this.conference = {};
         this.videoParams = {};
 
         this.vertoLogin = options.login;
@@ -77,6 +78,20 @@ class Session {
         }
     }
 
+    startConference (v, dialog, pvtData) {
+        this.conference[pvtData.conferenceMemberID] = new Conference(
+            v, dialog, pvtData, this.useVideo
+        )
+
+    }
+
+    stopConference (id) {
+        if (this.conference.hasOwnProperty(id)) {
+            this.conference[id].destroy();
+            delete this.conference[id];
+        }
+    }
+
     get vetoCallbacks () {
         // TODO move helper ?
         function addVideo(id) {
@@ -113,6 +128,44 @@ class Session {
             onGetVideoContainer: (d) => {
                 const video = addVideo(d.callID);
                 d.params.tag = video.id;
+            },
+
+            onMessage: (v, dialog, msg, params) => {
+                console.debug('onMessage:', v, dialog, msg, params);
+
+                switch (msg) {
+                    case $.verto.enum.message.pvtEvent:
+                        if (params.pvtData) {
+                            switch (params.pvtData.action) {
+                                case "conference-liveArray-join":
+                                    if (!params.pvtData.screenShare && !params.pvtData.videoOnly) {
+                                        console.log("conference-liveArray-join");
+                                        this.stopConference();
+                                        this.startConference(v, dialog, params.pvtData);
+                                    }
+                                break;
+
+                                case "conference-liveArray-part":
+                                    if (!params.pvtData.screenShare && !params.pvtData.videoOnly) {
+                                        console.log("conference-liveArray-part");
+                                        this.stopConference(params.pvtData.conferenceMemberID);
+                                    }
+                                break;
+                            }
+                        }
+                        break;
+                    case $.verto.enum.message.info:
+                        const body = params.body,
+                            from = params.from_msg_name || params.from
+                            ;
+                
+                        break;
+                    case $.verto.enum.message.display:
+                        break;
+                    default:
+                        console.warn('Got a not implemented message:', msg, dialog, params);
+                    break;
+                }
             },
 
             onWSLogin: (e, success) => {
@@ -322,6 +375,7 @@ class Session {
                 },
                 (window) => {
                     window.contentWindow.onload = function (e) {
+                        this.initPort(chrome.runtime.id);
                         this.document.title += title;
                         var videoLeft = e.target.getElementById('remoteVideoLeft');
                         var videoL = e.target.getElementById('localVideo');

@@ -45,8 +45,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 	}
 );
 
-chrome.runtime.onConnectExternal.addListener(function(port) {
-
+chrome.runtime.onConnectExternal.addListener((port) => {
 	if (port.name === 'vertoExtension') {
 		let extensionPort = Helper.extensionPort = port;
 		console.debug(`Open port vertoExtension`);

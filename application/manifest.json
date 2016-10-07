@@ -40,6 +40,7 @@
             "js/helper.js",
             "js/call.js",
             "js/session.js",
+            "js/conference.js",
             "background.js"
         ]
     }
