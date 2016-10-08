@@ -11,9 +11,10 @@
             <nav id="menu" role="navigation">
                 <div class="list-group">
                     <ul>
+                        <!--{'chat-member-talking': member.status.audio.talking, 'chat-member-muted': member.status.audio.muted}-->
                         <li class___="active" ng-repeat="m in members">
                             <div class="picture"><img src="../../images/defaultUserPic.png"/>
-                                <div class="badge green">
+                                <div ng-if="m.status.audio.talking" class="badge green">
                                     <i class="ion-ios-pulse"></i>
                                 </div>
                             </div>

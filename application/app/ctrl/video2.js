@@ -1,210 +1,35 @@
-const app = angular.module('videoCall', []);
-app.run(($rootScope, $document, $timeout) => {
-    $rootScope.openSide = () => {
-        document.getElementById("mySidenav").style.width = "300px";
-        document.getElementById("main").style.marginLeft = "300px";
-    };
-    //document.body.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT)
-    $rootScope.closeSide = () => {
-        document.getElementById("mySidenav").style.width = "0";
-        document.getElementById("main").style.marginLeft= "0";
-    };
-    $rootScope.members = [
-        {
-            'uuid': "554b9126-1524-965c-8549-416cc8bde50d",
-            'id': "0017",
-            'number': "100",
-            'name': "Igor1",
-            'codec': "opus@48000",
-            'status': {
-                "audio": {
-                    "muted": false,
-                    "deaf": false,
-                    "onHold": false,
-                    "talking": false,
-                    "floor": true,
-                    "energyScore": 0
-                },
-                "video": {
-                    "visible": false,
-                    "videoOnly": false,
-                    "avatarPresented": false,
-                    "mediaFlow": "sendOnly",
-                    "muted": true,
-                    "floor": false,
-                    "reservationID": null,
-                    "videoLayerID": -1
-                },
-                "oldStatus": "FLOOR VIDEO (BLIND)"
-            },
-            'email': {
-                avatar: "../../images/defaultUserPic.png",
-                email: "navrotskyj@gmail.com"
-            }
-        },{
-            'uuid': "554b9126-1524-965c-8549-416cc8bde50d",
-            'id': "0017",
-            'number': "100",
-            'name': "Igor",
-            'codec': "opus@48000",
-            'status': {
-                "audio": {
-                    "muted": false,
-                    "deaf": false,
-                    "onHold": false,
-                    "talking": false,
-                    "floor": true,
-                    "energyScore": 0
-                },
-                "video": {
-                    "visible": false,
-                    "videoOnly": false,
-                    "avatarPresented": false,
-                    "mediaFlow": "sendOnly",
-                    "muted": true,
-                    "floor": false,
-                    "reservationID": null,
-                    "videoLayerID": -1
-                },
-                "oldStatus": "FLOOR VIDEO (BLIND)"
-            },
-            'email': {
-                avatar: "http://gravatar.com/avatar/c25f1d6e925b2402c40e849b20785f1b.png?s=600",
-                email: "navrotskyj@gmail.com"
-            }
-        },{
-            'uuid': "554b9126-1524-965c-8549-416cc8bde50d",
-            'id': "0017",
-            'number': "100",
-            'name': "Igor",
-            'codec': "opus@48000",
-            'status': {
-                "audio": {
-                    "muted": false,
-                    "deaf": false,
-                    "onHold": false,
-                    "talking": false,
-                    "floor": true,
-                    "energyScore": 0
-                },
-                "video": {
-                    "visible": false,
-                    "videoOnly": false,
-                    "avatarPresented": false,
-                    "mediaFlow": "sendOnly",
-                    "muted": true,
-                    "floor": false,
-                    "reservationID": null,
-                    "videoLayerID": -1
-                },
-                "oldStatus": "FLOOR VIDEO (BLIND)"
-            },
-            'email': {
-                avatar: "http://gravatar.com/avatar/c25f1d6e925b2402c40e849b20785f1b.png?s=600",
-                email: "navrotskyj@gmail.com"
-            }
-        },{
-            'uuid': "554b9126-1524-965c-8549-416cc8bde50d",
-            'id': "0017",
-            'number': "100",
-            'name': "Igor",
-            'codec': "opus@48000",
-            'status': {
-                "audio": {
-                    "muted": false,
-                    "deaf": false,
-                    "onHold": false,
-                    "talking": false,
-                    "floor": true,
-                    "energyScore": 0
-                },
-                "video": {
-                    "visible": false,
-                    "videoOnly": false,
-                    "avatarPresented": false,
-                    "mediaFlow": "sendOnly",
-                    "muted": true,
-                    "floor": false,
-                    "reservationID": null,
-                    "videoLayerID": -1
-                },
-                "oldStatus": "FLOOR VIDEO (BLIND)"
-            },
-            'email': {
-                avatar: "http://gravatar.com/avatar/c25f1d6e925b2402c40e849b20785f1b.png?s=600",
-                email: "navrotskyj@gmail.com"
-            }
-        },{
-            'uuid': "554b9126-1524-965c-8549-416cc8bde50d",
-            'id': "0017",
-            'number': "100",
-            'name': "Igor",
-            'codec': "opus@48000",
-            'status': {
-                "audio": {
-                    "muted": false,
-                    "deaf": false,
-                    "onHold": false,
-                    "talking": false,
-                    "floor": true,
-                    "energyScore": 0
-                },
-                "video": {
-                    "visible": false,
-                    "videoOnly": false,
-                    "avatarPresented": false,
-                    "mediaFlow": "sendOnly",
-                    "muted": true,
-                    "floor": false,
-                    "reservationID": null,
-                    "videoLayerID": -1
-                },
-                "oldStatus": "FLOOR VIDEO (BLIND)"
-            },
-            'email': {
-                avatar: "http://gravatar.com/avatar/c25f1d6e925b2402c40e849b20785f1b.png?s=600",
-                email: "navrotskyj@gmail.com"
-            }
-        },{
-            'uuid': "554b9126-1524-965c-8549-416cc8bde50d",
-            'id': "0017",
-            'number': "100",
-            'name': "Igor",
-            'codec': "opus@48000",
-            'status': {
-                "audio": {
-                    "muted": false,
-                    "deaf": false,
-                    "onHold": false,
-                    "talking": false,
-                    "floor": true,
-                    "energyScore": 0
-                },
-                "video": {
-                    "visible": false,
-                    "videoOnly": false,
-                    "avatarPresented": false,
-                    "mediaFlow": "sendOnly",
-                    "muted": true,
-                    "floor": false,
-                    "reservationID": null,
-                    "videoLayerID": -1
-                },
-                "oldStatus": "FLOOR VIDEO (BLIND)"
-            },
-            'email': {
-                avatar: "http://gravatar.com/avatar/c25f1d6e925b2402c40e849b20785f1b.png?s=600",
-                email: "navrotskyj@gmail.com"
-            }
-        },
-    ];
+const app = angular.module('videoCall', []),
+    call = null,
+    session = null;
 
-    $rootScope.layers = [
-        {
-            id: "one",
-            name: "One layer"
+app.run(($rootScope, $document, $timeout) => {
+    window.init = (session, call) => {
+        console.log('init', call, session);
+        call = call;
+        session = session;
+
+        if (call.conferenceId && session.conference[call.conferenceId]) {
+            let conf = session.conference[call.conferenceId];
+            for (let key in conf.members) {
+                $rootScope.members.push(conf.members[key]);
+            }
+            // TODO layers
+
+            conf.onChange = (action, ms) => {
+                $rootScope.members = [];
+                for (let key in conf.members) {
+                    $rootScope.members.push(conf.members[key]);
+                }
+                apply();
+            }
+            apply();
         }
-    ]
+    };
+
+    
+    $rootScope.members = [];
+
+    $rootScope.layers = []
 
     $rootScope.initPage = true;
     $timeout(() => {
@@ -221,6 +46,10 @@ app.run(($rootScope, $document, $timeout) => {
         })
     }
 
+    window.onSessionMessage = (action, data) => {
+        console.log(action, data);
+    }
+
     $rootScope.isFullScreen = false;
     $rootScope.toggleFullScreen = () => {
         if (document.webkitCurrentFullScreenElement) {
@@ -232,14 +61,8 @@ app.run(($rootScope, $document, $timeout) => {
         }
         apply();
     };
-
-    console.log($document.find('#menu-icn'))
+    
 });
-
-
-window.initPort = (id) => {
-    console.warn(id)
-}
 
 //Exelent little functions to use any time when class modification is needed
 function hasClass(ele, cls) {
@@ -258,7 +81,7 @@ function removeClass(ele, cls) {
 }
 
 //Add event from js the keep the marup clean
-function init() {
+function initMenu() {
     document.getElementById("menu-toggle").addEventListener("click", toggleMenu);
 }
 
@@ -275,6 +98,6 @@ function toggleMenu() {
 //Prevent the function to run before the document is loaded
 document.addEventListener('readystatechange', function() {
     if (document.readyState === "complete") {
-        init();
+        initMenu();
     }
 });

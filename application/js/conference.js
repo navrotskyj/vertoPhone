@@ -9,6 +9,8 @@ class Conference {
         this.messages = [];
         this.callId = null;
 
+        this.onChange = null;
+
         this.conf = new $.verto.conf(v, {
             dialog: dialog,
             hasVid: useVideo,
@@ -38,12 +40,11 @@ class Conference {
             }
         );
 
-        this.liveArray.onErr = (obj, args) => {
-            console.log('liveArray.onErr', obj, args);
+        this.liveArray.onErr = (la, err) => {
+            console.error('liveArray.onErr', la, err);
         };
 
         this.liveArray.onChange = (la, res) => {
-            console.log('liveArray.onChange', la, res);
             switch (res.action) {
                 case 'bootObj':
                     let acctiveCalls = Helper.session && Helper.session.activeCalls,
@@ -55,9 +56,11 @@ class Conference {
                         if (!this.callId && ~callKeys.indexOf(callId)) {
                             this.callId = callId;
                             this.members[callId].im = true;
+                            acctiveCalls[callId].conferenceId = this.id;
                         }
                     });
-                    break;
+                    this.onInit();
+                    return;
 
                 case 'add':
                     this.members[res.key] = parseMember(res.data);
@@ -75,7 +78,18 @@ class Conference {
                     this.members[res.key] = parseMember([res.key, res.data]);
                     break;
             }
+            this.sendMessage('changeMembers', this.members)
         };
+    }
+
+    onInit () {
+
+    }
+
+    sendMessage (message, data) {
+        if (this.onChange) {
+            this.onChange(message, data);
+        }
     }
 
     destroy () {

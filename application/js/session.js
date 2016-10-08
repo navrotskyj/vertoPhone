@@ -374,7 +374,8 @@ class Session {
                 },
                 (window) => {
                     window.contentWindow.onload = function (e) {
-                        this.initPort(chrome.runtime.id);
+                        call.videoWindow = true;
+                        this.init(Helper.session, call);
                         this.document.title += title;
                         var videoLeft = e.target.getElementById('remoteVideoLeft');
                         var videoL = e.target.getElementById('localVideo');
@@ -395,7 +396,12 @@ class Session {
                             }
 
                         }
-                    }
+                    };
+                    window.onClosed.addListener(() => {
+                        if (call) {
+                            call.videoWindow = false;
+                        }
+                    });
                 }
             );
         }

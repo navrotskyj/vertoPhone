@@ -27,6 +27,8 @@ class Call {
         this.screenShareCall = null;
         this.screenShareCallStreem = null;
         this.dtmfArray = [];
+        this.conferenceId = null;
+        this.videoWindow = false;
 
         this.contact = null;
         var scope = this;
