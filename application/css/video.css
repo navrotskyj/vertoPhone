@@ -200,18 +200,22 @@ video {
 
 /* Mmbers*/
 
-#menu .list-group {
+#menu .members {
+    text-align: left;
+}
+
+#menu .members .list-group {
     width: 20rem;
     display: inline-block;
     vertical-align: top;
     background-color: #343841;
 }
-#menu .list-group ul {
+#menu .members .list-group ul {
     padding: 0;
     list-style: none;
     margin-top: 71px;
 }
-#menu .list-group ul li {
+#menu .members .list-group ul li {
     position: relative;
     padding: 0.9rem;
     cursor: pointer;
@@ -223,70 +227,68 @@ video {
     -webkit-transition: background-color 0.2s linear, color 0.2s linear;
     transition: background-color 0.2s linear, color 0.2s linear;
 }
-#menu .list-group ul li .picture {
+#menu .members .list-group ul li .picture {
     float: left;
     width: 3rem;
     position: relative;
 }
-#menu .list-group ul li .picture img {
+#menu .members .list-group ul li .picture img {
     width: 3rem;
     height: 3rem;
     -moz-border-radius: 2rem;
     -webkit-border-radius: 2rem;
     border-radius: 2rem;
 }
-#menu .list-group ul li .picture .badge {
+#menu .members .list-group ul li .picture .badge {
     position: absolute;
-    bottom: -0.2rem;
+    bottom: -0.0rem;
     right: -0.5rem;
     background-color: #2776C5;
-    -moz-transition: border 0.2s linear;
-    -o-transition: border 0.2s linear;
-    -webkit-transition: border 0.2s linear;
     transition: border 0.2s linear;
     color: White;
-    font-size: 0.6rem;
-    line-height: 1.1rem;
+    font-size: 1rem;
+    line-height: 1.5rem;
     width: 1.5rem;
     text-align: center;
-    border: 3px solid #343841;
-    -moz-border-radius: 1rem;
-    -webkit-border-radius: 1rem;
+    /* border: 3px solid #343841; */
     border-radius: 1rem;
 }
-#menu .list-group ul li .picture .badge.orange {
+
+#menu .members .list-group ul li .picture .badge.orange {
     background-color: #D28C1D;
 }
-#menu .list-group ul li .picture .badge.blue {
+#menu .members .list-group ul li .picture .badge.blue,
+#menu .members .list-group ul li .footer .info.blue {
     background-color: #3198FD;
 }
-#menu .list-group ul li .picture .badge.green {
+#menu .members .list-group ul li .picture .badge.green {
     background-color: #59BA37;
 }
-#menu .list-group ul li .picture .badge.red {
+#menu .members .list-group ul li .picture .badge.red,
+#menu .members .list-group ul li .footer .info.red {
     background-color: #8A262E;
 }
-#menu .list-group ul li .content {
+#menu .members .list-group ul li .content {
     float: right;
     width: calc(100% - 4rem);
 }
-#menu .list-group ul li .content .title {
+#menu .members .list-group ul li .content .title {
     color: White;
     font-size: 1.3em;
     font-family: "Work Sans", Arial, sans-serif;
 }
-#menu .list-group ul li .content .description {
+#menu .members .list-group ul li .content .description {
     font-size: 0.8rem;
     line-height: 1.2rem;
 }
 
-#menu .list-group ul li .content .description .tags {
+#menu .members .list-group ul li .content .description .tags {
     margin-top: 0.4rem;
 }
-#menu .list-group ul li .content .description .tags .tag {
+#menu .members .list-group ul li .content .description .tags .tag {
     display: inline-block;
-    font-size: 1.2rem;
-    padding: 0px 5px;
+    font-size: 0.6rem;
+    padding: 0px 2px;
     margin: 2px;
     color: White;
     background-color: #2776C5;
@@ -294,88 +296,89 @@ video {
     -webkit-border-radius: 4px;
     border-radius: 4px;
 }
-#menu .list-group ul li .content .description .tags .tag.orange {
+#menu .members .list-group ul li .content .description .tags .tag.orange {
     background-color: #D28C1D;
 }
-#menu .list-group ul li .content .description .tags .tag.blue {
+#menu .members .list-group ul li .content .description .tags .tag.blue {
     background-color: #3198FD;
 }
-#menu .list-group ul li .content .description .tags .tag.green {
+#menu .members .list-group ul li .content .description .tags .tag.green {
     background-color: #59BA37;
 }
-#menu .list-group ul li .content .description .tags .tag.red {
+#menu .members .list-group ul li .content .description .tags .tag.red {
     background-color: #8A262E;
 }
-#menu .list-group ul li .footer {
+#menu .members .list-group ul li .footer {
     display: block;
     clear: both;
     width: 100%;
-    padding-top: 0.8rem;
+    /*padding-top: 0.8rem;*/
     font-size: 0.7rem;
 }
-#menu .list-group ul li .footer .info i {
+#menu .members .list-group ul li .footer .info i {
     margin-right: 0.3rem;
 }
-#menu .list-group ul li .footer .info.left {
+#menu .members .list-group ul li .footer .info.left {
     float: left;
 }
-#menu .list-group ul li .footer .info.right {
+#menu .members .list-group ul li .footer .info.right {
     float: right;
 }
-#menu .list-group ul li .footer:before, .container .list-group ul li .footer:after {
+#menu .members .list-group ul li .footer:before, .container .list-group ul li .footer:after {
     content: "";
     display: table;
 }
-#menu .list-group ul li .footer:after {
+#menu .members .list-group ul li .footer:after {
     clear: both;
 }
-#menu .list-group ul li .functions {
-    opacity: 0.1;
+#menu .members .list-group ul li .functions {
+    opacity: 1.;
     position: absolute;
     right: 0.4rem;
     top: 0.4rem;
     color: #b3b3b3;
-    font-size: 0.8rem;
-    -moz-transition: opacity 0.2s linear;
-    -o-transition: opacity 0.2s linear;
-    -webkit-transition: opacity 0.2s linear;
+    font-size: 1.5rem;
     transition: opacity 0.2s linear;
 }
-#menu .list-group ul li .functions .func {
+#menu .members .list-group ul li .functions .func {
     display: inline-block;
     padding: 2px;
     cursor: pointer;
 }
-#menu .list-group ul li .functions .func:hover {
+#menu .members .list-group ul li .functions .func:hover {
     color: White;
 }
-#menu .list-group ul li:hover {
+#menu .members .list-group ul li:hover {
     background-color: rgba(39, 118, 197, 0.3);
 }
-#menu .list-group ul li:hover .picture .badge {
-    border: 3px solid rgba(39, 118, 197, 0.6);
-}
-#menu .list-group ul li.active, .container .list-group ul li:active {
+/*#menu .members .list-group ul li:hover .picture img {*/
+    /*border: 3px solid rgba(39, 118, 197, 0.6);*/
+    /*width: 3.2rem;
+    height: 3.2rem;*/
+/*}*/
+#menu .members .list-group ul li.active, .container .list-group ul li:active {
     background-color: rgba(39, 118, 197, 0.6);
 }
-#menu .list-group ul li.active .picture .badge, .container .list-group ul li:active .picture .badge {
+#menu .members .list-group ul li.active .picture .badge, .container .list-group ul li:active .picture .badge {
     border: 3px solid #2776C5;
 }
-#menu .list-group ul li.active, .container .list-group ul li:active, .container .list-group ul li:hover {
+#menu .members .list-group ul li.active, .container .list-group ul li:active, .container .list-group ul li:hover {
     color: White;
 }
 
-#menu .list-group ul li.active .functions, .container .list-group ul li:active .functions, .container .list-group ul li:hover .functions {
+#menu .members .list-group ul li.active .functions, .container .list-group ul li:active .functions, .container .list-group ul li:hover .functions {
     color: White;
     opacity: 0.7;
 }
-#menu .list-group ul li:before, .container .list-group ul li:after {
+#menu .members .list-group ul li:before, .container .list-group ul li:after {
     content: "";
     display: table;
 }
-#menu .list-group ul li:after {
+#menu .members .list-group ul li:after {
     clear: both;
 }
+
+/*END members*/
 
 ::-webkit-scrollbar {
     width: 12px;

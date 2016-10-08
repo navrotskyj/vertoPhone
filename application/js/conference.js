@@ -10,6 +10,8 @@ class Conference {
         this.callId = null;
 
         this.onChange = null;
+        this.layouts = [];
+        this.convasInfo = null;
 
         this.conf = new $.verto.conf(v, {
             dialog: dialog,
@@ -18,8 +20,34 @@ class Conference {
             chatCallback: (v, e) => {
 
             },
-            onBroadcast: function(v, conf, message) {
-                console.log('>>> conf.onBroadcast:', arguments);
+            onBroadcast: (v, conf, message) => {
+              if (message.action == 'response') {
+                // This is a response with the video layouts list.
+                if (message['conf-command'] == 'list-videoLayouts') {
+                  let layouts = [];
+
+                  for (let i in message.responseData) {
+                    layouts.push(message.responseData[i].name);
+                  }
+
+                  let sortLayouts = layouts.sort((a, b) => {
+                    let ga = a.substring(0, 6) == "group:" ? true : false;
+                    let gb = b.substring(0, 6) == "group:" ? true : false;
+
+                    if ((ga || gb) && ga != gb) {
+                      return ga ? -1 : 1;
+                    }
+
+                    return ( ( a == b ) ? 0 : ( ( a > b ) ? 1 : -1 ) );
+                  });
+                //   data.confLayoutsData = message.responseData;
+                  this.layouts = sortLayouts;
+                } else if (message['conf-command'] == 'canvasInfo') {
+                  this.canvasInfo = message.responseData;
+                } else {
+                  
+                }
+              }
             }
         });
 

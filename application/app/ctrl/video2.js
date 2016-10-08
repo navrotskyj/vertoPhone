@@ -1,24 +1,22 @@
-const app = angular.module('videoCall', []),
-    call = null,
-    session = null;
+const app = angular.module('videoCall', [])
 
 app.run(($rootScope, $document, $timeout) => {
+    let room,
+        call;
     window.init = (session, call) => {
         console.log('init', call, session);
-        call = call;
-        session = session;
-
-        if (call.conferenceId && session.conference[call.conferenceId]) {
-            let conf = session.conference[call.conferenceId];
-            for (let key in conf.members) {
-                $rootScope.members.push(conf.members[key]);
+        room = call.conferenceId && session.conference[call.conferenceId];
+        if (room) {
+            for (let key in room.members) {
+                $rootScope.members.push(room.members[key]);
             }
-            // TODO layers
+            
+            $rootScope.layouts = room.layouts || [];
 
-            conf.onChange = (action, ms) => {
+            room.onChange = (action, ms) => {
                 $rootScope.members = [];
-                for (let key in conf.members) {
-                    $rootScope.members.push(conf.members[key]);
+                for (let key in room.members) {
+                    $rootScope.members.push(room.members[key]);
                 }
                 apply();
             }
@@ -26,10 +24,24 @@ app.run(($rootScope, $document, $timeout) => {
         }
     };
 
+    $rootScope.data = {};
+    $rootScope.$watch('data.layout', (v, oldV) => {
+        if (v) {
+            room.conf.setVideoLayout(v, null);
+        }
+    })
+
+    $rootScope.layouts = [];
+
+    $rootScope.confToggleMuteMic = (memberId) => {
+        room.conf.muteMic(memberId);
+    }
+
+    $rootScope.confToggleMuteVid = (memberId) => {
+        room.conf.muteVideo(memberId);
+    }
     
     $rootScope.members = [];
-
-    $rootScope.layers = []
 
     $rootScope.initPage = true;
     $timeout(() => {

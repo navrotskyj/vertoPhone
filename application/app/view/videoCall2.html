@@ -8,42 +8,74 @@
     </head>
     <body ng-app="videoCall" >
 
-            <nav id="menu" role="navigation">
-                <div class="list-group">
-                    <ul>
-                        <!--{'chat-member-talking': member.status.audio.talking, 'chat-member-muted': member.status.audio.muted}-->
-                        <li class___="active" ng-repeat="m in members">
-                            <div class="picture"><img src="../../images/defaultUserPic.png"/>
-                                <div ng-if="m.status.audio.talking" class="badge green">
-                                    <i class="ion-ios-pulse"></i>
-                                </div>
-                            </div>
-                            <div class="content">
-                                <div class="title">{{m.name}}</div>
-                                <div class="description">
-                                    <div class="location"><i class="fa fa-map-marker"></i>
-                                        <span>{{m.email.email}}</span>
+            <nav id="menu"  role="navigation">
+                <div class="members">
+                    <div class="list-group">
+                        <ul>
+                                <li class="active">
+                                    <div class="picture"><img src="https://s3.amazonaws.com/uifaces/faces/twitter/peterlandt/48.jpg"/>
+                                        <div class="badge green"><i class="fa fa-check"></i></div>
                                     </div>
-                                    <div class="tags">
-                                        <div class="tag red">
-                                            <i class="ion-ios-mic-off"></i>
-                                        </div>
+                                    <div class="content">
+                                    <div class="title">Mark Brack</div>
+                                    <div class="description">
+                                        <div class="location"><i class="fa fa-map-marker"></i><span>Paris, France</span></div>
+                                        <div class="tags">
+                                        <div class="tag orange">System administrator</div>
                                         <!--.tag.blue Clerk-->
-                                        <div class="tag green">
-                                            <i class="ion-ios-videocam"></i>
-                                        </div>
+                                        <div class="tag green">Online</div>
                                         <!--.tag.red Inactive-->
-                                        
+                                        </div>
+                                    </div>
+                                    </div>
+                                    <div class="footer">
+                                    <div class="info left"><i class="fa fa-clock-o"></i><span>Last login: online</span></div>
+                                    <div class="info right"><i class="fa fa-calendar"></i><span>Added 3 days ago</span></div>
+                                    </div>
+                                    <div class="functions">
+                                    <div class="func"><i class="fa fa-envelope"></i></div>
+                                    <div class="func"><i class="fa fa-trash"></i></div>
+                                    </div>
+                                </li>
+                            <!--{'chat-member-talking': member.status.audio.talking, 'chat-member-muted': member.status.audio.muted}-->
+                            <li class___="active" ng-repeat="m in members">
+                                <div class="picture"><img src="../../images/defaultUserPic.png"/>
+                                    <div ng-if="m.status.audio.talking" class="badge green">
+                                        <i class="ion-ios-pulse"></i>
+                                    </div>
+                                    <div ng-if="m.status.audio.muted" class="badge red">
+                                        <i class="ion-android-microphone-off"></i>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="footer">
-                                
-                                <div class="info left"><i class="ion-ios-browsers-outline"></i><span>floor</span></div>
-                                <div class="info right"><i class="ion-monitor"></i><span>Screen share</span></div>
-                            </div>
-                        </li>
-                    </ul>
+                                <div class="content">
+                                    <div class="title">{{m.name}}</div>
+                                    <div class="description">
+                                        <div class="location"><i class="fa fa-map-marker"></i>
+                                            <span>{{m.email || m.number}}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="footer">
+                                    <div ng-if="m.status.video.floor && m.status.video.floorLocked" class="info left red">
+                                        <i class="ion-locked"></i>
+                                        <span>FLOOR</span>
+                                    </div>
+                                    <div ng-if="m.status.video.floor && !m.status.video.floorLocked" class="info left blue">
+                                        <i class="ion-unlocked"></i>
+                                        <span>FLOOR</span>
+                                    </div>                                    
+                                </div>
+                                <div class="functions">
+                                    <div ng-click="confToggleMuteMic(m.id)" class="func">
+                                        <i ng-class="{'ion-ios-mic-off': m.status.audio.muted, 'ion-ios-mic': !m.status.audio.muted}" ></i>
+                                    </div>
+                                    <div ng-click="confToggleMuteVid(m.id)" class="func">
+                                        <i ng-class="{'ion-ios-videocam': m.status.video.muted, 'ion-ios-videocam-outline': !m.status.video.muted}" ></i>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             </nav>
             <div class="page-wrap">
@@ -66,8 +98,8 @@
                             <i class="ion-image"></i>
                         </a>
                         <a class="btn">
-                            <select size="1" autocomplete="off">
-                                <option ng-repeat="l in layers" value="{{l.id}}">{{l.name}}</option>                                                                                                                                                     
+                            <select ng-model="data.layout" size="1" autocomplete="off">
+                                <option ng-repeat="l in layouts" value="{{l}}">{{l}}</option>                                                                                                                                                     
                             </select>
                             <i class="ion-ios-photos-outline"></i>
                         </a>
