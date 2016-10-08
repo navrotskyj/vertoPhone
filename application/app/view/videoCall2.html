@@ -12,33 +12,7 @@
                 <div class="members">
                     <div class="list-group">
                         <ul>
-                                <li class="active">
-                                    <div class="picture"><img src="https://s3.amazonaws.com/uifaces/faces/twitter/peterlandt/48.jpg"/>
-                                        <div class="badge green"><i class="fa fa-check"></i></div>
-                                    </div>
-                                    <div class="content">
-                                    <div class="title">Mark Brack</div>
-                                    <div class="description">
-                                        <div class="location"><i class="fa fa-map-marker"></i><span>Paris, France</span></div>
-                                        <div class="tags">
-                                        <div class="tag orange">System administrator</div>
-                                        <!--.tag.blue Clerk-->
-                                        <div class="tag green">Online</div>
-                                        <!--.tag.red Inactive-->
-                                        </div>
-                                    </div>
-                                    </div>
-                                    <div class="footer">
-                                    <div class="info left"><i class="fa fa-clock-o"></i><span>Last login: online</span></div>
-                                    <div class="info right"><i class="fa fa-calendar"></i><span>Added 3 days ago</span></div>
-                                    </div>
-                                    <div class="functions">
-                                    <div class="func"><i class="fa fa-envelope"></i></div>
-                                    <div class="func"><i class="fa fa-trash"></i></div>
-                                    </div>
-                                </li>
-                            <!--{'chat-member-talking': member.status.audio.talking, 'chat-member-muted': member.status.audio.muted}-->
-                            <li class___="active" ng-repeat="m in members">
+                           <li ng-click="selectMember(m.id)" ng-class="{'active' : m.id == selectedMemberId}" ng-repeat-start="m in members">
                                 <div class="picture"><img src="../../images/defaultUserPic.png"/>
                                     <div ng-if="m.status.audio.talking" class="badge green">
                                         <i class="ion-ios-pulse"></i>
@@ -66,14 +40,56 @@
                                     </div>                                    
                                 </div>
                                 <div class="functions">
-                                    <div ng-click="confToggleMuteMic(m.id)" class="func">
+                                    <div ng-click="confToggleMuteMic(m.id, $event)" class="func">
                                         <i ng-class="{'ion-ios-mic-off': m.status.audio.muted, 'ion-ios-mic': !m.status.audio.muted}" ></i>
                                     </div>
-                                    <div ng-click="confToggleMuteVid(m.id)" class="func">
+                                    <div ng-click="confToggleMuteVid(m.id, $event)" class="func">
                                         <i ng-class="{'ion-ios-videocam': m.status.video.muted, 'ion-ios-videocam-outline': !m.status.video.muted}" ></i>
+                                    </div>
+
+                                    <div ng-click="confResID(member.id, resID)" class="func">
+                                        <i class="ion-image" ></i>
                                     </div>
                                 </div>
                             </li>
+                        
+                            <div ng-repeat-end="" ng-show="m.id == selectedMemberId" class="details">
+
+                                <div class="functions">
+                                    <div ng-click="confKick(m.id)" class="func">
+                                        <i class="ion-close-circled"></i>
+                                    </div>
+                                    <div ng-click="confSetVideoFloor(m.id, $event)" class="func">
+                                        <i class="ion-arrow-shrink"></i>
+                                    </div>
+                                    <div class="func">
+                                        <i class="ion-forward"></i>
+                                    </div>
+                                    <div class="func">
+                                        <i class="ion-volume-mute"></i>
+                                    </div>
+                                    <div class="func">
+                                        
+                                        <i class="ion-android-create toggle-hover">
+                                            <i class="ion-ios-color-wand-outline up"></i>
+                                            <i class="ion-ios-close-empty down"></i>
+                                        </i>
+                                        
+                                    </div>
+                                    <div class="func">
+                                        <i class="ion-android-volume-down toggle-hover">
+                                            <i class="ion-arrow-up-b up"></i>
+                                            <i class="ion-arrow-down-b down"></i>
+                                        </i>
+                                    </div>
+                                    <div class="func">
+                                        <i class="ion-ios-pulse-strong toggle-hover">
+                                            <i class="ion-arrow-up-b up"></i>
+                                            <i class="ion-arrow-down-b down"></i>
+                                        </i>
+                                    </div>
+                                </div>
+                            </div>
                         </ul>
                     </div>
                 </div>

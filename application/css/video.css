@@ -358,6 +358,7 @@ video {
 /*}*/
 #menu .members .list-group ul li.active, .container .list-group ul li:active {
     background-color: rgba(39, 118, 197, 0.6);
+    border-bottom: 0;
 }
 #menu .members .list-group ul li.active .picture .badge, .container .list-group ul li:active .picture .badge {
     border: 3px solid #2776C5;
@@ -378,6 +379,69 @@ video {
     clear: both;
 }
 
+#menu .members .list-group ul div .details {
+    cursor: pointer;
+    display: inline-block;
+    margin: 0 0.2rem;
+    color: #cccccc;
+    font-size: 1.0rem;
+    line-height: 2.3rem;
+    width: 2.3rem;
+    text-align: center;
+    background-color: #40444f;
+    border-radius: 2rem;
+    transition: background-color 0.2s linear, color 0.2s linear;
+}
+
+#menu .members .list-group ul div.details {
+    background-color: rgba(39, 118, 197, 0.6);
+}
+
+#menu .members .list-group ul div.details .functions {
+    padding: 3px;
+}
+
+#menu .members .list-group ul div.details .functions .func {
+    cursor: pointer;
+    display: inline-block;
+    margin: 3px;
+    font-size: 1.5rem;
+    line-height: 2rem;
+    width: 2rem;
+    text-align: center;
+    border-radius: 2rem;
+    transition: background-color 0.2s linear, color 0.2s linear;
+}
+
+#menu .members .list-group ul div.details .functions .func i.up {
+    position: absolute;
+    margin-top: -24px;
+    width: 23px;
+    margin-left: -34px;
+} 
+#menu .members .list-group ul div.details .functions .func i.down {
+    position: absolute;
+    margin-top: -24px;
+    margin-left: -10px;
+    width: 23px;
+}
+
+/*#menu .members .list-group ul div.details .functions .func i.toggle-hover {*/
+    /*cursor: none;*/
+/*}*/
+
+#menu .members .list-group ul div.details .functions .func i.toggle-hover > i {
+    visibility: hidden;
+    opacity: 0;
+    transition: visibility 1s, opacity 1s linear;
+}
+
+#menu .members .list-group ul div.details .functions .func:hover i.toggle-hover > i.up,
+#menu .members .list-group ul div.details .functions .func:hover i.toggle-hover > i.down {
+    visibility: visible;
+    opacity: 1;
+    z-index: 1;
+}
 /*END members*/
 
 ::-webkit-scrollbar {

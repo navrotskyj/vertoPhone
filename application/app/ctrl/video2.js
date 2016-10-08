@@ -29,16 +29,36 @@ app.run(($rootScope, $document, $timeout) => {
         if (v) {
             room.conf.setVideoLayout(v, null);
         }
-    })
+    });
+    $rootScope.selectedMemberId = "";
+    $rootScope.selectMember = id => {
+        if (id == $rootScope.selectedMemberId) {
+            $rootScope.selectedMemberId = "";
+        } else {
+            $rootScope.selectedMemberId = id;
+        }
+    }
 
     $rootScope.layouts = [];
 
-    $rootScope.confToggleMuteMic = (memberId) => {
-        room.conf.muteMic(memberId);
+    $rootScope.confKick = (memberId, $event) => {
+        room.conf.kick(memberId);
+        $event.stopPropagation();
     }
 
-    $rootScope.confToggleMuteVid = (memberId) => {
+    $rootScope.confSetVideoFloor = (memberId, $event) => {
+        room.conf.videoFloor(memberId);
+        $event.stopPropagation();        
+    }
+
+    $rootScope.confToggleMuteMic = (memberId, $event) => {
+        room.conf.muteMic(memberId);
+        $event.stopPropagation();
+    }
+
+    $rootScope.confToggleMuteVid = (memberId, $event) => {
         room.conf.muteVideo(memberId);
+        $event.stopPropagation();
     }
     
     $rootScope.members = [];
