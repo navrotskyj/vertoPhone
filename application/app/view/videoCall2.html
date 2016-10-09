@@ -9,7 +9,11 @@
     <body ng-app="videoCall" >
 
             <nav id="menu"  role="navigation">
-                <div class="members">
+                <div class="tabs">
+                    <div class="tab" ng-click="changeTab('m')" ng-class="{'active': activeTab == 'm'}">Mambers</div>
+                    <div class="tab" ng-click="changeTab('c')" ng-class="{'active': activeTab == 'c'}">Chat</div>
+                </div>
+                <div ng-show="activeTab == 'm'" class="members">
                     <div class="list-group">
                         <ul>
                            <li  ng-class="{'active' : m.id == selectedMemberId}" ng-repeat-start="m in members">
@@ -62,7 +66,7 @@
                                     <div ng-click="confSetVideoFloor(m.id, $event)" class="func">
                                         <i class="ion-arrow-shrink"></i>
                                     </div>
-                                    <div class="func">
+                                    <div ng-click="toggleModal()" class="func">
                                         <i class="ion-forward"></i>
                                     </div>
                                     <div ng-click="confDeaf(m.id, m.status.audio.deaf, $event)" class="func">
@@ -93,6 +97,71 @@
                         </ul>
                     </div>
                 </div>
+
+                <div ng-show="activeTab == 'c'" class="chat"> 
+                    <div class="chat-data">
+                        <ul>
+                            <li class="clearfix">
+                                <div class="message-data align-right">
+                                <span class="message-data-time">10:10 AM, Today</span> &nbsp; &nbsp;
+                                <span class="message-data-name">Olia</span> <i class="fa fa-circle me"></i>
+                                
+                                </div>
+                                <div class="message other-message float-right">
+                                Hi Vincent, how are you? How is the project coming along?
+                                </div>
+                            </li>
+                            
+                            <li>
+                                <div class="message-data">
+                                <span class="message-data-name"><i class="fa fa-circle online"></i> Vincent</span>
+                                <span class="message-data-time">10:12 AM, Today</span>
+                                </div>
+                                <div class="message my-message">
+                                Are we meeting today? Project has been already finished and I have results to show you.
+                                </div>
+                            </li>
+                            
+                            <li class="clearfix">
+                                <div class="message-data align-right">
+                                <span class="message-data-time">10:14 AM, Today</span> &nbsp; &nbsp;
+                                <span class="message-data-name">Olia</span> <i class="fa fa-circle me"></i>
+                                
+                                </div>
+                                <div class="message other-message float-right">
+                                Well I am not sure. The rest of the team is not here yet. Maybe in an hour or so? Have you faced any problems at the last phase of the project?
+                                </div>
+                            </li>
+                            
+                            <li>
+                                <div class="message-data">
+                                <span class="message-data-name"><i class="fa fa-circle online"></i> Vincent</span>
+                                <span class="message-data-time">10:20 AM, Today</span>
+                                </div>
+                                <div class="message my-message">
+                                Actually everything was fine. I'm very excited to show this to our team.
+                                </div>
+                            </li>
+                            
+                            <li>
+                                <div class="message-data">
+                                <span class="message-data-name"><i class="fa fa-circle online"></i> Vincent</span>
+                                <span class="message-data-time">10:31 AM, Today</span>
+                                </div>
+                                <i class="fa fa-circle online"></i>
+                                <i class="fa fa-circle online" style="color: #AED2A6"></i>
+                                <i class="fa fa-circle online" style="color:#DAE9DA"></i>
+                            </li>
+                            
+                        </ul>
+                        
+                    </div>
+                    <div class="chat-action">
+                        <div class="chat-message clearfix">
+                            <textarea name="message-to-send" id="message-to-send" placeholder ="Type your message" rows="1"></textarea>
+                        </div>
+                    </div>
+                </div>
             </nav>
             <div class="page-wrap">
                 <div class="video-menu" ng-class="{'open-video-menu': initPage}">
@@ -102,7 +171,7 @@
                             <i id="menu-toggle" class="ion-ios-people"></i>
                         </a>
 
-                        <a class="btn">
+                        <a id="myModal" class="btn">
                             <i class="ion-play"></i>
                         </a>
                         <!--<i class="ion-stop"></i>-->
@@ -120,9 +189,7 @@
                             <i class="ion-ios-photos-outline"></i>
                         </a>
 
-
                     </div>
-
 
                     <div class="btn-group">
                         <a class="btn">
@@ -136,18 +203,39 @@
                         <a class="btn">
                             <i ng-click="toggleFullScreen()" ng-class="{'ion-android-contract': isFullScreen, 'ion-android-expand': !isFullScreen}" ></i>
                         </a>
+
+                        <a class="btn">
+                            <i class="ion-ios-chatbubble"></i>
+                        </a>
+
                         <!--<i ng-click="fullScreen(false)" class="ion-android-contract"></i>-->
                         <a class="btn">
                             <i class="ion-ios-keypad"></i>
                         </a>
                     </div>
 
-
+                    <div class="call-menu">
+                        <div class="left">
+                            00:00:00
+                        </div>
+                         <div class="right">
+                            Hangup
+                        </div>
+                    </div>
                 </div>
                 <div class="container" role="main">
                     <video id="remoteVideoLeft"></video>
                 </div>
-        </div>
+            </div>
+
+            <!-- The Modal -->
+            <modal-dialog show='dialogShown' dialog-title='My Dialog'>
+                <form>
+                    <input type="text"/>
+                    <button>OK</button>
+                    <button>Close</button>
+                </form>
+            </modal-dialog>
 
         <script type="text/javascript" src="../../lib/angular.min.js"></script>
         <script type="text/javascript" src="../ctrl/video2.js"></script>
