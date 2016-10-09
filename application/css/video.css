@@ -107,8 +107,9 @@ body.open #menu {
     z-index: 101;
     margin: 50px;
     font-size: 3.5em;
-    min-height: 100px;
-    min-width: 250px;
+    min-width: 90%;
+    bottom: 0;
+    top: 0;
 }
 
 /*.video-menu > i {*/
@@ -131,24 +132,22 @@ body.open #menu {
 }
 
 .call-menu {
-    position: fixed;
+    position: absolute;
     z-index: 101;
     font-size: 0.5em;
     min-width: 100%;
     bottom: 0;
-    margin-left: 50px;
     display: inline-flex;
-    margin-bottom: 20px;
 }
 
 .call-menu .left {
     text-align: left;
-    width: 35%;
+    left: 0
 }
 
 .call-menu .right {
     text-align: right;
-    width: 35%;
+    width: 100%;
 }
 
 body.open .page-wrap {
