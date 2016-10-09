@@ -41,6 +41,35 @@ app.run(($rootScope, $document, $timeout) => {
 
     $rootScope.layouts = [];
 
+    $rootScope.confChangeVolume = (memberId, pos, $event) => {
+        if (pos == 'up') {
+            room.conf.volumeUp(memberId);
+        } else {
+            room.conf.volumeDown(memberId);
+        }
+        $event.stopPropagation();
+    }
+
+    $rootScope.confChangeGain = (memberId, pos, $event) => {
+        if (pos == 'up') {
+            room.conf.gainUp(memberId);
+        } else {
+            room.conf.gainDown(memberId);
+        }
+        $event.stopPropagation();
+    }    
+
+    $rootScope.confDeaf = (memberId, deafStatus, $event) => {
+        if (room.confRole == 'moderator') {
+            if (deafStatus) {
+                room.conf.undeaf(memberId);
+            } else {
+                room.conf.deaf(memberId);
+            }
+        }
+        $event.stopPropagation();
+    }
+
     $rootScope.confKick = (memberId, $event) => {
         room.conf.kick(memberId);
         $event.stopPropagation();

@@ -5839,6 +5839,14 @@
                 this.modCommand("transfer", parseInt(memberID), exten);
             };
 
+            $.verto.conf.prototype.deaf = function(memberID) {
+                this.modCommand("deaf", parseInt(memberID));
+            };
+
+            $.verto.conf.prototype.undeaf = function(memberID) {
+                this.modCommand("undeaf", parseInt(memberID));
+            };
+
             $.verto.conf.prototype.sendChat = function(message, type) {
                 var conf = this;
                 conf.verto.rpcClient.call("verto.broadcast", {

@@ -12,8 +12,8 @@
                 <div class="members">
                     <div class="list-group">
                         <ul>
-                           <li ng-click="selectMember(m.id)" ng-class="{'active' : m.id == selectedMemberId}" ng-repeat-start="m in members">
-                                <div class="picture"><img src="../../images/defaultUserPic.png"/>
+                           <li  ng-class="{'active' : m.id == selectedMemberId}" ng-repeat-start="m in members">
+                                <div ng-click="selectMember(m.id)" class="picture"><img src="../../images/defaultUserPic.png"/>
                                     <div ng-if="m.status.audio.talking" class="badge green">
                                         <i class="ion-ios-pulse"></i>
                                     </div>
@@ -21,7 +21,7 @@
                                         <i class="ion-android-microphone-off"></i>
                                     </div>
                                 </div>
-                                <div class="content">
+                                <div ng-click="selectMember(m.id)" class="content">
                                     <div class="title">{{m.name}}</div>
                                     <div class="description">
                                         <div class="location"><i class="fa fa-map-marker"></i>
@@ -56,7 +56,7 @@
                             <div ng-repeat-end="" ng-show="m.id == selectedMemberId" class="details">
 
                                 <div class="functions">
-                                    <div ng-click="confKick(m.id)" class="func">
+                                    <div ng-click="confKick(m.id, $event)" class="func">
                                         <i class="ion-close-circled"></i>
                                     </div>
                                     <div ng-click="confSetVideoFloor(m.id, $event)" class="func">
@@ -65,7 +65,7 @@
                                     <div class="func">
                                         <i class="ion-forward"></i>
                                     </div>
-                                    <div class="func">
+                                    <div ng-click="confDeaf(m.id, m.status.audio.deaf, $event)" class="func">
                                         <i class="ion-volume-mute"></i>
                                     </div>
                                     <div class="func">
@@ -78,14 +78,14 @@
                                     </div>
                                     <div class="func">
                                         <i class="ion-android-volume-down toggle-hover">
-                                            <i class="ion-arrow-up-b up"></i>
-                                            <i class="ion-arrow-down-b down"></i>
+                                            <i ng-click="confChangeVolume(m.id, 'up', $event)" class="ion-arrow-up-b up"></i>
+                                            <i ng-click="confChangeVolume(m.id, 'down', $event)" class="ion-arrow-down-b down"></i>
                                         </i>
                                     </div>
                                     <div class="func">
                                         <i class="ion-ios-pulse-strong toggle-hover">
-                                            <i class="ion-arrow-up-b up"></i>
-                                            <i class="ion-arrow-down-b down"></i>
+                                            <i ng-click="confChangeGain(m.id, 'up', $event)" class="ion-arrow-up-b up"></i>
+                                            <i ng-click="confChangeGain(m.id, 'down', $event)" class="ion-arrow-down-b down"></i>
                                         </i>
                                     </div>
                                 </div>
