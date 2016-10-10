@@ -24,6 +24,7 @@ h2 {
 }
 /* PUSH MENU */
 #menu {
+    border-right: 1px solid #292C33;
     position: fixed;
     top: 0;
     left: -300px;
@@ -63,7 +64,7 @@ h2 {
 }
 
 #menu ul li a {
-    display: block;
+    /*display: block;
 
     font-weight: 900;
     line-height: 50px;
@@ -76,13 +77,13 @@ h2 {
     text-transform: uppercase;
 
     color: #232629;
-    border-top: 1px solid #eee;
+    border-top: 1px solid #eee;*/
 }
 #menu ul li:last-child a {
-    border-bottom: 1px solid #eee;
+    /*border-bottom: 1px solid #eee;*/
 }
 #menu ul li a:hover {
-    letter-spacing: 1px;
+    /*letter-spacing: 1px;*/
 }
 body.open #menu {
     left: 0;
@@ -460,7 +461,13 @@ video {
 
 #menu .members .list-group ul div.details {
     background-color: rgba(39, 118, 197, 0.6);
-    width: 299px;
+    width: 298px;
+    transition: background-color 0.2s linear, color 0.2s linear;
+}
+
+#menu .members .list-group ul div.details {
+    background-color: rgba(39, 118, 197, 0.6);
+    width: 298px;
 }
 
 #menu .members .list-group ul div.details .functions {
@@ -652,7 +659,8 @@ select option {
     bottom: 0;
     width: 100%;
     height: 100%;
-    top: 44px;    
+    top: 44px;   
+    word-break: break-all; 
 }
 
 #menu .chat .chat-data {
@@ -667,7 +675,7 @@ select option {
     position: fixed; 
     bottom: 0;
     height: 47px;
-    width: 258px;
+    width: 300px;
 }
 
 .chat .chat-data .message-data {
@@ -682,9 +690,9 @@ select option {
     padding: 18px 20px;
     line-height: 26px;
     font-size: 16px;
-    border-radius: 7px;
+    border-radius: 12px;
     margin-bottom: 30px;
-    width: 85%;
+    width: 80%;
     position: relative;
     margin-left: 3px;
     margin-right: 3px;
@@ -698,18 +706,18 @@ select option {
   width: 0;
   position: absolute;
   pointer-events: none;
-  border-bottom-color: #86BB71;
+  border-bottom-color: #59b239;
   border-width: 10px;
   margin-left: -10px;
 }
 .chat .chat-data .my-message {
-  background: #86BB71;
+  background: #59BA37;
 }
 .chat .chat-data .other-message {
-  background: #94C2ED;
+  background: rgba(124, 132, 140, 0.47);
 }
 .chat .chat-data .other-message:after {
-  border-bottom-color: #94C2ED;
+  border-bottom-color: rgba(124, 132, 140, 0.47);
   left: 93%;
 }
 .chat .chat-message {
@@ -717,31 +725,28 @@ select option {
 }
 
 .chat .chat-message textarea {
-  width: 100%;
-  border: none;
-  padding: 10px 20px;
-  font: 14px/22px "Lato", Arial, sans-serif;
-  margin-bottom: 10px;
-  border-radius: 5px;
-  resize: none;
+    width: 228px;
+    border: none;
+    padding: 11px 10px;
+    font: 14px/22px "Lato", Arial, sans-serif;
+    margin-bottom: 10px;
+    border-radius: 20px;
+    resize: none;
+    outline: none;
 }
-.chat .chat-message .fa-file-o, .chat .chat-message .fa-file-image-o {
-  font-size: 16px;
-  color: gray;
-  cursor: pointer;
-}
+
 .chat .chat-message button {
-  float: right;
-  color: #94C2ED;
-  font-size: 16px;
-  text-transform: uppercase;
-  border: none;
-  cursor: pointer;
-  font-weight: bold;
-  background: #F2F5F8;
+float: right;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+    background: #59BA37;
+    position: absolute;
+    top: -6px;
+    color: #fff;
 }
 .chat .chat-message button:hover {
-  color: #75b1e8;
+  background: #59b239;
 }
 
 .online, .offline, .me {
@@ -750,7 +755,7 @@ select option {
 }
 
 .online {
-  color: #86BB71;
+  color: #59b239;
 }
 
 .offline {
@@ -758,7 +763,7 @@ select option {
 }
 
 .me {
-  color: #94C2ED;
+  color: #59BA37;
 }
 
 .align-left {

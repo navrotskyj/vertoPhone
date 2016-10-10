@@ -101,65 +101,27 @@
 
                 <div ng-show="activeTab == 'c'" class="chat"> 
                     <div class="chat-data">
-                        <ul>
-                            <li class="clearfix">
-                                <div class="message-data align-right">
-                                <span class="message-data-time">10:10 AM, Today</span> &nbsp; &nbsp;
-                                <span class="message-data-name">Olia</span> <i class="fa fa-circle me"></i>
-                                
+                        <ul id="chatDataUl">
+                            <li class="clearfix" ng-repeat="message in messages">
+                                <div class="message-data" ng-class="{'align-right': !message.my}">
+                                    <span class="message-data-time">{{message.date}}</span> &nbsp; &nbsp;
+                                    <span class="message-data-name">{{message.fromDisplay || message.from}}</span>
+                                    <!--<i class="ion-ios-pulse-strong"></i>-->
                                 </div>
-                                <div class="message other-message float-right">
-                                Hi Vincent, how are you? How is the project coming along?
-                                </div>
-                            </li>
-                            
-                            <li>
-                                <div class="message-data">
-                                <span class="message-data-name"><i class="fa fa-circle online"></i> Vincent</span>
-                                <span class="message-data-time">10:12 AM, Today</span>
-                                </div>
-                                <div class="message my-message">
-                                Are we meeting today? Project has been already finished and I have results to show you.
+                                <div picturify ng-bind-html="message.message | linky:'_blank' " 
+                                    ng-class="{'my-message': message.my, 'other-message float-right': !message.my}" class="message">
+
                                 </div>
                             </li>
-                            
-                            <li class="clearfix">
-                                <div class="message-data align-right">
-                                <span class="message-data-time">10:14 AM, Today</span> &nbsp; &nbsp;
-                                <span class="message-data-name">Olia</span> <i class="fa fa-circle me"></i>
-                                
-                                </div>
-                                <div class="message other-message float-right">
-                                Well I am not sure. The rest of the team is not here yet. Maybe in an hour or so? Have you faced any problems at the last phase of the project?
-                                </div>
-                            </li>
-                            
-                            <li>
-                                <div class="message-data">
-                                <span class="message-data-name"><i class="fa fa-circle online"></i> Vincent</span>
-                                <span class="message-data-time">10:20 AM, Today</span>
-                                </div>
-                                <div class="message my-message">
-                                Actually everything was fine. I'm very excited to show this to our team.
-                                </div>
-                            </li>
-                            
-                            <li>
-                                <div class="message-data">
-                                <span class="message-data-name"><i class="fa fa-circle online"></i> Vincent</span>
-                                <span class="message-data-time">10:31 AM, Today</span>
-                                </div>
-                                <i class="fa fa-circle online"></i>
-                                <i class="fa fa-circle online" style="color: #AED2A6"></i>
-                                <i class="fa fa-circle online" style="color:#DAE9DA"></i>
-                            </li>
-                            
                         </ul>
                         
                     </div>
                     <div class="chat-action">
                         <div class="chat-message clearfix">
-                            <textarea name="message-to-send" id="message-to-send" placeholder ="Type your message" rows="1"></textarea>
+                            <textarea ng-model="message" ng-keydown="($event.keyCode == 13 && $event.ctrlKey == true) && sendChat($event)" name="message-to-send" id="message-to-send" placeholder ="Type your message" rows="1"></textarea>
+                            <button ng-click="sendChat($event)" class="btn">
+                                <i class="ion-android-create"></i>    
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -269,6 +231,8 @@
             </modal-dialog>
 
         <script type="text/javascript" src="../../lib/angular.min.js"></script>
+        <script type="text/javascript" src="../../lib/angular-sanitize.min.js"></script>
+        <!--<script type="text/javascript" src="../../lib/angular-picturify.min.js"></script>-->
         <script type="text/javascript" src="../directive/date.js"></script>
         <script type="text/javascript" src="../ctrl/video2.js"></script>
     </body>

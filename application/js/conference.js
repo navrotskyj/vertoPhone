@@ -18,7 +18,13 @@ class Conference {
             hasVid: useVideo,
             laData: pvtData,
             chatCallback: (v, e) => {
-
+                if (e.data.action == 'send')
+                    return;
+                const m = e.data;
+                m.my = Helper.session.vertoLogin == m.from;
+                m.date = new Date().toLocaleTimeString();
+                this.messages.push(m);
+                this.sendMessage('addMessage', m);
             },
             onBroadcast: (v, conf, message) => {
               if (message.action == 'response') {

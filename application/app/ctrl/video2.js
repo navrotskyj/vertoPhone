@@ -1,11 +1,16 @@
-const app = angular.module('videoCall', ['app.directive']);
+const app = angular.module('videoCall', ['app.directive', 'ngSanitize']);
 
 app.run(($rootScope, $document, $timeout) => {
     let room,
         _call,
         _session;
 
-    // $rootScope.startTime = null;
+    const chatScrollTop = () => {
+        const objDiv = document.getElementById("chatDataUl");
+        objDiv.scrollTop = objDiv.scrollHeight;
+    }
+
+    $rootScope.messages = [];
     window.init = (session, call) => {
         console.log('init', call, session);
         _call = call;
@@ -14,21 +19,35 @@ app.run(($rootScope, $document, $timeout) => {
         room = call.conferenceId && session.conference[call.conferenceId];
         if (room) {
             for (let key in room.members) {
-                $rootScope.members.push(room.members[key]);
+                $rootScope.members.push(angular.copy(room.members[key]));
             }
             
             $rootScope.layouts = room.layouts || [];
-
+            $rootScope.messages = angular.copy(room.messages);
             room.onChange = (action, ms) => {
-                $rootScope.members = [];
-                for (let key in room.members) {
-                    $rootScope.members.push(room.members[key]);
+                if (action == 'addMessage') {
+                    $rootScope.messages.push(angular.copy(ms));
+                    $timeout(() => chatScrollTop(), 500)
+                } else {
+                    $rootScope.members = [];
+                    for (let key in room.members) {
+                        $rootScope.members.push(angular.copy(room.members[key]));
+                    }
                 }
                 apply();
             };
             apply();
         }
     };
+
+    $rootScope.message = "";
+    $rootScope.sendChat = ($event) => {
+        $event.stopPropagation();
+        if (!$rootScope.message)
+            return;
+        room.conf.sendChat($rootScope.message);
+        $rootScope.message = "";
+    }
 
     $rootScope.hangupCall = () => {
         _session.dropCall(_call.id);
@@ -156,44 +175,6 @@ app.run(($rootScope, $document, $timeout) => {
 
     $rootScope.fix = $event => $event.stopPropagation();
 
-    $rootScope.data = [
-        {
-            body: "message",
-            direction: "inbound"
-        },
-        {
-            body: "message",
-            direction: "outbound"
-        },{
-            body: "message",
-            direction: "inbound"
-        },
-        {
-            body: "message",
-            direction: "outbound"
-        },{
-            body: "message",
-            direction: "inbound"
-        },
-        {
-            body: "message",
-            direction: "outbound"
-        },{
-            body: "message",
-            direction: "inbound"
-        },
-        {
-            body: "message",
-            direction: "outbound"
-        },{
-            body: "message",
-            direction: "inbound"
-        },
-        {
-            body: "message",
-            direction: "outbound"
-        },
-    ]
     
 });
 
