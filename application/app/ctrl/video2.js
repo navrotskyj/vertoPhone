@@ -99,6 +99,11 @@ app.run(($rootScope, $document, $timeout) => {
         room.conf.muteVideo(memberId);
         $event.stopPropagation();
     }
+
+    $rootScope.dtmf = (digit, $event) => {
+        _session.dtmf(_call.id, digit);
+        $event.stopPropagation();
+    }
     
     $rootScope.members = [];
 
@@ -142,6 +147,14 @@ app.run(($rootScope, $document, $timeout) => {
     $rootScope.changeTab = (name) => {
         $rootScope.activeTab = name;
     }
+
+    $rootScope.dialpadOpen = false;
+    $rootScope.toggleDialpad = ($event) => {
+        $rootScope.dialpadOpen = !$rootScope.dialpadOpen;
+        $event.stopPropagation();
+    }
+
+    $rootScope.fix = $event => $event.stopPropagation();
 
     $rootScope.data = [
         {

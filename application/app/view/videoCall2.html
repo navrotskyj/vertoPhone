@@ -209,9 +209,35 @@
                             <i class="ion-ios-chatbubble"></i>
                         </a>
 
-                        <!--<i ng-click="fullScreen(false)" class="ion-android-contract"></i>-->
-                        <a class="btn">
+                        <a ng-click="toggleDialpad($event)" class="btn">
                             <i class="ion-ios-keypad"></i>
+                            <div class="dialpad" ng-click="fix($event);" ng-class="{'open': !!dialpadOpen}">
+                                <ul>
+                                    <li>
+                                        <button ng-click="dtmf('1', $event)" class="btn">1</button>
+                                        <button ng-click="dtmf('2', $event)" class="btn">2</button>
+                                        <button ng-click="dtmf('3', $event)" class="btn">3</button>
+                                    </li>
+                                    
+                                    <li>
+                                        <button ng-click="dtmf('4', $event)" class="btn">4</button>
+                                        <button ng-click="dtmf('5', $event)" class="btn">5</button>
+                                        <button ng-click="dtmf('6', $event)" class="btn">6</button>
+                                    </li>
+
+                                    <li>
+                                        <button ng-click="dtmf('7', $event)" class="btn">7</button>
+                                        <button ng-click="dtmf('8', $event)" class="btn">8</button>
+                                        <button ng-click="dtmf('9', $event)" class="btn">9</button>
+                                    </li>
+
+                                    <li>
+                                        <button ng-click="dtmf('*', $event)" class="btn">*</button>
+                                        <button ng-click="dtmf('0', $event)" class="btn">0</button>
+                                        <button ng-click="dtmf('#', $event)" class="btn">#</button>
+                                    </li>
+                                </ul>
+                            </div>
                         </a>
                     </div>
 
