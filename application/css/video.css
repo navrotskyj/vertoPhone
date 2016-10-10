@@ -163,7 +163,7 @@ body.open .page-wrap {
 }
 
 body.open .page-wrap .video-menu {
-    min-width: 70%;
+    min-width: calc(100% - 400px);
 }
 
 /* MENU TOGGLE ICON */
