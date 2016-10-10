@@ -45,10 +45,11 @@
                                 </div>
                                 <div class="functions">
                                     <div ng-click="confToggleMuteMic(m.id, $event)" class="func">
-                                        <i ng-class="{'ion-ios-mic-off': m.status.audio.muted, 'ion-ios-mic': !m.status.audio.muted}" ></i>
+                                        <i ng-class="{'ion-ios-mic-outline': m.status.audio.muted, 'ion-ios-mic color-green': !m.status.audio.muted}" ></i>
                                     </div>
+                                    <!--ion-aperture-->
                                     <div ng-click="confToggleMuteVid(m.id, $event)" class="func">
-                                        <i ng-class="{'ion-ios-videocam': m.status.video.muted, 'ion-ios-videocam-outline': !m.status.video.muted}" ></i>
+                                        <i ng-class="{'ion-aperture': !m.status.videom, 'ion-ios-videocam-outline': m.status.video && m.status.video.muted, 'ion-ios-videocam color-green': m.status.video && !m.status.video.muted}" ></i>
                                     </div>
 
                                     <div ng-click="confResID(member.id, resID)" class="func">
