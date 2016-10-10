@@ -154,6 +154,10 @@ body.open .page-wrap {
     padding-left: 300px;
 }
 
+body.open .page-wrap .video-menu {
+    min-width: 70%;
+}
+
 /* MENU TOGGLE ICON */
 
 button:focus {
@@ -345,7 +349,7 @@ video {
     clear: both;
 }
 #menu .members .list-group ul li .functions {
-    opacity: 1.;
+    opacity: 1;
     position: absolute;
     right: 0.4rem;
     top: 0.4rem;
@@ -483,7 +487,19 @@ video {
     text-align: center;
     border-radius: 2rem;
     transition: background-color 0.2s linear, color 0.2s linear;
-    background-color: #7c848c;
+    /*background-color: #7c848c;*/
+}
+
+.btn.btn-hangup-call {
+    background-color: #8A262E;
+    height: 40px;
+    width: 80px;
+}
+.btn.btn-time-call {
+    height: 40px;
+    width: 80px;
+    cursor: none;
+    background-color: #7C8489;
 }
 
 .btn-group{

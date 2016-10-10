@@ -60,36 +60,36 @@
                             <div ng-repeat-end="" ng-show="m.id == selectedMemberId" class="details">
 
                                 <div class="functions">
-                                    <div ng-click="confKick(m.id, $event)" class="func">
+                                    <div title="Kick" ng-click="confKick(m.id, $event)" class="func">
                                         <i class="ion-close-circled"></i>
                                     </div>
-                                    <div ng-click="confSetVideoFloor(m.id, $event)" class="func">
+                                    <div title="Video floor" ng-click="confSetVideoFloor(m.id, $event)" class="func">
                                         <i class="ion-arrow-shrink"></i>
                                     </div>
-                                    <div ng-click="toggleModal()" class="func">
+                                    <div title="Transfer" ng-click="toggleModal()" class="func">
                                         <i class="ion-forward"></i>
                                     </div>
-                                    <div ng-click="confDeaf(m.id, m.status.audio.deaf, $event)" class="func">
+                                    <div title="Deaf/Undeaf" ng-click="confDeaf(m.id, m.status.audio.deaf, $event)" class="func">
                                         <i class="ion-volume-mute"></i>
                                     </div>
                                     <div class="func">
                                         
                                         <i class="ion-android-create toggle-hover">
-                                            <i class="ion-ios-color-wand-outline up"></i>
-                                            <i class="ion-ios-close-empty down"></i>
+                                            <i title="Set banner" class="ion-ios-color-wand-outline up"></i>
+                                            <i title="Clear banner" class="ion-ios-close-empty down"></i>
                                         </i>
                                         
                                     </div>
                                     <div class="func">
                                         <i class="ion-android-volume-down toggle-hover">
-                                            <i ng-click="confChangeVolume(m.id, 'up', $event)" class="ion-arrow-up-b up"></i>
-                                            <i ng-click="confChangeVolume(m.id, 'down', $event)" class="ion-arrow-down-b down"></i>
+                                            <i title="Up volume" ng-click="confChangeVolume(m.id, 'up', $event)" class="ion-arrow-up-b up"></i>
+                                            <i title="Down volume" ng-click="confChangeVolume(m.id, 'down', $event)" class="ion-arrow-down-b down"></i>
                                         </i>
                                     </div>
                                     <div class="func">
                                         <i class="ion-ios-pulse-strong toggle-hover">
-                                            <i ng-click="confChangeGain(m.id, 'up', $event)" class="ion-arrow-up-b up"></i>
-                                            <i ng-click="confChangeGain(m.id, 'down', $event)" class="ion-arrow-down-b down"></i>
+                                            <i title="Up gain" ng-click="confChangeGain(m.id, 'up', $event)" class="ion-arrow-up-b up"></i>
+                                            <i title="Down gain"  ng-click="confChangeGain(m.id, 'down', $event)" class="ion-arrow-down-b down"></i>
                                         </i>
                                     </div>
                                 </div>
@@ -216,10 +216,14 @@
 
                     <div class="call-menu">
                         <div class="left">
-                            00:00:00
+                            <a ui-timer start="startTime" class="btn btn-time-call">
+
+                            </a>
                         </div>
                          <div class="right">
-                            Hangup
+                             <a ng-click="hangupCall()" class="btn btn-hangup-call">
+                                 <i class="ion-ios-telephone"></i>
+                             </a>
                         </div>
                     </div>
                 </div>
@@ -238,6 +242,7 @@
             </modal-dialog>
 
         <script type="text/javascript" src="../../lib/angular.min.js"></script>
+        <script type="text/javascript" src="../directive/date.js"></script>
         <script type="text/javascript" src="../ctrl/video2.js"></script>
     </body>
 </html>

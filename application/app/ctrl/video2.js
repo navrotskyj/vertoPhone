@@ -1,10 +1,16 @@
-const app = angular.module('videoCall', [])
+const app = angular.module('videoCall', ['app.directive']);
 
 app.run(($rootScope, $document, $timeout) => {
     let room,
-        call;
+        _call,
+        _session;
+
+    // $rootScope.startTime = null;
     window.init = (session, call) => {
         console.log('init', call, session);
+        _call = call;
+        _session = session;
+        $rootScope.startTime = call.onActiveTime;
         room = call.conferenceId && session.conference[call.conferenceId];
         if (room) {
             for (let key in room.members) {
@@ -19,9 +25,13 @@ app.run(($rootScope, $document, $timeout) => {
                     $rootScope.members.push(room.members[key]);
                 }
                 apply();
-            }
+            };
             apply();
         }
+    };
+
+    $rootScope.hangupCall = () => {
+        _session.dropCall(_call.id);
     };
 
     $rootScope.data = {};
@@ -37,7 +47,7 @@ app.run(($rootScope, $document, $timeout) => {
         } else {
             $rootScope.selectedMemberId = id;
         }
-    }
+    };
 
     $rootScope.layouts = [];
 
