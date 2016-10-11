@@ -384,15 +384,14 @@ class Session {
                             videoLeft.srcObject = stream.remoteStream;
                             videoLeft.volume = 0;
                             videoLeft.play();
-                            videoL.srcObject = stream.localStream;
-                            videoL.volume = 0;
-                            videoL.play();
+                            // videoL.srcObject = stream.localStream;
+                            // videoL.volume = 0;
+                            // videoL.play();
                             if (screenShareCallStreamSrc) {
                                 var videoRight = e.target.getElementById('remoteVideoRight');
                                 videoRight.volume = 0;
                                 videoRight.src = screenShareCallStreamSrc;
                                 videoRight.play();
-                                e.target.getElementsByClassName('right')[0].style.display = 'flex'
                             }
 
                         }
@@ -539,6 +538,17 @@ class Session {
             call.setMute(dialog.setMute('toggle'));
             Helper.sendSession('changeCall', this.activeCalls);
         }        
+    }
+
+    toggleMuteVideo (id) {
+        const call = this.activeCalls[id],
+            dialog = this.verto.dialogs[id]
+            ;
+
+        if (call && dialog) {
+            call.setMuteVideo(dialog.setVideoMute('toggle'));
+            // Helper.sendSession('changeCall', this.activeCalls);
+        }
     }
 
     // endregion

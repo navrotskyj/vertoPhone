@@ -220,10 +220,24 @@ button:focus {
     position: relative;
     height: 100%;
     width: 100%;
+    display: flex;
 }
 
-video {
+.container video {
     width: 100% !important;
+    height: auto !important;
+}
+.container video.screen {
+    display: none;
+}
+.container video.hide {
+    display: none;
+}
+.container.open-right video.screen {
+    display: block;
+}
+.container.open-right video {
+    width: 50% !important;
     height: auto !important;
 }
 
@@ -533,7 +547,7 @@ video {
 
 .btn {
     margin: 5px;
-    background-color: #7C8489;
+    background-color: #232629;
     cursor: pointer;
     display: inline-block;
     font-size: 1.7rem;

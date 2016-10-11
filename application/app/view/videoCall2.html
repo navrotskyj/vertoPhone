@@ -13,7 +13,7 @@
                     <div class="tab" ng-click="changeTab('m')" ng-class="{'active': activeTab == 'm'}">Mambers</div>
                     <div class="tab" ng-click="changeTab('c')" ng-class="{'active': activeTab == 'c'}">
                         Chat
-                        <span ng-if="unReadMessageCount > 0" class="badge-chat">{{unReadMessageCount}}</span>
+                        <span ng-show="unReadMessageCount > 0" class="badge-chat">{{unReadMessageCount || ''}}</span>
                     </div>
                 </div>
                 <div ng-show="activeTab == 'm'" class="members">
@@ -49,11 +49,11 @@
                                     </div>                                    
                                 </div>
                                 <div class="functions">
-                                    <div ng-click="confToggleMuteMic(m.id, $event)" class="func">
+                                    <div ng-click="toggleMuteMic(m.id, $event)" class="func">
                                         <i ng-class="{'ion-ios-mic-outline': m.status.audio.muted, 'ion-ios-mic color-green': !m.status.audio.muted}" ></i>
                                     </div>
                                     <!--ion-aperture-->
-                                    <div ng-click="confToggleMuteVid(m.id, $event)" class="func">
+                                    <div ng-click="toggleMuteVid(m.id, $event)" class="func">
                                         <i ng-class="{'ion-aperture': !m.status.videom, 'ion-ios-videocam-outline': m.status.video && m.status.video.muted, 'ion-ios-videocam color-green': m.status.video && !m.status.video.muted}" ></i>
                                     </div>
 
@@ -133,7 +133,7 @@
             </nav>
             <div class="page-wrap">
                 <div class="video-menu" ng-class="{'open-video-menu': initPage}">
-                    <div class="btn-group">
+                    <div ng-show="isConf" class="btn-group">
                         <!--<button id="menu-toggle"></button>-->
                         <a class="btn">
                             <i id="menu-toggle" class="ion-ios-people"></i>
@@ -160,16 +160,16 @@
                     </div>
 
                     <div class="btn-group">
-                        <a class="btn">
-                            <i class="ion-ios-mic"></i>
+                        <a ng-click="toggleMuteMic(null, $event)" class="btn" >
+                            <i ng-class="{'ion-ios-mic-outline': muteLocalAudio, 'ion-ios-mic color-green': !muteLocalAudio}"></i>
                         </a>
                         <!--<i class="ion-ios-mic-off"></i>-->
-                        <a class="btn" >
-                            <i class="ion-ios-videocam"></i>
+                        <a ng-click="toggleMuteVid(null, $event)" class="btn" >
+                            <i ng-class="{'ion-aperture': !useVideo, 'ion-ios-videocam-outline': useVideo && muteLocalVideo, 'ion-ios-videocam color-green': useVideo && !muteLocalVideo}"></i>
                         </a>
                         <!--<i class="ion-ios-videocam-outline"></i>-->
                         <a ng-click="toggleFullScreen($event)" class="btn">
-                            <i ng-class="{'ion-android-contract': isFullScreen, 'ion-android-expand': !isFullScreen}" ></i>
+                            <i ng-class="{'ion-android-contract color-green': isFullScreen, 'ion-android-expand': !isFullScreen}" ></i>
                         </a>
 
                         <a ng-click="screenShare($event)" class="btn">
@@ -177,7 +177,7 @@
                         </a>
 
                         <a ng-click="toggleDialpad($event)" class="btn">
-                            <i class="ion-ios-keypad"></i>
+                            <i class="ion-ios-keypad" ng-class="{'color-green': !!dialpadOpen}"></i>
                             <div class="dialpad" ng-click="fix($event);" ng-class="{'open': !!dialpadOpen}">
                                 <ul>
                                     <li>
@@ -221,8 +221,9 @@
                         </div>
                     </div>
                 </div>
-                <div class="container" role="main">
-                    <video id="remoteVideoLeft"></video>
+                <div class="container" ng-class="{'open-right': screenShareCall}" role="main">
+                    <video id="remoteVideoLeft" ng-class="{'hide': !useVideo}"></video>
+                    <video id="remoteVideoRight" class="screen"></video>
                 </div>
             </div>
 
@@ -234,7 +235,6 @@
                     <button>Close</button>
                 </form>
             </modal-dialog>
-            <video style="display: none; width: 1px; height: 1px;" id="remoteVideoRight"></video>
 
         <script type="text/javascript" src="../../lib/angular.min.js"></script>
         <script type="text/javascript" src="../../lib/angular-sanitize.min.js"></script>

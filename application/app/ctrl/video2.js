@@ -18,17 +18,55 @@ app.run(($rootScope, $document, $timeout) => {
         return -1;
     };
 
+    const localMemberChangeMedia = m => {
+        if (m.status && m.status.audio) {
+            $rootScope.muteLocalAudio = m.status.audio.muted;
+        }
+
+        if (m.status && m.status.video) {
+            $rootScope.muteLocalVideo = m.status.video.muted;
+        }
+    };
+
     $rootScope.messages = [];
     $rootScope.unReadMessageCount = 0;
+    $rootScope.isConf = false;
+    $rootScope.screenShareCall = false;
+    $rootScope.useVideo = false;
     window.init = (session, call) => {
         console.log('init', call, session);
         _call = call;
         _session = session;
         $rootScope.startTime = call.onActiveTime;
+        $rootScope.muteLocalAudio = !!call.mute;
+        $rootScope.muteLocalVideo = !!call.muteVideo;
+        $rootScope.useVideo = !!call.useVideo;
+
+        call.onChange = action => {
+            switch (action) {
+                case 'removeScreenShareCall':
+                    $rootScope.screenShareCall = false;
+                    break;
+
+                case 'setScreenShareCall':
+                    $rootScope.screenShareCall = true;
+                    break;
+            }
+            apply();
+        };
+
         room = call.conferenceId && session.conference[call.conferenceId];
+
+        $rootScope.screenShareCall = !room && !!call.screenShareCallStreem;
+
         if (room) {
+            $rootScope.isConf = true;
             for (let key in room.members) {
                 $rootScope.members.push(angular.copy(room.members[key]));
+                if (key == room.callId) {
+                    let myInfo =  room.members[key];
+                    localMemberChangeMedia(myInfo);
+                }
             }
             
             $rootScope.layouts = room.layouts || [];
@@ -65,13 +103,17 @@ app.run(($rootScope, $document, $timeout) => {
                         }
 
                         angular.extend($rootScope.members[key], data);
+
+                        if (data.uuid == room.callId) {
+                            localMemberChangeMedia(data);
+                        }
                         break;
 
                 }
                 apply();
             };
-            apply();
         }
+        apply();
     };
 
     $rootScope.message = "";
@@ -143,13 +185,24 @@ app.run(($rootScope, $document, $timeout) => {
         $event.stopPropagation();        
     };
 
-    $rootScope.confToggleMuteMic = (memberId, $event) => {
-        room.conf.muteMic(memberId);
+    $rootScope.toggleMuteMic = (memberId, $event) => {
+        if (room) {
+            room.conf.muteMic(memberId || room.id);
+        } else {
+            _session.toggleMute(_call.id);
+            $rootScope.muteLocalAudio = !!_call.mute;
+        }
         $event.stopPropagation();
     };
 
-    $rootScope.confToggleMuteVid = (memberId, $event) => {
-        room.conf.muteVideo(memberId);
+    $rootScope.toggleMuteVid = (memberId, $event) => {
+        if (!$rootScope.useVideo) return;
+        if (room) {
+            room.conf.muteVideo(memberId || room.id);
+        } else {
+            _session.toggleMuteVideo(_call.id);
+            $rootScope.muteLocalVideo = !!_call.muteVideo;
+        }
         $event.stopPropagation();
     };
 
