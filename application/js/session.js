@@ -14,7 +14,7 @@ class Session {
 
         this.vertoLogin = options.login;
         this.cidName = options.cidName || this.vertoLogin;
-        this.cidNnumber = options.cidNnumber || this.vertoLogin;
+        this.cidNumber = options.cidNumber || this.vertoLogin;
 
         this.notificationMissed = options.notificationMissed;
         this.notificationNewCall = options.notificationNewCall;
@@ -414,7 +414,7 @@ class Session {
         this.verto.newCall({
             destination_number: number,
             caller_id_name: this.cidName,
-            caller_id_number: this.cidNnumber,
+            caller_id_number: this.cidNumber,
 
             useVideo: this.useVideo && option.useVideo,
 
@@ -437,7 +437,7 @@ class Session {
     screenShare (parentCallId) {
         const call = this.activeCalls[parentCallId];
         if (!call) {
-            return // ERROR
+            return;
         }
 
         if (call.screenShareCall) {
@@ -447,8 +447,8 @@ class Session {
 
         this.verto.newCall({
             destination_number: call.calleeIdNumber + '-screen',
-            caller_id_name: this.cidName,
-            caller_id_number: this.cidNnumber,
+            caller_id_name: `${this.cidName}  (Screen)`,
+            caller_id_number: `${this.cidNumber}  (Screen)`,
             useAudio: false,
             useStereo: false,
             useVideo: true,
@@ -481,7 +481,7 @@ class Session {
             d.answer({
                 useVideo: params && params.useVideo,
                 callee_id_name: this.cidName,
-                callee_id_number: this.cidNnumber
+                callee_id_number: this.cidNumber
                 //  TODO move to conf		
                 // useStereo: false	
             });

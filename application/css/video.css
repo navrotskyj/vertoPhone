@@ -536,7 +536,6 @@ video {
     background-color: #7C8489;
     cursor: pointer;
     display: inline-block;
-    margin: 6px;
     font-size: 1.7rem;
     line-height: 2.5rem;
     width: 2.5rem;
@@ -554,8 +553,8 @@ video {
 .btn.btn-time-call {
     height: 40px;
     width: 80px;
-    cursor: none;
-    background-color: #7C8489;
+    cursor: default;
+    background-color: #232629;
 }
 
 .btn-group{
@@ -654,7 +653,15 @@ select option {
 
 /*CHAT*/
 
-#menu .chat {
+#menu .badge-chat {
+    position: absolute;
+    top: 3px;
+    margin-left: 30px;
+    background-color: #8A262E;
+    border-radius: 2rem;
+}
+
+#menu .tabs .tab.chat {
     position: absolute;
     bottom: 0;
     width: 100%;

@@ -11,13 +11,18 @@
             <nav id="menu"  role="navigation">
                 <div class="tabs">
                     <div class="tab" ng-click="changeTab('m')" ng-class="{'active': activeTab == 'm'}">Mambers</div>
-                    <div class="tab" ng-click="changeTab('c')" ng-class="{'active': activeTab == 'c'}">Chat</div>
+                    <div class="tab" ng-click="changeTab('c')" ng-class="{'active': activeTab == 'c'}">
+                        Chat
+                        <span ng-if="unReadMessageCount > 0" class="badge-chat">{{unReadMessageCount}}</span>
+                    </div>
                 </div>
                 <div ng-show="activeTab == 'm'" class="members">
                     <div class="list-group">
                         <ul>
                            <li  ng-class="{'active' : m.id == selectedMemberId}" ng-repeat-start="m in members">
-                                <div ng-click="selectMember(m.id)" class="picture"><img src="../../images/defaultUserPic.png"/>
+                                <div ng-click="selectMember(m.id)" class="picture">
+                                    <img ng-if="!m.status.video.screenShare" src="../../images/defaultUserPic.png"/>
+                                    <img ng-if="m.status.video.screenShare" src="../../images/screenShare32.png"/>
                                     <div ng-if="m.status.audio.talking" class="badge green">
                                         <i class="ion-ios-pulse"></i>
                                     </div>
@@ -103,7 +108,7 @@
                     <div class="chat-data">
                         <ul id="chatDataUl">
                             <li class="clearfix" ng-repeat="message in messages">
-                                <div class="message-data" ng-class="{'align-right': !message.my}">
+                                <div class="message-data" ng-class="{'align-right': message.my}">
                                     <span class="message-data-time">{{message.date}}</span> &nbsp; &nbsp;
                                     <span class="message-data-name">{{message.fromDisplay || message.from}}</span>
                                     <!--<i class="ion-ios-pulse-strong"></i>-->
@@ -159,16 +164,16 @@
                             <i class="ion-ios-mic"></i>
                         </a>
                         <!--<i class="ion-ios-mic-off"></i>-->
-                        <a class="btn">
+                        <a class="btn" >
                             <i class="ion-ios-videocam"></i>
                         </a>
                         <!--<i class="ion-ios-videocam-outline"></i>-->
-                        <a class="btn">
-                            <i ng-click="toggleFullScreen()" ng-class="{'ion-android-contract': isFullScreen, 'ion-android-expand': !isFullScreen}" ></i>
+                        <a ng-click="toggleFullScreen($event)" class="btn">
+                            <i ng-class="{'ion-android-contract': isFullScreen, 'ion-android-expand': !isFullScreen}" ></i>
                         </a>
 
-                        <a class="btn">
-                            <i class="ion-ios-chatbubble"></i>
+                        <a ng-click="screenShare($event)" class="btn">
+                            <i class="ion-ios-monitor"></i>
                         </a>
 
                         <a ng-click="toggleDialpad($event)" class="btn">
@@ -229,6 +234,7 @@
                     <button>Close</button>
                 </form>
             </modal-dialog>
+            <video style="display: none; width: 1px; height: 1px;" id="remoteVideoRight"></video>
 
         <script type="text/javascript" src="../../lib/angular.min.js"></script>
         <script type="text/javascript" src="../../lib/angular-sanitize.min.js"></script>

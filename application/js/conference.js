@@ -79,10 +79,11 @@ class Conference {
         };
 
         this.liveArray.onChange = (la, res) => {
+            let data = {};
             switch (res.action) {
                 case 'bootObj':
-                    let acctiveCalls = Helper.session && Helper.session.activeCalls,
-                    callKeys = Object.keys(acctiveCalls || {});
+                    let activeCalls = Helper.session && Helper.session.activeCalls,
+                        callKeys = Object.keys(activeCalls || {});
                     res.data.forEach( m => {
                         let callId = m[0];
                         this.members[callId] = parseMember(m);
@@ -90,18 +91,20 @@ class Conference {
                         if (!this.callId && ~callKeys.indexOf(callId)) {
                             this.callId = callId;
                             this.members[callId].im = true;
-                            acctiveCalls[callId].conferenceId = this.id;
+                            activeCalls[callId].conferenceId = this.id;
                         }
                     });
                     this.onInit();
                     return;
 
                 case 'add':
-                    this.members[res.key] = parseMember(res.data);
+                    data = parseMember([res.key, res.data]);
+                    this.members[res.key] = data;
                     break;
-                
+
                 case 'del':
                     delete this.members[res.key];
+                    data = res.key;
                     break;
 
                 case 'clear':
@@ -109,10 +112,11 @@ class Conference {
                     break;
 
                 case 'modify':
-                    this.members[res.key] = parseMember([res.key, res.data]);
+                    data = parseMember([res.key, res.data]);
+                    this.members[res.key] = data;
                     break;
             }
-            this.sendMessage('changeMembers', this.members)
+            this.sendMessage(`changeMembers:${res.action}`, data);
         };
     }
 

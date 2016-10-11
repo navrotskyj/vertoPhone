@@ -8,9 +8,18 @@ app.run(($rootScope, $document, $timeout) => {
     const chatScrollTop = () => {
         const objDiv = document.getElementById("chatDataUl");
         objDiv.scrollTop = objDiv.scrollHeight;
-    }
+    };
+
+    const getMemberKeyByUuid = uuid => {
+        for (let key in $rootScope.members) {
+            if ($rootScope.members[key].uuid == uuid)
+                return key;
+        }
+        return -1;
+    };
 
     $rootScope.messages = [];
+    $rootScope.unReadMessageCount = 0;
     window.init = (session, call) => {
         console.log('init', call, session);
         _call = call;
@@ -24,15 +33,40 @@ app.run(($rootScope, $document, $timeout) => {
             
             $rootScope.layouts = room.layouts || [];
             $rootScope.messages = angular.copy(room.messages);
-            room.onChange = (action, ms) => {
-                if (action == 'addMessage') {
-                    $rootScope.messages.push(angular.copy(ms));
-                    $timeout(() => chatScrollTop(), 500)
-                } else {
-                    $rootScope.members = [];
-                    for (let key in room.members) {
-                        $rootScope.members.push(angular.copy(room.members[key]));
-                    }
+
+            room.onChange = (action, data) => {
+                let key;
+                switch (action) {
+                    case 'addMessage':
+                        if ($rootScope.activeTab != 'c') {
+                            $rootScope.unReadMessageCount++;
+                        }
+                        $rootScope.messages.push(angular.copy(data));
+                        $timeout(() => chatScrollTop(), 500);
+                        break;
+                    case 'changeMembers:add':
+                        $rootScope.members.push(angular.copy(data));
+                        break;
+                    case 'changeMembers:del':
+                        key = getMemberKeyByUuid(data);
+                        if (key === -1) {
+                            return console.error('No found member');
+                        }
+
+                        $rootScope.members.splice(key, 1);
+                        break;
+                    case 'changeMembers:clear':
+                        $rootScope.members = [];
+                        break;
+                    case 'changeMembers:modify':
+                        key = getMemberKeyByUuid(data.uuid);
+                        if (key === -1) {
+                            return console.error('No found member');
+                        }
+
+                        angular.extend($rootScope.members[key], data);
+                        break;
+
                 }
                 apply();
             };
@@ -47,7 +81,7 @@ app.run(($rootScope, $document, $timeout) => {
             return;
         room.conf.sendChat($rootScope.message);
         $rootScope.message = "";
-    }
+    };
 
     $rootScope.hangupCall = () => {
         _session.dropCall(_call.id);
@@ -77,7 +111,7 @@ app.run(($rootScope, $document, $timeout) => {
             room.conf.volumeDown(memberId);
         }
         $event.stopPropagation();
-    }
+    };
 
     $rootScope.confChangeGain = (memberId, pos, $event) => {
         if (pos == 'up') {
@@ -86,7 +120,7 @@ app.run(($rootScope, $document, $timeout) => {
             room.conf.gainDown(memberId);
         }
         $event.stopPropagation();
-    }    
+    };
 
     $rootScope.confDeaf = (memberId, deafStatus, $event) => {
         if (room.confRole == 'moderator') {
@@ -97,32 +131,37 @@ app.run(($rootScope, $document, $timeout) => {
             }
         }
         $event.stopPropagation();
-    }
+    };
 
     $rootScope.confKick = (memberId, $event) => {
         room.conf.kick(memberId);
         $event.stopPropagation();
-    }
+    };
 
     $rootScope.confSetVideoFloor = (memberId, $event) => {
         room.conf.videoFloor(memberId);
         $event.stopPropagation();        
-    }
+    };
 
     $rootScope.confToggleMuteMic = (memberId, $event) => {
         room.conf.muteMic(memberId);
         $event.stopPropagation();
-    }
+    };
 
     $rootScope.confToggleMuteVid = (memberId, $event) => {
         room.conf.muteVideo(memberId);
         $event.stopPropagation();
-    }
+    };
 
     $rootScope.dtmf = (digit, $event) => {
         _session.dtmf(_call.id, digit);
         $event.stopPropagation();
-    }
+    };
+
+    $rootScope.screenShare = ($event) => {
+        _session.screenShare(_call.id, {});
+        $event.stopPropagation();
+    };
     
     $rootScope.members = [];
 
@@ -141,9 +180,6 @@ app.run(($rootScope, $document, $timeout) => {
         })
     }
 
-    window.onSessionMessage = (action, data) => {
-        console.log(action, data);
-    }
 
     $rootScope.isFullScreen = false;
     $rootScope.toggleFullScreen = () => {
@@ -165,13 +201,16 @@ app.run(($rootScope, $document, $timeout) => {
     $rootScope.activeTab = 'm';
     $rootScope.changeTab = (name) => {
         $rootScope.activeTab = name;
-    }
+        if (name == 'c') {
+            $rootScope.unReadMessageCount = 0;
+        }
+    };
 
     $rootScope.dialpadOpen = false;
     $rootScope.toggleDialpad = ($event) => {
         $rootScope.dialpadOpen = !$rootScope.dialpadOpen;
         $event.stopPropagation();
-    }
+    };
 
     $rootScope.fix = $event => $event.stopPropagation();
 
