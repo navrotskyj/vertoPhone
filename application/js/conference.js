@@ -5,12 +5,14 @@ class Conference {
         this.id = pvtData.conferenceMemberID;
         this.chattingWith = pvtData.chatID;
         this.confRole = pvtData.role;
+        this.name = pvtData.laName;
         this.members = {};
         this.messages = [];
         this.callId = null;
 
         this.onChange = null;
         this.layouts = [];
+        this.layoutsInfo = {};
         this.convasInfo = null;
 
         this.conf = new $.verto.conf(v, {
@@ -34,6 +36,7 @@ class Conference {
 
                   for (let i in message.responseData) {
                     layouts.push(message.responseData[i].name);
+                    this.layoutsInfo[message.responseData[i].name] = message.responseData[i];
                   }
 
                   let sortLayouts = layouts.sort((a, b) => {
@@ -49,9 +52,27 @@ class Conference {
                 //   data.confLayoutsData = message.responseData;
                   this.layouts = sortLayouts;
                 } else if (message['conf-command'] == 'canvasInfo') {
-                  this.canvasInfo = message.responseData;
-                } else {
-                  
+                    if (message.responseData instanceof Array && message.responseData.length == 1
+                        && this.layoutsInfo.hasOwnProperty(message.responseData[0].layoutName)) {
+
+                        this.canvasInfo = this.layoutsInfo[message.responseData[0].layoutName];
+                    } else {
+                        // TODO
+                        console.error(`Hmmmmmmmmmmmmmmmmm`);
+                    }
+
+
+                } else if (message["conf-command"].indexOf(`${this.name} vid-layout `) == 0) {
+                    try {
+                        const l = message["conf-command"].substring(`${this.name} vid-layout `.length).split(' ');
+                        if (this.layoutsInfo.hasOwnProperty(l[0])) {
+                            console.debug(`Change layout ${l[0]}`);
+                            this.canvasInfo = this.layoutsInfo[l[0]];
+                            this.sendMessage(`changeConvas`, this.canvasInfo);
+                        }
+                    } catch (e) {
+                        console.error(e);
+                    }
                 }
               }
             }
@@ -118,6 +139,26 @@ class Conference {
             }
             this.sendMessage(`changeMembers:${res.action}`, data);
         };
+    }
+
+    setVideoLayout (id, params) {
+        const resIDS = this.layoutsInfo[id] && this.layoutsInfo[id].resIDS;
+        this.conf.setVideoLayout(id, params);
+
+
+        let m;
+        for (let key in this.members) {
+            m = this.members[key];
+            let resId = m.status.video && m.status.video.reservationID;
+            if (!resId || resIDS && ~resIDS.indexOf(resId))
+                continue;
+            console.debug("clearing resid [" + resId + "] from [" + m.id + "]");
+            this.setVidResId(m.id, resId);
+        }
+    }
+
+    setVidResId (memberId, resId) {
+        this.conf.modCommand('vid-res-id', memberId, resId)
     }
 
     onInit () {

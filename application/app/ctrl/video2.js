@@ -75,8 +75,10 @@ app.run(($rootScope, $document, $timeout) => {
                 }
             }
             
-            $rootScope.layouts = room.layouts || [];
+            $rootScope.layouts = angular.copy(room.layouts) || [];
+            $rootScope.layoutsInfo = angular.copy(room.layoutsInfo) || {};
             $rootScope.messages = angular.copy(room.messages);
+            $rootScope.canvasInfo = angular.copy(room.canvasInfo);
 
             room.onChange = (action, data) => {
                 let key;
@@ -115,6 +117,10 @@ app.run(($rootScope, $document, $timeout) => {
                         }
                         break;
 
+                    case 'changeConvas':
+                        $rootScope.canvasInfo = angular.copy(data);
+                        break;
+
                 }
                 apply();
             };
@@ -138,9 +144,14 @@ app.run(($rootScope, $document, $timeout) => {
     $rootScope.data = {};
     $rootScope.$watch('data.layout', (v, oldV) => {
         if (v) {
-            room.conf.setVideoLayout(v, null);
+            room.setVideoLayout(v, null);
         }
     });
+
+    $rootScope.confResId = (mId, v) => {
+        room.setVidResId(mId, v);
+    };
+
     $rootScope.selectedMemberId = "";
     $rootScope.selectMember = id => {
         if (id == $rootScope.selectedMemberId) {
@@ -273,6 +284,14 @@ app.run(($rootScope, $document, $timeout) => {
 
     $rootScope.fix = $event => $event.stopPropagation();
 
+    $rootScope.dropdownOpened = '';
+    $rootScope.openConvasMenu = id => {
+        if ($rootScope.dropdownOpened == id) {
+            $rootScope.dropdownOpened = '';
+            return;
+        }
+        $rootScope.dropdownOpened = id;
+    }
     
 });
 
