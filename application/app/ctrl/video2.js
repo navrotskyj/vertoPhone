@@ -29,11 +29,13 @@ app.run(($rootScope, $document, $timeout) => {
     };
 
     $rootScope.messages = [];
+    $rootScope.modalDialog = {};
     $rootScope.unReadMessageCount = 0;
     $rootScope.isConf = false;
     $rootScope.screenShareCall = false;
     $rootScope.screenShareCallDirection = null;
     $rootScope.useVideo = false;
+    $rootScope.isModerator = false;
     window.init = (session, call) => {
         console.log('init', call, session);
         _call = call;
@@ -42,7 +44,7 @@ app.run(($rootScope, $document, $timeout) => {
         $rootScope.muteLocalAudio = !!call.mute;
         $rootScope.muteLocalVideo = !!call.muteVideo;
         $rootScope.useVideo = !!call.useVideo;
-
+        $rootScope.screenShareCall = !!call.screenShareCall;
         call.onChange = action => {
             switch (action) {
                 case 'removeScreenShareCall':
@@ -74,7 +76,7 @@ app.run(($rootScope, $document, $timeout) => {
                     localMemberChangeMedia(myInfo);
                 }
             }
-            
+            $rootScope.isModerator = room.confRole == 'moderator';
             $rootScope.layouts = angular.copy(room.layouts) || [];
             $rootScope.layoutsInfo = angular.copy(room.layoutsInfo) || {};
             $rootScope.messages = angular.copy(room.messages);
@@ -232,6 +234,81 @@ app.run(($rootScope, $document, $timeout) => {
         _session.screenShare(_call.id, {});
         $event.stopPropagation();
     };
+
+    $rootScope.transfer = (id, $event) => {
+        $rootScope.modalDialog.open(
+            {
+                title: "Transfer party?",
+                text: "To what destination would you like to transfer this call?"
+            },
+            (val) => {
+                if (val) {
+                    room.conf.transfer(id, val);
+                }
+            }
+        );
+        $event.stopPropagation();
+    };
+
+    const setBanner = (id, val) => {
+        room.conf.banner(id, val);
+    };
+    $rootScope.setBanner = setBanner;
+
+    $rootScope.confPlayFile = ($event) => {
+        $rootScope.modalDialog.open(
+            {
+                title: "Play",
+                text: "Please, enter filename"
+            },
+            (val) => {
+                if (val) {
+                    room.conf.play(val);
+                }
+            }
+        );
+        $event.stopPropagation();
+    };
+
+    $rootScope.confStopFile = ($event) => {
+        room.conf.stop();
+        $event.stopPropagation();
+    };
+
+    $rootScope.confStartRecord = ($event) => {
+        $rootScope.modalDialog.open(
+            {
+                title: "Start record",
+                text: "Please, enter filename"
+            },
+            (val) => {
+                if (val) {
+                    room.conf.record(val);
+                }
+            }
+        );
+        $event.stopPropagation();
+    };
+
+    $rootScope.confStopRecord = ($event) => {
+        room.conf.stopRecord();
+        $event.stopPropagation();
+    };
+
+    $rootScope.confBanner = (id, $event) => {
+        $rootScope.modalDialog.open(
+            {
+                title: "Set banner",
+                text: "Please insert the banner text"
+            },
+            (val) => {
+                if (val) {
+                    setBanner(id, val);
+                }
+            }
+        );
+        $event.stopPropagation();
+    };
     
     $rootScope.members = [];
 
@@ -295,76 +372,81 @@ app.run(($rootScope, $document, $timeout) => {
     
 });
 
-
-  app.provider("ngModalDefaults", function() {
+app.directive('modalDialog', [function() {
     return {
-      options: {
-        closeButtonHtml: "<span class='ng-modal-close-x'>X</span>"
-      },
-      $get: function() {
-        return this.options;
-      },
-      set: function(keyOrHash, value) {
-        var k, v, _results;
-        if (typeof keyOrHash === 'object') {
-          _results = [];
-          for (k in keyOrHash) {
-            v = keyOrHash[k];
-            _results.push(this.options[k] = v);
-          }
-          return _results;
-        } else {
-          return this.options[keyOrHash] = value;
-        }
-      }
-    };
-  });
-
-  app.directive('modalDialog', [
-    'ngModalDefaults', '$sce', function(ngModalDefaults, $sce) {
-      return {
         restrict: 'E',
         scope: {
-          show: '=',
-          dialogTitle: '@',
-          onClose: '&?'
+            dialog: '='
         },
         replace: true,
-        transclude: true,
         link: function(scope, element, attrs) {
-          var setupCloseButton, setupStyle;
-          setupCloseButton = function() {
-            return scope.closeButtonHtml = $sce.trustAsHtml(ngModalDefaults.closeButtonHtml);
-          };
-          setupStyle = function() {
-            scope.dialogStyle = {};
-            if (attrs.width) {
-              scope.dialogStyle['width'] = attrs.width;
-            }
-            if (attrs.height) {
-              return scope.dialogStyle['height'] = attrs.height;
-            }
-          };
-          scope.hideModal = function() {
-            return scope.show = false;
-          };
-          scope.$watch('show', function(newVal, oldVal) {
-            if (newVal && !oldVal) {
-              document.getElementsByTagName("body")[0].style.overflow = "hidden";
-            } else {
-              document.getElementsByTagName("body")[0].style.overflow = "";
-            }
-            if ((!newVal && oldVal) && (scope.onClose != null)) {
-              return scope.onClose();
-            }
-          });
-          setupCloseButton();
-          return setupStyle();
+            var setupStyle, callback;
+            scope.show = false;
+            scope.inputData = '';
+
+            scope.dialog.open = (param = {}, cb) => {
+                scope.hideModal();
+                scope.dialogTitle = param.title;
+                scope.dialogText = param.text;
+                callback = cb;
+                scope.show = true;
+            };
+
+            setupStyle = () => {
+                scope.dialogStyle = {};
+                if (attrs.width) {
+                    scope.dialogStyle['width'] = attrs.width;
+                }
+                if (attrs.height) {
+                    return scope.dialogStyle['height'] = attrs.height;
+                }
+            };
+
+            scope.hideModal = () => {
+                callback = null;
+                scope.inputData = '';
+                return scope.show = false;
+            };
+
+            scope.handleOk = () => {
+                if (typeof callback == 'function') {
+                    callback(angular.copy(scope.inputData));
+                }
+                scope.hideModal();
+            };
+
+            scope.$watch('show', function(newVal, oldVal) {
+                if (newVal && !oldVal) {
+                    document.getElementsByTagName("body")[0].style.overflow = "hidden";
+                } else {
+                    document.getElementsByTagName("body")[0].style.overflow = "";
+                }
+            });
+
+            return setupStyle();
         },
-        template: "<div class='ng-modal' ng-show='show'>\n  <div class='ng-modal-overlay' ng-click='hideModal()'></div>\n  <div class='ng-modal-dialog' ng-style='dialogStyle'>\n    <span class='ng-modal-title' ng-show='dialogTitle && dialogTitle.length' ng-bind='dialogTitle'></span>\n    <div class='ng-modal-close' ng-click='hideModal()'>\n      <div ng-bind-html='closeButtonHtml'></div>\n    </div>\n    <div class='ng-modal-dialog-content' ng-transclude></div>\n  </div>\n</div>"
-      };
+        template: `<div class='ng-modal' ng-show='show'>
+                        <div class='ng-modal-overlay' ng-click='hideModal()'></div>
+                        <div class='ng-modal-dialog' ng-style='dialogStyle'>
+                            <span class='ng-modal-title' ng-show='dialogTitle && dialogTitle.length' ng-bind='dialogTitle'></span>
+                            <div class='ng-modal-close' ng-click='hideModal()'>
+                                <span class='ng-modal-close-x'>X</span>
+                            </div>
+                            <div class='ng-modal-dialog-content'>
+                                <form>
+                                    <h3>{{dialogText}}</h3>
+                                    <input ng-model="inputData" type="text" />
+                                    <div class="bar">
+                                        <button ng-click="handleOk()">Ok</button>
+                                        <button ng-click='hideModal()'>Cancel</button>
+                                    </div>
+                                </form>                            
+                            </div>
+                        </div>
+                    </div>`
+        };
     }
-  ]);
+]);
 
 
 //Exelent little functions to use any time when class modification is needed

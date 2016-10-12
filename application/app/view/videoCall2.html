@@ -20,7 +20,7 @@
                     <div class="list-group">
                         <ul>
                            <li  ng-class="{'active' : m.id == selectedMemberId}" ng-repeat-start="m in members">
-                                <div ng-click="selectMember(m.id)" class="picture">
+                                <div ng-click="isModerator && selectMember(m.id)" class="picture">
                                     <img ng-if="!m.status.video.screenShare" src="../../images/defaultUserPic.png"/>
                                     <img ng-if="m.status.video.screenShare" src="../../images/screenShare32.png"/>
                                     <div ng-if="m.status.audio.talking" class="badge green">
@@ -30,7 +30,7 @@
                                         <i class="ion-android-microphone-off"></i>
                                     </div>
                                 </div>
-                                <div ng-click="selectMember(m.id)" class="content">
+                                <div ng-click="isModerator && selectMember(m.id)" class="content">
                                     <div class="title">{{m.name}}</div>
                                     <div class="description">
                                         <div class="location"><i class="fa fa-map-marker"></i>
@@ -41,36 +41,31 @@
                                 <div class="footer">
                                     <div ng-if="m.status.video.floor && m.status.video.floorLocked" class="info left red">
                                         <i class="ion-locked"></i>
-                                        <span>FLOOR</span>
+                                        <span>Floor</span>
                                     </div>
                                     <div ng-if="m.status.video.floor && !m.status.video.floorLocked" class="info left blue">
                                         <i class="ion-unlocked"></i>
-                                        <span>FLOOR</span>
+                                        <span>Floor</span>
                                     </div>
                                     <div ng-if="m.status.video.reservationID" class="info left orange">
                                         <i class="ion-ios-crop"></i>
                                         <span>{{m.status.video.reservationID | uppercase}}</span>
                                     </div>
+                                    <div ng-if="m.status.video.screenShare" class="info left orange">
+                                        <i class="ion-monitor"></i>
+                                        <span>Screen Share</span>
+                                    </div>
                                 </div>
                                 <div class="functions">
-                                    <div ng-click="toggleMuteMic(m.id, $event)" class="func">
+                                    <div ng-click="isModerator && toggleMuteMic(m.id, $event)" class="func">
                                         <i ng-class="{'ion-ios-mic-outline': m.status.audio.muted, 'ion-ios-mic color-green': !m.status.audio.muted}" ></i>
                                     </div>
                                     <!--ion-aperture-->
-                                    <div ng-click="toggleMuteVid(m.id, $event)" class="func">
+                                    <div ng-click="isModerator && toggleMuteVid(m.id, $event)" class="func">
                                         <i ng-class="{'ion-aperture': !m.status.videom, 'ion-ios-videocam-outline': m.status.video && m.status.video.muted, 'ion-ios-videocam color-green': m.status.video && !m.status.video.muted}" ></i>
                                     </div>
 
-                                    <!--<div ng-click="confResID(member.id, resID)" class="func">-->
-                                        <!--<i class="ion-image" ></i>-->
-                                    <!--</div>-->
-                                    <!--<div class="func" ng-if="canvasInfo.resIDS.length > 0">-->
-                                        <!--<select ng-model="m.status.video.reservationID" ng-change="confResId(m.id, m.status.video, $event)" style="width: 20px" size="1" autocomplete="off">-->
-                                            <!--<option ng-repeat="c in canvasInfo.resIDS" value="{{c}}">{{c}}</option>-->
-                                        <!--</select>-->
-                                        <!--<i class="ion-ios-albums-outline color-green"></i>-->
-                                    <!--</div>-->
-                                    <div ng-if="canvasInfo.resIDS.length > 0" ng-click="openConvasMenu(m.id)" ng-class="{'open': dropdownOpened == m.id}"  class="dropdown">
+                                    <div ng-if="isModerator && canvasInfo.resIDS.length > 0" ng-click="openConvasMenu(m.id)" ng-class="{'open': dropdownOpened == m.id}"  class="dropdown">
                                         <i class="dropbtn ion-ios-albums-outline color-green"></i>
                                         <div class="dropdown-content right">
                                             <a ng-click="confResId(m.id, c, $event)" ng-repeat="c in canvasInfo.resIDS" ng-class="{'selected': m.status.video.reservationID == c}" >{{c | uppercase}}</a>
@@ -79,7 +74,7 @@
                                 </div>
                             </li>
                         
-                            <div ng-repeat-end="" ng-show="m.id == selectedMemberId" class="details">
+                            <div ng-repeat-end="" ng-show="isModerator && m.id == selectedMemberId" class="details">
 
                                 <div class="functions">
                                     <div title="Kick" ng-click="confKick(m.id, $event)" class="func">
@@ -88,7 +83,7 @@
                                     <div title="Video floor" ng-click="confSetVideoFloor(m.id, $event)" class="func">
                                         <i class="ion-arrow-shrink"></i>
                                     </div>
-                                    <div title="Transfer" ng-click="toggleModal()" class="func">
+                                    <div title="Transfer" ng-click="transfer(m.id, $event)" class="func">
                                         <i class="ion-forward"></i>
                                     </div>
                                     <div title="Deaf/Undeaf" ng-click="confDeaf(m.id, m.status.audio.deaf, $event)" class="func">
@@ -97,8 +92,8 @@
                                     <div class="func">
                                         
                                         <i class="ion-android-create toggle-hover">
-                                            <i title="Set banner" class="ion-ios-color-wand-outline up"></i>
-                                            <i title="Clear banner" class="ion-ios-close-empty down"></i>
+                                            <i ng-click="confBanner(m.id, $event)" title="Set banner" class="ion-ios-color-wand-outline up"></i>
+                                            <i ng-click="setBanner(m.id, 'reset')" title="Clear banner" class="ion-ios-close-empty down"></i>
                                         </i>
                                         
                                     </div>
@@ -155,18 +150,25 @@
                             <i id="menu-toggle" class="ion-ios-people"></i>
                         </a>
 
-                        <a id="myModal" class="btn">
-                            <i class="ion-play"></i>
+                        <a ng-click="confPlayFile($event)" class="btn">
+                            <i class="ion-ios-film"></i>
+                        </a>
+
+                        <a ng-click="confStopFile($event)" class="btn">
+                            <i class="ion-ios-film-outline"></i>
                         </a>
                         <!--<i class="ion-stop"></i>-->
-                        <a class="btn">
-                            <i class="ion-ios-recording"></i>
+                        <a ng-click="confStartRecord($event)" class="btn">
+                            <i class="ion-record"></i>
+                        </a>
+                        <a ng-click="confStopRecord($event)" class="btn">
+                            <i class="ion-stop"></i>
                         </a>
                         <!--<i class="ion-ios-recording-outline"></i>-->
                         <a class="btn">
                             <i class="ion-image"></i>
                         </a>
-                        <a class="btn">
+                        <a ng-if="isModerator" class="btn">
                             <select ng-model="data.layout" size="1" autocomplete="off">
                                 <option ng-repeat="l in layouts" value="{{l}}">{{l}}</option>                                                                                                                                                     
                             </select>
@@ -244,12 +246,8 @@
             </div>
 
             <!-- The Modal -->
-            <modal-dialog show='dialogShown' dialog-title='My Dialog'>
-                <form>
-                    <input type="text"/>
-                    <button>OK</button>
-                    <button>Close</button>
-                </form>
+            <modal-dialog show='dialogShown' dialog="modalDialog" dialog-title='My Dialog'>
+
             </modal-dialog>
 
         <script type="text/javascript" src="../../lib/angular.min.js"></script>

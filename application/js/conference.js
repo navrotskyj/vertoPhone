@@ -113,6 +113,11 @@ class Conference {
                             this.callId = callId;
                             this.members[callId].im = true;
                             activeCalls[callId].conferenceId = this.id;
+
+                            const w = chrome.app.window.get(callId);
+                            if (w && w.contentWindow.init) {
+                                w.contentWindow.init(Helper.session, activeCalls[callId]);
+                            }
                         }
                     });
                     this.onInit();
