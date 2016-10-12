@@ -214,7 +214,7 @@ class Session {
                 if (screenShare) {
                     const number = screenShare[1];
                     for (let key in this.activeCalls) {
-                        if (this.activeCalls[key].calleeIdNumber === number) {
+                        if (this.activeCalls[key].calleeIdNumber === number || this.activeCalls[key].screenShareCall == d.callID) {
                             d.screenShare = true;
                             if (d.state == $.verto.enum.state.ringing) {
                                 d.answer({useVideo: true});

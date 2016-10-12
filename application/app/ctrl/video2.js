@@ -32,6 +32,7 @@ app.run(($rootScope, $document, $timeout) => {
     $rootScope.unReadMessageCount = 0;
     $rootScope.isConf = false;
     $rootScope.screenShareCall = false;
+    $rootScope.screenShareCallDirection = null;
     $rootScope.useVideo = false;
     window.init = (session, call) => {
         console.log('init', call, session);
@@ -46,10 +47,12 @@ app.run(($rootScope, $document, $timeout) => {
             switch (action) {
                 case 'removeScreenShareCall':
                     $rootScope.screenShareCall = false;
+                    $rootScope.screenShareCallDirection = null;
                     break;
 
                 case 'setScreenShareCall':
                     $rootScope.screenShareCall = true;
+                    $rootScope.screenShareCallDirection = angular.copy(_call.screenShareCallDirection);
                     break;
             }
             apply();
@@ -57,7 +60,10 @@ app.run(($rootScope, $document, $timeout) => {
 
         room = call.conferenceId && session.conference[call.conferenceId];
 
-        $rootScope.screenShareCall = !room && !!call.screenShareCallStreem;
+        if (call.screenShareCall && !room) {
+            $rootScope.screenShareCall = true;
+            $rootScope.screenShareCallDirection = angular.copy(_call.screenShareCallDirection);
+        }
 
         if (room) {
             $rootScope.isConf = true;

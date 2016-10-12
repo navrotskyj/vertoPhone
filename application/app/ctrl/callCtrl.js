@@ -54,6 +54,21 @@ angular
         $scope.transfer = transfer;
         $scope.openMenu = openMenu;
         $scope.dtmf = dtmf;
+        $scope.getDisplay = getDisplay;
+
+        function getDisplay(call) {
+            //activeCall.contact.name ? activeCall.contact.name  + ' (' + activeCall.calleeIdNumber + ')': activeCall.calleeIdNumber
+            let res = '';
+            if (call.contact && call.contact.name) {
+                res = `${call.contact.name} (${call.calleeIdNumber})`;
+            } else {
+                res = `${call.calleeIdNumber}`;
+            }
+            if (call.dtmfArray.length > 0) {
+                res += `;${call.dtmfArray.join('')}`;
+            }
+            return res;
+        }
 
         function screenShare(id) {
             CallService.screenShare(id, {});

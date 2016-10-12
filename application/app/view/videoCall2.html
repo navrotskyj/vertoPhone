@@ -173,7 +173,7 @@
                         </a>
 
                         <a ng-click="screenShare($event)" class="btn">
-                            <i class="ion-ios-monitor"></i>
+                            <i ng-class="{'color-green': screenShareCall}" class="ion-monitor"></i>
                         </a>
 
                         <a ng-click="toggleDialpad($event)" class="btn">
@@ -221,7 +221,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="container" ng-class="{'open-right': screenShareCall}" role="main">
+                <div class="container" ng-class="{'open-right': screenShareCall && !isConf && screenShareCallDirection == 'inbound'}" role="main">
                     <video id="remoteVideoLeft" ng-class="{'hide': !useVideo}"></video>
                     <video id="remoteVideoRight" class="screen"></video>
                 </div>

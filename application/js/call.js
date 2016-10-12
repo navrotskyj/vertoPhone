@@ -28,6 +28,7 @@ class Call {
         this.initRemoteStream = false;
         this.screenShareCall = null;
         this.screenShareCallStreem = null;
+        this.screenShareCallDirection = null;
         this.dtmfArray = [];
         this.conferenceId = null;
         this.videoWindow = false;
@@ -52,13 +53,16 @@ class Call {
     removeScreenShareCall () {
         this.screenShareCall = null;
         this.screenShareCallStreem = null;
+        this.screenShareCallDirection = null;
+
         var w = Helper.getWindowById(this.id);
         if (w && !this.conferenceId) {
             w.contentWindow.document.getElementById('remoteVideoRight').src = '';
             // w.contentWindow.document.getElementsByClassName('right')[0].style.display = 'none'
-            if (typeof this.onChange == 'function') {
-                this.onChange('removeScreenShareCall');
-            }
+
+        }
+        if (typeof this.onChange == 'function') {
+            this.onChange('removeScreenShareCall');
         }
     }
 
@@ -72,10 +76,10 @@ class Call {
 
     dtmf (digit) {
         if (this.dtmfArray.push(digit) === 1) {
-            this.calleeIdNumber += ':';
+            // this.calleeIdNumber += ':';
         }
 
-        this.calleeIdNumber+= digit;
+        // this.calleeIdNumber+= digit;
     }
 
     setState (state) {
@@ -117,6 +121,8 @@ class Call {
 
     setScreenShareCall (d) {
         this.screenShareCall = d.callID;
+        this.screenShareCallDirection = d.direction.name;
+
         var screenShareCallStreamSrc = this.screenShareCallStreem = URL.createObjectURL(d.rtc.remoteStream || d.rtc.localStream);
 
         var w = Helper.getWindowById(this.id);
@@ -125,12 +131,14 @@ class Call {
             videoRight.volume = 0;
             videoRight.src = screenShareCallStreamSrc;
             videoRight.play();
-            if (typeof this.onChange == 'function') {
-                this.onChange('setScreenShareCall');
-            }
+
             // w.contentWindow.document.getElementsByClassName('right')[0].style.display = 'flex'
         } else if (Helper.session) {
             Helper.session.openVideo(this.id);
+        }
+
+        if (typeof this.onChange == 'function') {
+            this.onChange('setScreenShareCall');
         }
     }
 
