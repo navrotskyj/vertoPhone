@@ -157,7 +157,9 @@ vertoPhone.run(function($rootScope, $window, CallService, $timeout) {
                 ? $rootScope.activeTabName
                 : 'dialpad');
         }
-        $rootScope.$apply();
+        $timeout(() => {
+            $rootScope.$apply()
+        })
     }
 
     $rootScope.activeTabName = 'dialpad';

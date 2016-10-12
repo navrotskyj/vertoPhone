@@ -59,6 +59,9 @@ angular
         function getDisplay(call) {
             //activeCall.contact.name ? activeCall.contact.name  + ' (' + activeCall.calleeIdNumber + ')': activeCall.calleeIdNumber
             let res = '';
+            if (!call)
+                return res;
+            
             if (call.contact && call.contact.name) {
                 res = `${call.contact.name} (${call.calleeIdNumber})`;
             } else {
