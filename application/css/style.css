@@ -154,6 +154,11 @@ input[placeholder].small-placeholder::-webkit-input-placeholder{
 
 }
 
+#phone .bar .segmented-control {
+    width: 100%;
+    border: 0;
+}
+
 #phone ul>li>a:not(:first-child) {
     margin-left: 10px;
 }
@@ -163,6 +168,23 @@ input[placeholder].small-placeholder::-webkit-input-placeholder{
 }
 #phone.app.loaded {
     display: block;
+}
+
+
+#phone .header-call-item {
+    position: relative;
+    height: 27px;
+}
+
+#phone .header-call-item .header-call-number {
+    overflow: hidden;
+    width: 100%;
+    position: absolute;
+    margin: 0px 2px 0px;;
+    padding: 0;
+    height: 100%;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 #phone .color-success {

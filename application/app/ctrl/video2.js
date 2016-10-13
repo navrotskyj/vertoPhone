@@ -36,10 +36,12 @@ app.run(($rootScope, $document, $timeout) => {
     $rootScope.screenShareCallDirection = null;
     $rootScope.useVideo = false;
     $rootScope.isModerator = false;
+    $rootScope.audioOutDevices = [];
     window.init = (session, call) => {
         console.log('init', call, session);
         _call = call;
         _session = session;
+        $rootScope.audioOutDevices = angular.copy(session.getDevicesList().audioOutDevices);
         $rootScope.startTime = call.onActiveTime;
         $rootScope.muteLocalAudio = !!call.mute;
         $rootScope.muteLocalVideo = !!call.muteVideo;
@@ -147,6 +149,13 @@ app.run(($rootScope, $document, $timeout) => {
     $rootScope.$watch('data.layout', (v, oldV) => {
         if (v) {
             room.setVideoLayout(v, null);
+        }
+    });
+    $rootScope.$watch('data.audioDevice', (v, oldV) => {
+        if (v) {
+            _session.setAudioPlaybackDevice(_call.id, v, (err, res) => {
+                debugger
+            });
         }
     });
 
@@ -284,6 +293,21 @@ app.run(($rootScope, $document, $timeout) => {
             (val) => {
                 if (val) {
                     room.conf.record(val);
+                }
+            }
+        );
+        $event.stopPropagation();
+    };
+
+    $rootScope.confSnapShot = ($event) => {
+        $rootScope.modalDialog.open(
+            {
+                title: "Snapshot",
+                text: "Please, enter filename"
+            },
+            (val) => {
+                if (val) {
+                    room.conf.snapshot(val);
                 }
             }
         );

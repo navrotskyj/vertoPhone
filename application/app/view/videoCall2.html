@@ -146,29 +146,29 @@
                 <div class="video-menu" ng-class="{'open-video-menu': initPage}">
                     <div ng-show="isConf" class="btn-group">
                         <!--<button id="menu-toggle"></button>-->
-                        <a class="btn">
+                        <a title="Members/Chat" class="btn">
                             <i id="menu-toggle" class="ion-ios-people"></i>
                         </a>
 
-                        <a ng-click="confPlayFile($event)" class="btn">
+                        <a title="Play file" ng-click="confPlayFile($event)" class="btn">
                             <i class="ion-ios-film"></i>
                         </a>
 
-                        <a ng-click="confStopFile($event)" class="btn">
+                        <a title="Stop file" ng-click="confStopFile($event)" class="btn">
                             <i class="ion-ios-film-outline"></i>
                         </a>
                         <!--<i class="ion-stop"></i>-->
-                        <a ng-click="confStartRecord($event)" class="btn">
+                        <a title="Record" ng-click="confStartRecord($event)" class="btn">
                             <i class="ion-record"></i>
                         </a>
-                        <a ng-click="confStopRecord($event)" class="btn">
+                        <a title="Stop record" ng-click="confStopRecord($event)" class="btn">
                             <i class="ion-stop"></i>
                         </a>
                         <!--<i class="ion-ios-recording-outline"></i>-->
-                        <a class="btn">
+                        <a title="Snapshot" ng-click="confSnapShot($event)" class="btn">
                             <i class="ion-image"></i>
                         </a>
-                        <a ng-if="isModerator" class="btn">
+                        <a title="Video mode" ng-if="isModerator" class="btn">
                             <select ng-model="data.layout" size="1" autocomplete="off">
                                 <option ng-repeat="l in layouts" value="{{l}}">{{l}}</option>                                                                                                                                                     
                             </select>
@@ -178,23 +178,30 @@
                     </div>
 
                     <div class="btn-group">
-                        <a ng-click="toggleMuteMic(null, $event)" class="btn" >
+                        <a title="{{ muteLocalAudio ? 'Un mute mic' : 'Mute mic' }}" ng-click="toggleMuteMic(null, $event)" class="btn" >
                             <i ng-class="{'ion-ios-mic-outline': muteLocalAudio, 'ion-ios-mic color-green': !muteLocalAudio}"></i>
                         </a>
                         <!--<i class="ion-ios-mic-off"></i>-->
-                        <a ng-click="toggleMuteVid(null, $event)" class="btn" >
+                        <a title="{{muteLocalVideo ? 'Un mute video' : 'Mute video'}}" ng-click="toggleMuteVid(null, $event)" class="btn" >
                             <i ng-class="{'ion-aperture': !useVideo, 'ion-ios-videocam-outline': useVideo && muteLocalVideo, 'ion-ios-videocam color-green': useVideo && !muteLocalVideo}"></i>
                         </a>
                         <!--<i class="ion-ios-videocam-outline"></i>-->
-                        <a ng-click="toggleFullScreen($event)" class="btn">
+                        <a title="{{isFullScreen ? 'Normal mode' : 'Fullscreen mode'}}" ng-click="toggleFullScreen($event)" class="btn">
                             <i ng-class="{'ion-android-contract color-green': isFullScreen, 'ion-android-expand': !isFullScreen}" ></i>
                         </a>
 
-                        <a ng-click="screenShare($event)" class="btn">
+                        <a title="{{screenShareCall ? 'Stop screen share' : 'Screen share'}}" ng-click="screenShare($event)" class="btn">
                             <i ng-class="{'color-green': screenShareCall}" class="ion-monitor"></i>
                         </a>
 
-                        <a ng-click="toggleDialpad($event)" class="btn">
+                        <a title="Change audi device" class="btn">
+                            <select ng-model="data.audioDevice" size="1" autocomplete="off">
+                                <option ng-repeat="d in audioOutDevices" value="{{d.id}}">{{d.label}}</option>
+                            </select>
+                            <i class="ion-headphone"></i>
+                        </a>
+
+                        <a title="Dial pad" ng-click="toggleDialpad($event)" class="btn">
                             <i class="ion-ios-keypad" ng-class="{'color-green': !!dialpadOpen}"></i>
                             <div class="dialpad" ng-click="fix($event);" ng-class="{'open': !!dialpadOpen}">
                                 <ul>
@@ -233,7 +240,7 @@
                             </a>
                         </div>
                          <div class="right">
-                             <a ng-click="hangupCall()" class="btn btn-hangup-call">
+                             <a title="Hangup call" ng-click="hangupCall()" class="btn btn-hangup-call">
                                  <i class="ion-ios-telephone"></i>
                              </a>
                         </div>

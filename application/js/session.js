@@ -465,6 +465,13 @@ class Session {
         }
     }
 
+    setAudioPlaybackDevice (id, speakerId, cb) {
+        const call = this.verto.dialogs[id];
+        if (call) {
+            call.setAudioPlaybackDevice(speakerId, cb)
+        }
+    }
+
     dropCall (id) {
         const call = this.verto.dialogs[id];
         if (call) {
