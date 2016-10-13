@@ -128,7 +128,16 @@ app.run(($rootScope, $document, $timeout) => {
                 }
                 apply();
             };
+        } else {
+            closeMenu();
+            $rootScope.isConf = false;
+            $rootScope.isModerator = false;
+            $rootScope.canvasInfo = {};
+            $rootScope.messages = [];
+            $rootScope.layoutsInfo = {};
+            $rootScope.layouts = [];
         }
+
         apply();
     };
 
@@ -502,6 +511,11 @@ function toggleMenu() {
     } else {
         removeClass(ele, "open");
     }
+}
+
+function closeMenu() {
+    var ele = document.getElementsByTagName('body')[0];
+    removeClass(ele, "open");
 }
 
 //Prevent the function to run before the document is loaded

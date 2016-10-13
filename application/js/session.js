@@ -87,8 +87,20 @@ class Session {
 
     stopConference (id) {
         if (this.conference.hasOwnProperty(id)) {
+            const call = this.activeCalls[this.conference[id].callId];
             this.conference[id].destroy();
             delete this.conference[id];
+
+            if (call) {
+                call.conferenceId = null;
+                if (call.videoWindow) {
+                    const w = chrome.app.window.get(call.id);
+                    // TODO
+                    if (w && w.contentWindow.init) {
+                        w.contentWindow.init(this, call);
+                    }
+                }
+            }
         }
     }
 
