@@ -29,6 +29,7 @@ input[placeholder].small-placeholder::-webkit-input-placeholder{
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    cursor: copy;
 }
 
 

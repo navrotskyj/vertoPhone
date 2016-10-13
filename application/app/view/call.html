@@ -2,7 +2,7 @@
 
     <div class="card card-call-info no-border bg-default" style="height: 55px; margin: 0;">
         <div style="text-align: center;" >
-            <p class="call-view-number">{{getDisplay(activeCall)}}</p>
+            <p ng-click="copyNumber(activeCall.calleeIdNumber)" title="Click to copy number" class="call-view-number">{{getDisplay(activeCall)}}</p>
             <p ui-timer start="activeCall.onActiveTime"></p>
         </div>
     </div>

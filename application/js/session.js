@@ -380,7 +380,7 @@ class Session {
                     id: id,
                     // alwaysOnTop: true,
                     innerBounds: {
-                        width: 640,
+                        width: 800,
                         height: 480
                     }
                 },

@@ -55,6 +55,7 @@ angular
         $scope.openMenu = openMenu;
         $scope.dtmf = dtmf;
         $scope.getDisplay = getDisplay;
+        $scope.copyNumber = copyNumber;
 
         function getDisplay(call) {
             //activeCall.contact.name ? activeCall.contact.name  + ' (' + activeCall.calleeIdNumber + ')': activeCall.calleeIdNumber
@@ -71,6 +72,17 @@ angular
                 res += `;${call.dtmfArray.join('')}`;
             }
             return res;
+        }
+
+        function copyNumber(text) {
+            const input = document.createElement('input');
+            input.style.position = 'fixed';
+            input.style.opacity = 0;
+            input.value = text;
+            document.body.appendChild(input);
+            input.select();
+            document.execCommand('Copy');
+            document.body.removeChild(input);
         }
 
         function screenShare(id) {
