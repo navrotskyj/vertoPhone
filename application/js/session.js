@@ -9,11 +9,12 @@ class Session {
 
         this.lastCallNumber = null;
         this.activeCalls = {};
+        this.conference = {};
         this.videoParams = {};
 
         this.vertoLogin = options.login;
         this.cidName = options.cidName || this.vertoLogin;
-        this.cidNnumber = options.cidNnumber || this.vertoLogin;
+        this.cidNumber = options.cidNumber || this.vertoLogin;
 
         this.notificationMissed = options.notificationMissed;
         this.notificationNewCall = options.notificationNewCall;
@@ -77,6 +78,32 @@ class Session {
         }
     }
 
+    startConference (v, dialog, pvtData) {
+        this.conference[pvtData.conferenceMemberID] = new Conference(
+            v, dialog, pvtData, this.useVideo
+        )
+
+    }
+
+    stopConference (id) {
+        if (this.conference.hasOwnProperty(id)) {
+            const call = this.activeCalls[this.conference[id].callId];
+            this.conference[id].destroy();
+            delete this.conference[id];
+
+            if (call) {
+                call.conferenceId = null;
+                if (call.videoWindow) {
+                    const w = chrome.app.window.get(call.id);
+                    // TODO
+                    if (w && w.contentWindow.init) {
+                        w.contentWindow.init(this, call);
+                    }
+                }
+            }
+        }
+    }
+
     get vetoCallbacks () {
         // TODO move helper ?
         function addVideo(id) {
@@ -113,6 +140,43 @@ class Session {
             onGetVideoContainer: (d) => {
                 const video = addVideo(d.callID);
                 d.params.tag = video.id;
+            },
+
+            onMessage: (v, dialog, msg, params) => {
+                console.debug('onMessage:', v, dialog, msg, params);
+
+                switch (msg) {
+                    case $.verto.enum.message.pvtEvent:
+                        if (params.pvtData) {
+                            switch (params.pvtData.action) {
+                                case "conference-liveArray-join":
+                                    if (!params.pvtData.screenShare && !params.pvtData.videoOnly) {
+                                        console.log("conference-liveArray-join");
+                                        this.startConference(v, dialog, params.pvtData);
+                                    }
+                                break;
+
+                                case "conference-liveArray-part":
+                                    if (!params.pvtData.screenShare && !params.pvtData.videoOnly) {
+                                        console.log("conference-liveArray-part");
+                                        this.stopConference(params.pvtData.conferenceMemberID);
+                                    }
+                                break;
+                            }
+                        }
+                        break;
+                    case $.verto.enum.message.info:
+                        const body = params.body,
+                            from = params.from_msg_name || params.from
+                            ;
+                
+                        break;
+                    case $.verto.enum.message.display:
+                        break;
+                    default:
+                        console.warn('Got a not implemented message:', msg, dialog, params);
+                    break;
+                }
             },
 
             onWSLogin: (e, success) => {
@@ -162,7 +226,7 @@ class Session {
                 if (screenShare) {
                     const number = screenShare[1];
                     for (let key in this.activeCalls) {
-                        if (this.activeCalls[key].calleeIdNumber === number) {
+                        if (this.activeCalls[key].calleeIdNumber === number || this.activeCalls[key].screenShareCall == d.callID) {
                             d.screenShare = true;
                             if (d.state == $.verto.enum.state.ringing) {
                                 d.answer({useVideo: true});
@@ -311,17 +375,19 @@ class Session {
             console.warn('open window');
             const title = ' ' + call.calleeIdNumber + ' (' + call.calleeIdName + ')';
             var screenShareCallStreamSrc = call.screenShareCallStreem;
-            chrome.app.window.create('app/view/videoCall.html',
+            chrome.app.window.create('app/view/videoCall2.html',
                 {
                     id: id,
                     // alwaysOnTop: true,
                     innerBounds: {
-                        width: 640,
+                        width: 800,
                         height: 480
                     }
                 },
                 (window) => {
                     window.contentWindow.onload = function (e) {
+                        call.videoWindow = true;
+                        this.init(Helper.session, call);
                         this.document.title += title;
                         var videoLeft = e.target.getElementById('remoteVideoLeft');
                         var videoL = e.target.getElementById('localVideo');
@@ -330,19 +396,23 @@ class Session {
                             videoLeft.srcObject = stream.remoteStream;
                             videoLeft.volume = 0;
                             videoLeft.play();
-                            videoL.srcObject = stream.localStream;
-                            videoL.volume = 0;
-                            videoL.play();
+                            // videoL.srcObject = stream.localStream;
+                            // videoL.volume = 0;
+                            // videoL.play();
                             if (screenShareCallStreamSrc) {
                                 var videoRight = e.target.getElementById('remoteVideoRight');
                                 videoRight.volume = 0;
                                 videoRight.src = screenShareCallStreamSrc;
                                 videoRight.play();
-                                e.target.getElementsByClassName('right')[0].style.display = 'flex'
                             }
 
                         }
-                    }
+                    };
+                    window.onClosed.addListener(() => {
+                        if (call) {
+                            call.videoWindow = false;
+                        }
+                    });
                 }
             );
         }
@@ -355,7 +425,7 @@ class Session {
         this.verto.newCall({
             destination_number: number,
             caller_id_name: this.cidName,
-            caller_id_number: this.cidNnumber,
+            caller_id_number: this.cidNumber,
 
             useVideo: this.useVideo && option.useVideo,
 
@@ -378,7 +448,7 @@ class Session {
     screenShare (parentCallId) {
         const call = this.activeCalls[parentCallId];
         if (!call) {
-            return // ERROR
+            return;
         }
 
         if (call.screenShareCall) {
@@ -388,8 +458,8 @@ class Session {
 
         this.verto.newCall({
             destination_number: call.calleeIdNumber + '-screen',
-            caller_id_name: this.cidName,
-            caller_id_number: this.cidNnumber,
+            caller_id_name: `${this.cidName}  (Screen)`,
+            caller_id_number: `${this.cidNumber}  (Screen)`,
             useAudio: false,
             useStereo: false,
             useVideo: true,
@@ -404,6 +474,13 @@ class Session {
                 localStream: call.rtc.localStream,
                 remoteStream: call.rtc.remoteStream
             }
+        }
+    }
+
+    setAudioPlaybackDevice (id, speakerId, cb) {
+        const call = this.verto.dialogs[id];
+        if (call) {
+            call.setAudioPlaybackDevice(speakerId, cb)
         }
     }
 
@@ -422,7 +499,7 @@ class Session {
             d.answer({
                 useVideo: params && params.useVideo,
                 callee_id_name: this.cidName,
-                callee_id_number: this.cidNnumber
+                callee_id_number: this.cidNumber
                 //  TODO move to conf		
                 // useStereo: false	
             });
@@ -480,6 +557,17 @@ class Session {
             call.setMute(dialog.setMute('toggle'));
             Helper.sendSession('changeCall', this.activeCalls);
         }        
+    }
+
+    toggleMuteVideo (id) {
+        const call = this.activeCalls[id],
+            dialog = this.verto.dialogs[id]
+            ;
+
+        if (call && dialog) {
+            call.setMuteVideo(dialog.setVideoMute('toggle'));
+            // Helper.sendSession('changeCall', this.activeCalls);
+        }
     }
 
     // endregion

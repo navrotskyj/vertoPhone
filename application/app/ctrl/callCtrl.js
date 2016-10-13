@@ -5,7 +5,7 @@
 "use strict";
     
 angular
-    .module('app.call', ['app.callService'])
+    .module('app.call', ['app.callService', 'app.directive'])
     .controller('callCtrl', function ($scope, CallService, $rootScope) {
 
         var onKeyUp = $rootScope.$on('key:down', function (e, key) {
@@ -54,6 +54,36 @@ angular
         $scope.transfer = transfer;
         $scope.openMenu = openMenu;
         $scope.dtmf = dtmf;
+        $scope.getDisplay = getDisplay;
+        $scope.copyNumber = copyNumber;
+
+        function getDisplay(call) {
+            //activeCall.contact.name ? activeCall.contact.name  + ' (' + activeCall.calleeIdNumber + ')': activeCall.calleeIdNumber
+            let res = '';
+            if (!call)
+                return res;
+            
+            if (call.contact && call.contact.name) {
+                res = `${call.contact.name} (${call.calleeIdNumber})`;
+            } else {
+                res = `${call.calleeIdNumber}`;
+            }
+            if (call.dtmfArray.length > 0) {
+                res += `;${call.dtmfArray.join('')}`;
+            }
+            return res;
+        }
+
+        function copyNumber(text) {
+            const input = document.createElement('input');
+            input.style.position = 'fixed';
+            input.style.opacity = 0;
+            input.value = text;
+            document.body.appendChild(input);
+            input.select();
+            document.execCommand('Copy');
+            document.body.removeChild(input);
+        }
 
         function screenShare(id) {
             CallService.screenShare(id, {});
@@ -123,40 +153,5 @@ angular
                     }
                 });
             }
-        }
-    })
-    .directive('uiTimer', function () {
-        return {
-            restrict: 'A',
-            scope: {start: "=start"},
-            link: function(scope, ele) {
-              var checkTime, startTimer;
-
-              startTimer = function() {
-                if (scope.$$destroyed)
-                    return;
-                var m, s, time, t;
-
-                if (!scope.start) {
-                    ele.html("00:00");
-                    return t = setTimeout(startTimer, 1000);
-                }
-                s = Math.floor((Date.now() - scope.start) / 1000);
-                m = Math.floor(s / 60);
-                m = checkTime(m);
-                s = checkTime(s % 60);
-                time = m + ":" + s;
-                ele.html(time);
-                return t = setTimeout(startTimer, 1000);
-              };
-              checkTime = function(i) {
-                if (i < 10) {
-                  i = "0" + i;
-                }
-                return i;
-              };
-              return startTimer();
-            }
-
         }
     });

@@ -23,10 +23,18 @@ class Call {
         this.onActiveTime = null;
         this.menuName = '';
         this.mute = false;
+        this.muteVideo = false;
+        
         this.initRemoteStream = false;
         this.screenShareCall = null;
         this.screenShareCallStreem = null;
+        this.screenShareCallDirection = null;
         this.dtmfArray = [];
+        this.conferenceId = null;
+        this.videoWindow = false;
+
+        // TODO
+        this.onChange = null;
 
         this.contact = null;
         var scope = this;
@@ -45,10 +53,16 @@ class Call {
     removeScreenShareCall () {
         this.screenShareCall = null;
         this.screenShareCallStreem = null;
+        this.screenShareCallDirection = null;
+
         var w = Helper.getWindowById(this.id);
-        if (w) {
+        if (w && !this.conferenceId) {
             w.contentWindow.document.getElementById('remoteVideoRight').src = '';
-            w.contentWindow.document.getElementsByClassName('right')[0].style.display = 'none'
+            // w.contentWindow.document.getElementsByClassName('right')[0].style.display = 'none'
+
+        }
+        if (typeof this.onChange == 'function') {
+            this.onChange('removeScreenShareCall');
         }
     }
 
@@ -56,12 +70,16 @@ class Call {
         this.mute = mute;
     }
 
+    setMuteVideo (mute) {
+        this.muteVideo = mute;
+    }
+
     dtmf (digit) {
         if (this.dtmfArray.push(digit) === 1) {
-            this.calleeIdNumber += ':';
+            // this.calleeIdNumber += ':';
         }
 
-        this.calleeIdNumber+= digit;
+        // this.calleeIdNumber+= digit;
     }
 
     setState (state) {
@@ -83,6 +101,7 @@ class Call {
 
     destroy (userDropCall, d) {
         this._clearNotification();
+        this.onChange = null;
  
         if (!userDropCall && !this.onActiveTime && this.direction === $.verto.enum.direction.inbound)
             this.showMissed();
@@ -102,17 +121,24 @@ class Call {
 
     setScreenShareCall (d) {
         this.screenShareCall = d.callID;
+        this.screenShareCallDirection = d.direction.name;
+
         var screenShareCallStreamSrc = this.screenShareCallStreem = URL.createObjectURL(d.rtc.remoteStream || d.rtc.localStream);
 
         var w = Helper.getWindowById(this.id);
-        if (w) {
+        if (w && !this.conferenceId) {
             var videoRight = w.contentWindow.document.getElementById('remoteVideoRight');
             videoRight.volume = 0;
             videoRight.src = screenShareCallStreamSrc;
             videoRight.play();
-            w.contentWindow.document.getElementsByClassName('right')[0].style.display = 'flex'
+
+            // w.contentWindow.document.getElementsByClassName('right')[0].style.display = 'flex'
         } else if (Helper.session) {
             Helper.session.openVideo(this.id);
+        }
+
+        if (typeof this.onChange == 'function') {
+            this.onChange('setScreenShareCall');
         }
     }
 

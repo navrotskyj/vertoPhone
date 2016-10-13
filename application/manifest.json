@@ -3,7 +3,7 @@
   "name"            : "Verto Phone",
   "description"     : "FreeSWITCH verto phone.",
   "short_name"      : "Verto Phone",
-  "version"         : "0.3.3",
+  "version"         : "0.4.0",
   "author"          : "navrotskyj@gmail.com",
   "minimum_chrome_version": "23",
   "icons": {
@@ -40,6 +40,7 @@
             "js/helper.js",
             "js/call.js",
             "js/session.js",
+            "js/conference.js",
             "background.js"
         ]
     }

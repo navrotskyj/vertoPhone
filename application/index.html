@@ -10,8 +10,9 @@
     <body ng-app="vertoPhone"  id="phone" class="app" ng-class="{'loaded': isLoadApplication}">
         <header class="bar bar-nav">
             <div class="segmented-control">
-                <a ng-click="setViewCall(call)" ng-class="{'bg-success': call.state == 'active', 'bg-danger': call.state == 'held'}" class="control-item" ng-repeat="call in activeCalls">
-                    <span class="h5">{{call.calleeIdNumber.substring(call.calleeIdNumber.length - 4)}}</span>
+                <a ng-click="setViewCall(call)" ng-class="{'bg-success': call.state == 'active', 'bg-danger': call.state == 'held'}" class="control-item header-call-item" ng-repeat="call in activeCalls">
+                    <!--<span class="h5">{{call.calleeIdNumber.substring(call.calleeIdNumber.length - 4)}}</span>-->
+                    <p class="h5 header-call-number">{{call.calleeIdNumber}}</p>
                 </a>
             </div>
 
@@ -38,6 +39,7 @@
         <script type="text/javascript" src="lib/angular.min.js"></script>
         <script type="text/javascript" src="lib/ratchet-v2.0.2/js/ratchet.min.js"></script>
         <script type="text/javascript" src="app/services/callService.js"></script>
+        <script type="text/javascript" src="app/directive/date.js"></script>
         <script type="text/javascript" src="app/ctrl/settingsCtrl.js"></script>
         <script type="text/javascript" src="app/ctrl/dialpadCtrl.js"></script>
         <script type="text/javascript" src="app/ctrl/callCtrl.js"></script>

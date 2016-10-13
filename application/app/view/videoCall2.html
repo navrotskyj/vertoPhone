@@ -1,39 +1,266 @@
 <!DOCTYPE html>
 <html >
+    <meta http-equiv="Content-Security-Policy" content="img-src *; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' 'unsafe-eval' http://cdnjs.cloudflare.com ">
     <head>
         <title>Video</title>
         <link rel="stylesheet" type="text/css" href="../../css/video.css">
+        <link rel="stylesheet" type="text/css" href="../../lib/ionicons-2.0.1/css/ionicons.min.css">
     </head>
-    <body ng-app="videoCall">
-        
-        <div id="mySidenav" class="sidenav">
-            <div class="sidenav-btn">
-                <a class="closebtn" ng-click="closeSide()">&times;</a>
-            </div>
-            
-            <!--<ul class="tab">
-                <li><a href="#" class="tablinks" >Members</a></li>
-                <li><a href="#" class="tablinks" >Chat</a></li>
-            </ul>-->
-            <div class="side-content">
-                <div class="members">
-                    <ul class="people">
-                        <li class="person" ng-repeat="m in members">
-                            <img src="http://s13.postimg.org/ih41k9tqr/img1.jpg" alt="" />
-                            <span class="name">Thomas Bangalter</span>
-                            <span class="time">2:09 PM</span>
-                            <span class="preview">I was wondering...</span>
-                        </li>
-                    </ul>
+    <body ng-app="videoCall" >
+
+            <nav id="menu"  role="navigation">
+                <div class="tabs">
+                    <div class="tab" ng-click="changeTab('m')" ng-class="{'active': activeTab == 'm'}">Mambers</div>
+                    <div class="tab" ng-click="changeTab('c')" ng-class="{'active': activeTab == 'c'}">
+                        Chat
+                        <span ng-show="unReadMessageCount > 0" class="badge-chat">{{unReadMessageCount || ''}}</span>
+                    </div>
+                </div>
+                <div ng-show="activeTab == 'm'" class="members">
+                    <div class="list-group">
+                        <ul>
+                           <li  ng-class="{'active' : m.id == selectedMemberId}" ng-repeat-start="m in members">
+                                <div ng-click="isModerator && selectMember(m.id)" class="picture">
+                                    <img ng-if="!m.status.video.screenShare" src="../../images/defaultUserPic.png"/>
+                                    <img ng-if="m.status.video.screenShare" src="../../images/screenShare32.png"/>
+                                    <div ng-if="m.status.audio.talking" class="badge green">
+                                        <i class="ion-ios-pulse"></i>
+                                    </div>
+                                    <div ng-if="m.status.audio.muted" class="badge red">
+                                        <i class="ion-android-microphone-off"></i>
+                                    </div>
+                                </div>
+                                <div ng-click="isModerator && selectMember(m.id)" class="content">
+                                    <div class="title">{{m.name}}</div>
+                                    <div class="description">
+                                        <div class="location"><i class="fa fa-map-marker"></i>
+                                            <span>{{m.email || m.number}}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="footer">
+                                    <div ng-if="m.status.video.floor && m.status.video.floorLocked" class="info left red">
+                                        <i class="ion-locked"></i>
+                                        <span>Floor</span>
+                                    </div>
+                                    <div ng-if="m.status.video.floor && !m.status.video.floorLocked" class="info left blue">
+                                        <i class="ion-unlocked"></i>
+                                        <span>Floor</span>
+                                    </div>
+                                    <div ng-if="m.status.video.reservationID" class="info left orange">
+                                        <i class="ion-ios-crop"></i>
+                                        <span>{{m.status.video.reservationID | uppercase}}</span>
+                                    </div>
+                                    <div ng-if="m.status.video.screenShare" class="info left orange">
+                                        <i class="ion-monitor"></i>
+                                        <span>Screen Share</span>
+                                    </div>
+                                </div>
+                                <div class="functions">
+                                    <div ng-click="isModerator && toggleMuteMic(m.id, $event)" class="func">
+                                        <i ng-class="{'ion-ios-mic-outline': m.status.audio.muted, 'ion-ios-mic color-green': !m.status.audio.muted}" ></i>
+                                    </div>
+                                    <!--ion-aperture-->
+                                    <div ng-click="isModerator && toggleMuteVid(m.id, $event)" class="func">
+                                        <i ng-class="{'ion-aperture': !m.status.videom, 'ion-ios-videocam-outline': m.status.video && m.status.video.muted, 'ion-ios-videocam color-green': m.status.video && !m.status.video.muted}" ></i>
+                                    </div>
+
+                                    <div ng-if="isModerator && canvasInfo.resIDS.length > 0" ng-click="openConvasMenu(m.id)" ng-class="{'open': dropdownOpened == m.id}"  class="dropdown">
+                                        <i class="dropbtn ion-ios-albums-outline color-green"></i>
+                                        <div class="dropdown-content right">
+                                            <a ng-click="confResId(m.id, c, $event)" ng-repeat="c in canvasInfo.resIDS" ng-class="{'selected': m.status.video.reservationID == c}" >{{c | uppercase}}</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        
+                            <div ng-repeat-end="" ng-show="isModerator && m.id == selectedMemberId" class="details">
+
+                                <div class="functions">
+                                    <div title="Kick" ng-click="confKick(m.id, $event)" class="func">
+                                        <i class="ion-close-circled"></i>
+                                    </div>
+                                    <div title="Video floor" ng-click="confSetVideoFloor(m.id, $event)" class="func">
+                                        <i class="ion-arrow-shrink"></i>
+                                    </div>
+                                    <div title="Transfer" ng-click="transfer(m.id, $event)" class="func">
+                                        <i class="ion-forward"></i>
+                                    </div>
+                                    <div title="Deaf/Undeaf" ng-click="confDeaf(m.id, m.status.audio.deaf, $event)" class="func">
+                                        <i class="ion-volume-mute"></i>
+                                    </div>
+                                    <div class="func">
+                                        
+                                        <i class="ion-android-create toggle-hover">
+                                            <i ng-click="confBanner(m.id, $event)" title="Set banner" class="ion-ios-color-wand-outline up"></i>
+                                            <i ng-click="setBanner(m.id, 'reset')" title="Clear banner" class="ion-ios-close-empty down"></i>
+                                        </i>
+                                        
+                                    </div>
+                                    <div class="func">
+                                        <i class="ion-android-volume-down toggle-hover">
+                                            <i title="Up volume" ng-click="confChangeVolume(m.id, 'up', $event)" class="ion-arrow-up-b up"></i>
+                                            <i title="Down volume" ng-click="confChangeVolume(m.id, 'down', $event)" class="ion-arrow-down-b down"></i>
+                                        </i>
+                                    </div>
+                                    <div class="func">
+                                        <i class="ion-ios-pulse-strong toggle-hover">
+                                            <i title="Up gain" ng-click="confChangeGain(m.id, 'up', $event)" class="ion-arrow-up-b up"></i>
+                                            <i title="Down gain"  ng-click="confChangeGain(m.id, 'down', $event)" class="ion-arrow-down-b down"></i>
+                                        </i>
+                                    </div>
+                                </div>
+                            </div>
+                        </ul>
+                    </div>
+                </div>
+
+                <div ng-show="activeTab == 'c'" class="chat"> 
+                    <div class="chat-data">
+                        <ul id="chatDataUl">
+                            <li class="clearfix" ng-repeat="message in messages">
+                                <div class="message-data" ng-class="{'align-right': message.my}">
+                                    <span class="message-data-time">{{message.date}}</span> &nbsp; &nbsp;
+                                    <span class="message-data-name">{{message.fromDisplay || message.from}}</span>
+                                    <!--<i class="ion-ios-pulse-strong"></i>-->
+                                </div>
+                                <div picturify ng-bind-html="message.message | linky:'_blank' " 
+                                    ng-class="{'my-message': message.my, 'other-message float-right': !message.my}" class="message">
+
+                                </div>
+                            </li>
+                        </ul>
+                        
+                    </div>
+                    <div class="chat-action">
+                        <div class="chat-message clearfix">
+                            <textarea ng-model="message" ng-keydown="($event.keyCode == 13 && $event.ctrlKey == true) && sendChat($event)" name="message-to-send" id="message-to-send" placeholder ="Type your message" rows="1"></textarea>
+                            <button ng-click="sendChat($event)" class="btn">
+                                <i class="ion-android-create"></i>    
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+            <div class="page-wrap">
+                <div class="video-menu" ng-class="{'open-video-menu': initPage}">
+                    <div ng-show="isConf" class="btn-group">
+                        <!--<button id="menu-toggle"></button>-->
+                        <a title="Members/Chat" class="btn">
+                            <i id="menu-toggle" class="ion-ios-people"></i>
+                        </a>
+
+                        <a title="Play file" ng-click="confPlayFile($event)" class="btn">
+                            <i class="ion-ios-film"></i>
+                        </a>
+
+                        <a title="Stop file" ng-click="confStopFile($event)" class="btn">
+                            <i class="ion-ios-film-outline"></i>
+                        </a>
+                        <!--<i class="ion-stop"></i>-->
+                        <a title="Record" ng-click="confStartRecord($event)" class="btn">
+                            <i class="ion-record"></i>
+                        </a>
+                        <a title="Stop record" ng-click="confStopRecord($event)" class="btn">
+                            <i class="ion-stop"></i>
+                        </a>
+                        <!--<i class="ion-ios-recording-outline"></i>-->
+                        <a title="Snapshot" ng-click="confSnapShot($event)" class="btn">
+                            <i class="ion-image"></i>
+                        </a>
+                        <a title="Video mode" ng-if="isModerator" class="btn">
+                            <select ng-model="data.layout" size="1" autocomplete="off">
+                                <option ng-repeat="l in layouts" value="{{l}}">{{l}}</option>                                                                                                                                                     
+                            </select>
+                            <i class="ion-ios-photos-outline"></i>
+                        </a>
+
+                    </div>
+
+                    <div class="btn-group">
+                        <a title="{{ muteLocalAudio ? 'Un mute mic' : 'Mute mic' }}" ng-click="toggleMuteMic(null, $event)" class="btn" >
+                            <i ng-class="{'ion-ios-mic-outline': muteLocalAudio, 'ion-ios-mic color-green': !muteLocalAudio}"></i>
+                        </a>
+                        <!--<i class="ion-ios-mic-off"></i>-->
+                        <a title="{{muteLocalVideo ? 'Un mute video' : 'Mute video'}}" ng-click="toggleMuteVid(null, $event)" class="btn" >
+                            <i ng-class="{'ion-aperture': !useVideo, 'ion-ios-videocam-outline': useVideo && muteLocalVideo, 'ion-ios-videocam color-green': useVideo && !muteLocalVideo}"></i>
+                        </a>
+                        <!--<i class="ion-ios-videocam-outline"></i>-->
+                        <a title="{{isFullScreen ? 'Normal mode' : 'Fullscreen mode'}}" ng-click="toggleFullScreen($event)" class="btn">
+                            <i ng-class="{'ion-android-contract color-green': isFullScreen, 'ion-android-expand': !isFullScreen}" ></i>
+                        </a>
+
+                        <a title="{{screenShareCall ? 'Stop screen share' : 'Screen share'}}" ng-click="screenShare($event)" class="btn">
+                            <i ng-class="{'color-green': screenShareCall}" class="ion-monitor"></i>
+                        </a>
+
+                        <a title="Change audi device" class="btn">
+                            <select ng-model="data.audioDevice" size="1" autocomplete="off">
+                                <option ng-repeat="d in audioOutDevices" value="{{d.id}}">{{d.label}}</option>
+                            </select>
+                            <i class="ion-headphone"></i>
+                        </a>
+
+                        <a title="Dial pad" ng-click="toggleDialpad($event)" class="btn">
+                            <i class="ion-ios-keypad" ng-class="{'color-green': !!dialpadOpen}"></i>
+                            <div class="dialpad" ng-click="fix($event);" ng-class="{'open': !!dialpadOpen}">
+                                <ul>
+                                    <li>
+                                        <button ng-click="dtmf('1', $event)" class="btn">1</button>
+                                        <button ng-click="dtmf('2', $event)" class="btn">2</button>
+                                        <button ng-click="dtmf('3', $event)" class="btn">3</button>
+                                    </li>
+                                    
+                                    <li>
+                                        <button ng-click="dtmf('4', $event)" class="btn">4</button>
+                                        <button ng-click="dtmf('5', $event)" class="btn">5</button>
+                                        <button ng-click="dtmf('6', $event)" class="btn">6</button>
+                                    </li>
+
+                                    <li>
+                                        <button ng-click="dtmf('7', $event)" class="btn">7</button>
+                                        <button ng-click="dtmf('8', $event)" class="btn">8</button>
+                                        <button ng-click="dtmf('9', $event)" class="btn">9</button>
+                                    </li>
+
+                                    <li>
+                                        <button ng-click="dtmf('*', $event)" class="btn">*</button>
+                                        <button ng-click="dtmf('0', $event)" class="btn">0</button>
+                                        <button ng-click="dtmf('#', $event)" class="btn">#</button>
+                                    </li>
+                                </ul>
+                            </div>
+                        </a>
+                    </div>
+
+                    <div class="call-menu">
+                        <div class="left">
+                            <a ui-timer start="startTime" class="btn btn-time-call">
+
+                            </a>
+                        </div>
+                         <div class="right">
+                             <a title="Hangup call" ng-click="hangupCall()" class="btn btn-hangup-call">
+                                 <i class="ion-ios-telephone"></i>
+                             </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="container" ng-class="{'open-right': screenShareCall && !isConf && screenShareCallDirection == 'inbound'}" role="main">
+                    <video id="remoteVideoLeft" ng-class="{'hide': !useVideo}"></video>
+                    <video id="remoteVideoRight" class="screen"></video>
                 </div>
             </div>
 
-        </div>
+            <!-- The Modal -->
+            <modal-dialog show='dialogShown' dialog="modalDialog" dialog-title='My Dialog'>
 
-        <div id="main">
-            <span style="font-size:30px;cursor:pointer" ng-click="openSide()">&#9776; open</span>
-        </div>
+            </modal-dialog>
+
         <script type="text/javascript" src="../../lib/angular.min.js"></script>
+        <script type="text/javascript" src="../../lib/angular-sanitize.min.js"></script>
+        <!--<script type="text/javascript" src="../../lib/angular-picturify.min.js"></script>-->
+        <script type="text/javascript" src="../directive/date.js"></script>
         <script type="text/javascript" src="../ctrl/video2.js"></script>
     </body>
 </html>
