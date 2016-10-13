@@ -13,7 +13,7 @@
                     <div class="tab" ng-click="changeTab('m')" ng-class="{'active': activeTab == 'm'}">Mambers</div>
                     <div class="tab" ng-click="changeTab('c')" ng-class="{'active': activeTab == 'c'}">
                         Chat
-                        <span ng-show="unReadMessageCount > 0" class="badge-chat">{{unReadMessageCount || ''}}</span>
+                        <span ng-class="{'badge-chat-show': unReadMessageCount > 0}" class="badge-chat">{{unReadMessageCount || ''}}</span>
                     </div>
                 </div>
                 <div ng-show="activeTab == 'm'" class="members">

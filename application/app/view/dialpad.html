@@ -4,7 +4,7 @@
 		<div class="card no-border dialpad-input bg-default">
 			<a ng-click="changeState('contacts', true, {number: number})" class="color-default icon ion-ios-plus-outline pull-left input-number-btn"></a>
 			<a ng-click="delLastNumber()" class="color-default icon ion-backspace-outline pull-right input-number-btn"></a>
-			<input ng-keyup="$event.keyCode == 13 && makeCall()" type="text" ng-model="number" class="input-number" placeholder="SIP uri">
+			<input ng-keyup="$event.keyCode == 13 && makeCall()" type="text" ng-model="number" class="input-number" placeholder="Number">
 		</div>
 
 		<div  ng-include=" 'app/view/dialpadTemplate.html' ">
