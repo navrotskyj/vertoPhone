@@ -496,8 +496,9 @@ class Session {
         const d = this.verto.dialogs[id];
         const call = this.activeCalls[id];
         if (d && call && !call.onActiveTime) {
+            call.useVideo = params && params.useVideo;
             d.answer({
-                useVideo: params && params.useVideo,
+                useVideo: call.useVideo,
                 callee_id_name: this.cidName,
                 callee_id_number: this.cidNumber
                 //  TODO move to conf		
