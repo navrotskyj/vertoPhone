@@ -144,10 +144,10 @@
             </nav>
             <div class="page-wrap">
                 <div class="video-menu" ng-class="{'open-video-menu': initPage}">
-                    <div ng-show="isConf" class="btn-group">
+                    <div ng-show="isConf && isModerator" class="btn-group">
                         <!--<button id="menu-toggle"></button>-->
                         <a title="Members/Chat" class="btn">
-                            <i id="menu-toggle" class="ion-ios-people"></i>
+                            <i class="menu-toggle ion-ios-people"></i>
                         </a>
 
                         <a title="Play file" ng-click="confPlayFile($event)" class="btn">
@@ -178,6 +178,11 @@
                     </div>
 
                     <div class="btn-group">
+
+                        <a ng-show="isConf && !isModerator" title="Members/Chat" class="btn">
+                            <i  class="menu-toggle ion-ios-people"></i>
+                        </a>
+
                         <a title="{{ muteLocalAudio ? 'Un mute mic' : 'Mute mic' }}" ng-click="toggleMuteMic(null, $event)" class="btn" >
                             <i ng-class="{'ion-ios-mic-outline': muteLocalAudio, 'ion-ios-mic color-green': !muteLocalAudio}"></i>
                         </a>

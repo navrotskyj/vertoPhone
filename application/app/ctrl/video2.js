@@ -163,7 +163,7 @@ app.run(($rootScope, $document, $timeout) => {
     $rootScope.$watch('data.audioDevice', (v, oldV) => {
         if (v) {
             _session.setAudioPlaybackDevice(_call.id, v, (err, res) => {
-                debugger
+
             });
         }
     });
@@ -224,7 +224,11 @@ app.run(($rootScope, $document, $timeout) => {
 
     $rootScope.toggleMuteMic = (memberId, $event) => {
         if (room) {
-            room.conf.muteMic(memberId || room.id);
+            if ($rootScope.isModerator) {
+                room.conf.muteMic(memberId || room.id);
+            } else {
+                _session.dtmf(_call.id, '0');
+            }
         } else {
             _session.toggleMute(_call.id);
             $rootScope.muteLocalAudio = !!_call.mute;
@@ -235,7 +239,11 @@ app.run(($rootScope, $document, $timeout) => {
     $rootScope.toggleMuteVid = (memberId, $event) => {
         if (!$rootScope.useVideo) return;
         if (room) {
-            room.conf.muteVideo(memberId || room.id);
+            if ($rootScope.isModerator) {
+                room.conf.muteVideo(memberId || room.id);
+            } else {
+                _session.dtmf(_call.id, '*0');
+            }
         } else {
             _session.toggleMuteVideo(_call.id);
             $rootScope.muteLocalVideo = !!_call.muteVideo;
@@ -500,7 +508,10 @@ function removeClass(ele, cls) {
 
 //Add event from js the keep the marup clean
 function initMenu() {
-    document.getElementById("menu-toggle").addEventListener("click", toggleMenu);
+    const elems = document.getElementsByClassName('menu-toggle');
+    for (let i = 0; i < elems.length; i++) {
+        elems.item(i).addEventListener("click", toggleMenu);
+    }
 }
 
 //The actual fuction
